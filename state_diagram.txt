@@ -1,0 +1,40 @@
+상태
+idle(초기)
+	jump - space key event
+	hit - hit event
+	move - left key up/ left key down/ right key up/ right key down
+	attack - a key down
+
+jump
+	idle - landing event
+	hit - hit event
+	jumpattack - a key donw
+	jumpmove - left key up/ left key down/ right key up/ right key down
+
+jumpmove
+	jump - left key up/ left key down/ right key up/ right key down
+	hit - hit event
+	jumpattack - a key donw
+	move - landing event
+
+
+attack
+	idle - timeout
+	hit - hit event
+
+jumpattack
+	attack - landing event
+	hit - hit event
+	jump - timeout
+hit
+	death - hp <= 0
+	idle - timeout
+death
+	idle - r key down
+move
+	idle - left key up/ left key down/ right key up/ right key down
+	jumpmove - space key donw
+	attack - a key down
+	hit - hit event
+
+ 이것을 그래프의 관계를 나타내는 이차원 배열로 만들어 줄 수 있어?
