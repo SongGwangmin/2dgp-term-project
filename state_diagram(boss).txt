@@ -1,0 +1,37 @@
+상태
+move(초기)
+	enter() - timer = 0
+	do() - 플레이어 방향으로 dir 수정 / 플레이어 방향(dir)으로 이동 x += dir * 5
+		timer += 1 / if 250 <= timer: attack event
+		if hp <= 0: death event
+	exit() - 
+
+	attack - attack event
+	death - death event
+attack 
+	enter - targetx = player.x, targety = player.y
+	do - frame += 1 / frame이 값 벗어나면 timeout 발생
+		if hp <= 0: death event
+	exit - rock(targetx, targety,x, y + 90)
+
+	move - timeout
+	death - death event
+death
+	enter - 리스트에 돈자루 생성(x좌표는 몬스터 x좌표에, y좌표는 몬스터 y좌표 + 30에) / 리스트에서 자신 삭제 예약
+	do
+	exit
+
+
+
+
+rock
+생성(targetx, targety, nowx, nowy)
+
+	x = nowx, y = nowy
+	angle = atan2(targetx - x, targety - y)
+
+	enter - 
+	do - x += cos(angle) * 5 / y += sin(angle) * 5
+		if(플레이어와 충돌): player.hp -= 15, 자신 삭제 예약
+		if(x < 0 || x > window_width) 자신 삭제 예약
+		if(y < 0 || y > window_height) 자신 삭제 예약
