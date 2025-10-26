@@ -1,15 +1,27 @@
 상태
 move(초기)
 	enter() - 
-	do() - 플레이어 방향(dir)으로 이동
+	do() - 플레이어 방향으로 dir 수정 / 플레이어 방향(dir)으로 이동
 	exit() - 
+
 	hit - hit event
 
 hit
 	enter() - 플레이어 반대 방향으로 이동 방향(dir) 고정, y축 이동속도(ymove) 10
 	do() - ymove만큼 y축 이동 / ymove -= 1, x축 이동 8 * dir / y좌표 < 90이면 y좌표 = 90, landing event 발생
+	exit - 
+
 	move - landing event
 	death - hp <= 0
 
 death
-	xxx
+	enter - 리스트에 돈자루 생성(x좌표는 몬스터 x좌표에, y좌표는 몬스터 y좌표 + 30에) / 리스트에서 자신 삭제 예약
+
+
+
+
+
+삭제 예약 방식
+	순회하면서 hp가 0 이하인 객체들을 새로운 리스트(ㅁㅁ)에 append한다
+	그 후 ㅁㅁ를 순회하면서 기존 리스트에서 ㅁㅁ의 요소돌을 삭제한다
+	
