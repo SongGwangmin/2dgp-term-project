@@ -1,7 +1,7 @@
 상태
 move(초기)
 	enter() - 
-	do() - 플레이어 방향으로 dir 수정 / 플레이어 방향(dir)으로 이동
+	do() - 플레이어 방향으로 dir 수정 / 플레이어 방향(dir)으로 이동 x += dir * 5
 	exit() - 
 
 	hit - hit event
@@ -16,6 +16,8 @@ hit
 
 death
 	enter - 리스트에 돈자루 생성(x좌표는 몬스터 x좌표에, y좌표는 몬스터 y좌표 + 30에) / 리스트에서 자신 삭제 예약
+	do
+	exit
 
 
 
