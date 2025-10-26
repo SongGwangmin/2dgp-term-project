@@ -1,12 +1,14 @@
-	enter() - 
-	do() - 
+기본적으로 하는 것들
+	enter() - action = 각 움직임에 걸맞는 값
+	do() - frame = (frame + 1) % num_of_frame[action] / 
 	exit() -
-	에서 기본적으로 프레임 변화시키는건 제외
+
 
 상태
 idle(초기)
 	enter() - 
 	do() - left key up/ left key down/ right key up/ right key down 발생 시에 movedir 값 1씩 증감 / movedir != 0이면 moving event 발생
+		몬스터와 충돌 시 hit event 발생
 	exit() -
 
 	jump - space key event
@@ -17,6 +19,8 @@ idle(초기)
 move
 	enter() - 
 	do() - left key up/ left key down/ right key up/ right key down 발생 시에 movedir 값 1씩 증감 / movedir == 0이면 stop event 발생
+		 x += 10 * movedir
+		몬스터와 충돌 시 hit event 발생
 	exit() -
 
 	idle - stop event
@@ -25,8 +29,10 @@ move
 	hit - hit event
 
 jump
-	enter() - 
+	enter() - ymove = 10
 	do() - left key up/ left key down/ right key up/ right key down 발생 시에 movedir 값 1씩 증감 / movedir != 0이면 moving event 발생
+	        y += ymove / ymove -= 1 / y좌표 < 90이면 y좌표 = 90, landing event 발생
+		몬스터와 충돌 시 hit event 발생
 	exit() -
 
 	idle - landing event
@@ -35,26 +41,52 @@ jump
 	jumpmove - moving event
 
 jumpmove
-	enter() - 
+	enter() - ymove = 10
 	do() - left key up/ left key down/ right key up/ right key down 발생 시에 movedir 값 1씩 증감 / movedir == 0이면 stop event 발생
+	        y += ymove / ymove -= 1 / y좌표 < 90이면 y좌표 = 90, landing event 발생 / x += 10 * movedir
+		몬스터와 충돌 시 hit event 발생
 	exit() -
 
-	jump - left key up/ left key down/ right key up/ right key down
+	jump - stop event
 	hit - hit event
 	jumpattack - a key donw
 	move - landing event
 
 
 attack
+	enter() -
+	do() - 몬스터와 충돌 시 hit event 발생 
+		frame에서 모듈러 연산 대신 그냥 += 1 하고 범위 넘어가면 timeout 발생
+		몬스터와 충돌 시 hit event 발생
+
+	exit() -
+
 	idle - timeout
 	hit - hit event
 
 jumpattack
+	enter() -
+	do() - 몬스터와 충돌 시 hit event 발생 
+		frame에서 모듈러 연산 대신 그냥 += 1 하고 범위 넘어가면 timeout 발생
+		y += ymove / ymove -= 1 / y좌표 < 90이면 y좌표 = 90, landing event 발생
+		몬스터와 충돌 시 hit event 발생
+
+	exit() -
+
 	attack - landing event
 	hit - hit event
 	jump - timeout
+
 hit
-	death - hp <= 0
+	enter() -
+	do() - frame에서 모듈러 연산 대신 그냥 += 1 하고 범위 넘어가면 timeout 발생
+		if hp <= 0: death event
+	exit() -
+	death - death event
 	idle - timeout
 death
+	enter() -
+	do() - 
+	exit() - mapchange(home)
+
 	idle - r key down
