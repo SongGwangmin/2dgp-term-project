@@ -1,0 +1,15 @@
+상태
+move(초기)
+	enter() - 
+	do() - 플레이어 방향(dir)으로 이동
+	exit() - 
+	hit - hit event
+
+hit
+	enter() - 플레이어 반대 방향으로 이동 방향(dir) 고정, y축 이동속도(ymove) 10
+	do() - ymove만큼 y축 이동 / ymove -= 1, x축 이동 8 * dir / y좌표 < 90이면 y좌표 = 90, landing event 발생
+	move - landing event
+	death - hp <= 0
+
+death
+	xxx
