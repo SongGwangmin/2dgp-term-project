@@ -36,5 +36,3 @@ move
 	jumpmove - space key donw
 	attack - a key down
 	hit - hit event
-
- 이것을 그래프의 관계를 나타내는 이차원 배열로 만들어 줄 수 있어?
