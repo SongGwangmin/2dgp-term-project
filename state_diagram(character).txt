@@ -1,17 +1,44 @@
+	enter() - 
+	do() - 
+	exit() -
+	에서 기본적으로 프레임 변화시키는건 제외
+
 상태
 idle(초기)
+	enter() - 
+	do() - left key up/ left key down/ right key up/ right key down 발생 시에 movedir 값 1씩 증감 / movedir != 0이면 moving event 발생
+	exit() -
+
 	jump - space key event
 	hit - hit event
-	move - left key up/ left key down/ right key up/ right key down
+	move - moving event
 	attack - a key down
 
+move
+	enter() - 
+	do() - left key up/ left key down/ right key up/ right key down 발생 시에 movedir 값 1씩 증감 / movedir == 0이면 stop event 발생
+	exit() -
+
+	idle - stop event
+	jumpmove - space key down
+	attack - a key down
+	hit - hit event
+
 jump
+	enter() - 
+	do() - left key up/ left key down/ right key up/ right key down 발생 시에 movedir 값 1씩 증감 / movedir != 0이면 moving event 발생
+	exit() -
+
 	idle - landing event
 	hit - hit event
 	jumpattack - a key donw
-	jumpmove - left key up/ left key down/ right key up/ right key down
+	jumpmove - moving event
 
 jumpmove
+	enter() - 
+	do() - left key up/ left key down/ right key up/ right key down 발생 시에 movedir 값 1씩 증감 / movedir == 0이면 stop event 발생
+	exit() -
+
 	jump - left key up/ left key down/ right key up/ right key down
 	hit - hit event
 	jumpattack - a key donw
@@ -31,8 +58,3 @@ hit
 	idle - timeout
 death
 	idle - r key down
-move
-	idle - left key up/ left key down/ right key up/ right key down
-	jumpmove - space key donw
-	attack - a key down
-	hit - hit event
