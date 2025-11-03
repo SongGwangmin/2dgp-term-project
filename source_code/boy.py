@@ -1,5 +1,5 @@
 from pico2d import load_image, get_time
-from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT
+from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_a
 
 import game_world
 from state_machine import StateMachine
@@ -27,6 +27,14 @@ def left_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
 
 
+def a_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_a
+
+
+def a_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_a
+
+
 
 
 
@@ -51,7 +59,7 @@ class Idle:
     def do(self):
         self.boy.frame = (self.boy.frame + 1) % 6
         if get_time() - self.boy.wait_time > 3:
-            self.boy.state_machine.handle_state_event(('TIMEOUT', None))
+            pass
 
     def draw(self):
         if self.boy.face_dir == 1: # right
@@ -60,12 +68,13 @@ class Idle:
             self.boy.image.clip_draw(self.boy.frame * 128, 6 * 128, 128, 128, self.boy.x, self.boy.y)
 
 
-class Sleep:
+class Attack:
 
     def __init__(self, boy):
         self.boy = boy
 
     def enter(self, e):
+        self.boy.frame = 0
         pass
 
     def exit(self, e):
@@ -73,7 +82,9 @@ class Sleep:
         pass
 
     def do(self):
-        self.boy.frame = (self.boy.frame + 1) % 6
+        self.boy.frame = (self.boy.frame + 1)
+        if self.boy.frame >= 4:
+            self.boy.state_machine.handle_state_event(('TIMEOUT', None))
 
 
     def handle_event(self, event):
@@ -81,9 +92,9 @@ class Sleep:
 
     def draw(self):
         if self.boy.face_dir == 1:
-            self.boy.image.clip_composite_draw(self.boy.frame * 128, 6 * 128, 128, 128, 3.141592/2, '', self.boy.x - 25, self.boy.y - 25, 100, 100)
+            self.boy.image.clip_draw(self.boy.frame * 128, 2 * 128, 128, 128, self.boy.x, self.boy.y)
         else:
-            self.boy.image.clip_composite_draw(self.boy.frame * 128, 6 * 128, 128, 128, -3.141592/2, '', self.boy.x + 25, self.boy.y - 25, 100, 100)
+            self.boy.image.clip_draw(self.boy.frame * 128, 2 * 128, 128, 128, self.boy.x, self.boy.y)
 
 
 
@@ -127,13 +138,13 @@ class Boy:
         self.image = load_image('player_sprite_full.png')
 
         self.IDLE = Idle(self)
-        self.SLEEP = Sleep(self)
+        self.ATTACK = Attack(self)
         self.RUN = Run(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.SLEEP: {space_down: self.IDLE},
-                self.IDLE: {space_down: self.IDLE, time_out: self.SLEEP, right_down: self.RUN, left_down: self.RUN,
+                self.ATTACK: {time_out: self.IDLE},
+                self.IDLE: {space_down: self.IDLE, a_down: self.ATTACK, right_down: self.RUN, left_down: self.RUN,
                             right_up: self.RUN, left_up: self.RUN},
                 self.RUN: {space_down: self.RUN, right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
                            left_down: self.IDLE}}
