@@ -1,3 +1,13 @@
+프레임 사이즈
+	- 가로 128 - 세로 128
+
+
+
+
+
+
+
+
 기본적으로 하는 것들
 	enter() - action = 각 움직임에 걸맞는 값
 	do() - frame = (frame + 1) % num_of_frame[action] / 
