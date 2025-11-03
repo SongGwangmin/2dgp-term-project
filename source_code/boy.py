@@ -5,6 +5,7 @@ import game_world
 from state_machine import StateMachine
 from ball import Ball
 
+attackkeydown = 0
 
 def space_down(e): # e is space down ?
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
@@ -28,14 +29,28 @@ def left_up(e):
 
 
 def a_down(e):
+    global attackkeydown
+    if e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_a:
+        attackkeydown = 1
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_a
 
 
 def a_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_a
+    global attackkeydown
+    if e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_a:
+        attackkeydown = 0
+        return True
+    return False
 
 
-
+def attack_key_isdown(e):
+    global attackkeydown
+    if attackkeydown:
+        print('attack_key_isdown')
+        return True
+    else:
+        print('attack_key_isdown false')
+    return False
 
 
 
@@ -74,16 +89,19 @@ class Attack:
         self.boy = boy
 
     def enter(self, e):
-        self.boy.frame = 0
+        if a_down(e):
+            self.boy.frame = 0
         pass
 
     def exit(self, e):
-
+        if a_up(e):
+            pass
         pass
 
     def do(self):
         self.boy.frame = (self.boy.frame + 1)
-        if self.boy.frame >= 4:
+        if self.boy.frame >= 3:
+            self.boy.frame = 0
             self.boy.state_machine.handle_state_event(('TIMEOUT', None))
 
 
@@ -111,6 +129,8 @@ class Run:
     def exit(self, e):
         if space_down(e):
             self.boy.fire_ball()
+        if attackkeydown:
+            self.boy.state_machine.handle_state_event(('TIMEOUT', None))
         pass
 
     def do(self):
@@ -137,21 +157,25 @@ class Boy:
         self.dir = 0
         self.image = load_image('player_sprite_full.png')
 
+
         self.IDLE = Idle(self)
         self.ATTACK = Attack(self)
         self.RUN = Run(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.ATTACK: {time_out: self.IDLE},
-                self.IDLE: {space_down: self.IDLE, a_down: self.ATTACK, right_down: self.RUN, left_down: self.RUN,
-                            right_up: self.RUN, left_up: self.RUN},
+                self.ATTACK: {time_out: self.IDLE, a_up: self.ATTACK},
+                self.IDLE: {space_down: self.IDLE, a_down: self.IDLE,  right_down: self.RUN, left_down: self.RUN,
+                            right_up: self.RUN, left_up: self.RUN, time_out: self.ATTACK},
                 self.RUN: {space_down: self.RUN, right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
                            left_down: self.IDLE}}
         )
 
     def update(self):
         self.state_machine.update()
+        if attackkeydown:
+            self.state_machine.handle_state_event(('TIMEOUT', None))
+
 
     def handle_event(self, event):
         self.state_machine.handle_state_event(('INPUT', event))
