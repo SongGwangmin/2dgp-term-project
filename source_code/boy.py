@@ -28,7 +28,7 @@ def left_up(e):
 
 
 
-
+playerspritesize = 128
 
 
 class Idle:
@@ -53,9 +53,9 @@ class Idle:
 
     def draw(self):
         if self.boy.face_dir == 1: # right
-            self.boy.image.clip_draw(self.boy.frame * 100, 300, 100, 100, self.boy.x, self.boy.y)
+            self.boy.image.clip_draw(self.boy.frame * 128, 300, 128, 128, self.boy.x, self.boy.y)
         else: # face_dir == -1: # left
-            self.boy.image.clip_draw(self.boy.frame * 100, 200, 100, 100, self.boy.x, self.boy.y)
+            self.boy.image.clip_draw(self.boy.frame * 128, 200, 128, 128, self.boy.x, self.boy.y)
 
 
 class Sleep:
