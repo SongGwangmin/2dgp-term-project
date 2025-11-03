@@ -28,7 +28,9 @@ def left_up(e):
 
 
 
-playerspritesize = 128
+
+
+
 
 
 class Idle:
@@ -47,15 +49,15 @@ class Idle:
         pass
 
     def do(self):
-        self.boy.frame = (self.boy.frame + 1) % 8
+        self.boy.frame = (self.boy.frame + 1) % 6
         if get_time() - self.boy.wait_time > 3:
             self.boy.state_machine.handle_state_event(('TIMEOUT', None))
 
     def draw(self):
         if self.boy.face_dir == 1: # right
-            self.boy.image.clip_draw(self.boy.frame * 128, 300, 128, 128, self.boy.x, self.boy.y)
+            self.boy.image.clip_draw(self.boy.frame * 128, 6 * 128, 128, 128, self.boy.x, self.boy.y)
         else: # face_dir == -1: # left
-            self.boy.image.clip_draw(self.boy.frame * 128, 200, 128, 128, self.boy.x, self.boy.y)
+            self.boy.image.clip_draw(self.boy.frame * 128, 6 * 128, 128, 128, self.boy.x, self.boy.y)
 
 
 class Sleep:
@@ -71,7 +73,7 @@ class Sleep:
         pass
 
     def do(self):
-        self.boy.frame = (self.boy.frame + 1) % 8
+        self.boy.frame = (self.boy.frame + 1) % 6
 
 
     def handle_event(self, event):
@@ -79,9 +81,9 @@ class Sleep:
 
     def draw(self):
         if self.boy.face_dir == 1:
-            self.boy.image.clip_composite_draw(self.boy.frame * 100, 300, 100, 100, 3.141592/2, '', self.boy.x - 25, self.boy.y - 25, 100, 100)
+            self.boy.image.clip_composite_draw(self.boy.frame * 128, 6 * 128, 128, 128, 3.141592/2, '', self.boy.x - 25, self.boy.y - 25, 100, 100)
         else:
-            self.boy.image.clip_composite_draw(self.boy.frame * 100, 200, 100, 100, -3.141592/2, '', self.boy.x + 25, self.boy.y - 25, 100, 100)
+            self.boy.image.clip_composite_draw(self.boy.frame * 128, 6 * 128, 128, 128, -3.141592/2, '', self.boy.x + 25, self.boy.y - 25, 100, 100)
 
 
 
@@ -101,14 +103,14 @@ class Run:
         pass
 
     def do(self):
-        self.boy.frame = (self.boy.frame + 1) % 8
+        self.boy.frame = (self.boy.frame + 1) % 7
         self.boy.x += self.boy.dir * 5
 
     def draw(self):
         if self.boy.face_dir == 1: # right
-            self.boy.image.clip_draw(self.boy.frame * 100, 100, 100, 100, self.boy.x, self.boy.y)
+            self.boy.image.clip_draw(self.boy.frame * 128, 5 * 128, 128, 128, self.boy.x, self.boy.y)
         else: # face_dir == -1: # left
-            self.boy.image.clip_draw(self.boy.frame * 100, 0, 100, 100, self.boy.x, self.boy.y)
+            self.boy.image.clip_draw(self.boy.frame * 128, 5 * 128, 128, 128, self.boy.x, self.boy.y)
 
 
 
@@ -122,7 +124,7 @@ class Boy:
         self.frame = 0
         self.face_dir = 1
         self.dir = 0
-        self.image = load_image('animation_sheet.png')
+        self.image = load_image('player_sprite_full.png')
 
         self.IDLE = Idle(self)
         self.SLEEP = Sleep(self)
