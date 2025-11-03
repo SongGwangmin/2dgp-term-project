@@ -92,6 +92,10 @@ class Attack:
         self.boy.frame = (self.boy.frame + 1)
         if self.boy.frame >= 4:
             self.boy.state_machine.handle_state_event(('TIMEOUT', None))
+            
+        if attackkeydown:
+            self.boy.state_machine.handle_state_event(('ATTACK_HOLD', None))
+            pass
 
     def handle_event(self, event):
         pass
@@ -143,8 +147,8 @@ class Boy:
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.ATTACK: {time_out: self.IDLE},
-                self.IDLE: {space_down: self.IDLE, a_down: self.ATTACK, attack_hold: self.ATTACK,
+                self.ATTACK: {time_out: self.IDLE, a_up: self.ATTACK},
+                self.IDLE: {space_down: self.IDLE, a_down: self.ATTACK, a_up: self.IDLE, attack_hold: self.ATTACK,
                             right_down: self.RUN, left_down: self.RUN,
                             right_up: self.RUN, left_up: self.RUN},
                 self.RUN: {space_down: self.RUN, right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
@@ -154,17 +158,10 @@ class Boy:
     def update(self):
         self.state_machine.update()
         # A키가 눌려있으면 매 프레임 ATTACK_HOLD 이벤트 발생
-        if attackkeydown:
-            self.state_machine.handle_state_event(('ATTACK_HOLD', None))
+
 
     def handle_event(self, event):
-        # 키 상태를 먼저 갱신
-        global attackkeydown
-        if event.type == SDL_KEYDOWN and event.key == SDLK_a:
-            attackkeydown = 1
-        elif event.type == SDL_KEYUP and event.key == SDLK_a:
-            attackkeydown = 0
-            
+
         self.state_machine.handle_state_event(('INPUT', event))
         pass
 
