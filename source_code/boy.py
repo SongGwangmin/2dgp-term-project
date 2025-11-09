@@ -50,6 +50,15 @@ def attack_hold(e):
     return e[0] == 'ATTACK_HOLD'
 
 
+# 새 이벤트: dir 기반 상태 전이 트리거용
+def run_dir(e):
+    return e[0] == 'RUN_DIR'
+
+
+def idle_dir(e):
+    return e[0] == 'IDLE_DIR'
+
+
 class Idle:
 
     def __init__(self, boy):
@@ -57,7 +66,7 @@ class Idle:
 
     def enter(self, e):
         self.boy.wait_time = get_time()
-        self.boy.dir = 0
+        # dir는 키 이벤트로 관리하므로 여기서 초기화하지 않습니다.
 
     def exit(self, e):
         if space_down(e):
@@ -73,7 +82,9 @@ class Idle:
         if self.boy.face_dir == 1:
             self.boy.image.clip_draw(self.boy.frame * 128, 6 * 128, 128, 128, self.boy.x, self.boy.y)
         else:
-            self.boy.image.clip_draw(self.boy.frame * 128, 6 * 128, 128, 128, self.boy.x, self.boy.y)
+            #self.boy.image.clip_draw(self.boy.frame * 128, 6 * 128, 128, 128, self.boy.x, self.boy.y)
+            self.boy.image.clip_composite_draw(self.boy.frame * 128, 6 * 128, 128, 128, 0, 'h',
+                                          self.boy.x, self.boy.y, 128, 128)
 
 
 class Attack:
@@ -92,7 +103,7 @@ class Attack:
         self.boy.frame = (self.boy.frame + 1)
         if self.boy.frame >= 4:
             self.boy.state_machine.handle_state_event(('TIMEOUT', None))
-            
+
         if attackkeydown:
             self.boy.state_machine.handle_state_event(('ATTACK_HOLD', None))
             pass
@@ -104,7 +115,8 @@ class Attack:
         if self.boy.face_dir == 1:
             self.boy.image.clip_draw(self.boy.frame * 128, 2 * 128, 128, 128, self.boy.x, self.boy.y)
         else:
-            self.boy.image.clip_draw(self.boy.frame * 128, 2 * 128, 128, 128, self.boy.x, self.boy.y)
+            self.boy.image.clip_composite_draw(self.boy.frame * 128, 2 * 128, 128, 128, 0, 'h',
+                                          self.boy.x, self.boy.y, 128, 128)
 
 
 class Run:
@@ -112,10 +124,11 @@ class Run:
         self.boy = boy
 
     def enter(self, e):
-        if right_down(e) or left_up(e):
-            self.boy.dir = self.boy.face_dir = 1
-        elif left_down(e) or right_up(e):
-            self.boy.dir = self.boy.face_dir = -1
+        # dir은 handle_event에서 관리되므로 여기서는 face_dir만 갱신
+        if self.boy.dir > 0:
+            self.boy.face_dir = 1
+        elif self.boy.dir < 0:
+            self.boy.face_dir = -1
 
     def exit(self, e):
         if space_down(e):
@@ -130,7 +143,8 @@ class Run:
         if self.boy.face_dir == 1:
             self.boy.image.clip_draw(self.boy.frame * 128, 5 * 128, 128, 128, self.boy.x, self.boy.y)
         else:
-            self.boy.image.clip_draw(self.boy.frame * 128, 5 * 128, 128, 128, self.boy.x, self.boy.y)
+            self.boy.image.clip_composite_draw(self.boy.frame * 128, 5 * 128, 128, 128, 0, 'h',
+                                          self.boy.x, self.boy.y, 128, 128)
 
 
 class Boy:
@@ -148,19 +162,43 @@ class Boy:
             self.IDLE,
             {
                 self.ATTACK: {time_out: self.IDLE, a_up: self.ATTACK},
+                # 좌우 키의 직접적인 up/down 이벤트 매핑 제거. dir 상태로 전이 처리
                 self.IDLE: {space_down: self.IDLE, a_down: self.ATTACK, a_up: self.IDLE, attack_hold: self.ATTACK,
-                            right_down: self.RUN, left_down: self.RUN,
-                            right_up: self.RUN, left_up: self.RUN},
-                self.RUN: {space_down: self.RUN, right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE,
-                           left_down: self.IDLE}}
+                            run_dir: self.RUN},
+                self.RUN: {space_down: self.RUN, idle_dir: self.IDLE, a_down: self.ATTACK}
+            }
         )
 
     def update(self):
         self.state_machine.update()
         # A키가 눌려있으면 매 프레임 ATTACK_HOLD 이벤트 발생
+        if attackkeydown:
+            self.state_machine.handle_state_event(('ATTACK_HOLD', None))
 
+        # dir 상태에 따라 RUN/IDLE 전이 트리거 (현재 상태와 다를 때만 이벤트 보냄)
+        if self.dir != 0 and self.state_machine.cur_state is not self.RUN:
+            self.state_machine.handle_state_event(('RUN_DIR', None))
+        elif self.dir == 0 and self.state_machine.cur_state is self.RUN:
+            self.state_machine.handle_state_event(('IDLE_DIR', None))
 
     def handle_event(self, event):
+        # 방향키 상태를 누를 때마다 dir을 ++/-- 하여 여러 키 동시 입력도 처리
+        try:
+            if event.type == SDL_KEYDOWN:
+                if event.key == SDLK_RIGHT:
+                    self.dir += 1
+                    self.face_dir = 1
+                elif event.key == SDLK_LEFT:
+                    self.dir -= 1
+                    self.face_dir = -1
+            elif event.type == SDL_KEYUP:
+                if event.key == SDLK_RIGHT:
+                    self.dir -= 1
+                elif event.key == SDLK_LEFT:
+                    self.dir += 1
+        except Exception:
+            # event가 None이거나 구조가 다를 경우 예외 무시
+            pass
 
         self.state_machine.handle_state_event(('INPUT', event))
         pass
