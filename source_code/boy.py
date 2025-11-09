@@ -175,11 +175,13 @@ class Boy:
         if attackkeydown:
             self.state_machine.handle_state_event(('ATTACK_HOLD', None))
 
-        # dir 상태에 따라 RUN/IDLE 전이 트리거 (현재 상태와 다를 때만 이벤트 보냄)
-        if self.dir != 0 and self.state_machine.cur_state is not self.RUN:
-            self.state_machine.handle_state_event(('RUN_DIR', None))
-        elif self.dir == 0 and self.state_machine.cur_state is self.RUN:
-            self.state_machine.handle_state_event(('IDLE_DIR', None))
+        if self.dir != 0:
+            self.state_machine.handle_state_event(('RUN_DIR', self))
+        else:
+            self.state_machine.handle_state_event(('IDLE_DIR', self))
+
+        # dir 기반 상태 전이 이벤트는 handle_event에서 방향키 입력이 있을 때만 보냄
+        pass
 
     def handle_event(self, event):
         # 방향키 상태를 누를 때마다 dir을 ++/-- 하여 여러 키 동시 입력도 처리
@@ -199,6 +201,9 @@ class Boy:
         except Exception:
             # event가 None이거나 구조가 다를 경우 예외 무시
             pass
+
+
+
 
         self.state_machine.handle_state_event(('INPUT', event))
         pass
