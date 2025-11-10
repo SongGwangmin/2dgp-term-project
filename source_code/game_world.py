@@ -20,3 +20,18 @@ def remove_object(o):
             return
 
     print("Trying to remove object not in world")
+
+def update():
+    for layer in world:
+        for o in layer:
+            o.update()
+
+def render():
+    for layer in world:
+        for o in layer:
+            o.draw()
+
+
+def clear():
+    for layer in world:
+        layer.clear()
