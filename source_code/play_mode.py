@@ -18,41 +18,31 @@ def handle_events():
         else:
             boy.handle_event(event)
 
-
-def reset_world():
+def init():
     global boy
-    grass = Grass(30)
+    global running
+    running = True
+    grass = Grass()
     game_world.add_object(grass, 0)
-
     boy = Boy()
     game_world.add_object(boy, 1)
 
-    grass = Grass(0)
-    game_world.add_object(grass, 2)
 
+def finish():
+    game_world.clear()
 
-
-def update_world():
+def update():
     game_world.update()
 
 
-def render_world():
+def draw():
     clear_canvas()
     game_world.render()
     update_canvas()
 
 
-running = True
+def pause():
+    pass
 
-
-
-open_canvas()
-reset_world()
-# game loop
-while running:
-    handle_events()
-    update_world()
-    render_world()
-    delay(0.01)
-# finalization code
-close_canvas()
+def resume():
+    pass
