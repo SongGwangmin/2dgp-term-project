@@ -1,13 +1,23 @@
-from pico2d import load_image, get_time
+from pico2d import load_image, get_time, load_font
 from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_a
 
 import game_world
 from state_machine import StateMachine
+import game_framework
 from ball import Ball
 
 # 전역 변수로 A키 눌림 상태 저장
 attackkeydown = 0
+PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
+RUN_SPEED_KMPH = 20.0            # Km / Hour
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
+time_per_action = 0.3
+frames_per_action = 8
+actions_per_time = 1.0 / time_per_action
+FRAMES_PER_SEC = frames_per_action * actions_per_time
 
 def space_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
@@ -74,16 +84,16 @@ class Idle:
         pass
 
     def do(self):
-        self.boy.frame = (self.boy.frame + 1) % 6
-        if get_time() - self.boy.wait_time > 3:
+        self.boy.frame = (FRAMES_PER_SEC * game_framework.frame_time + self.boy.frame) % 6
+        if get_time() - self.boy.wait_time > 3: # 슬립 흔적기관
             pass
 
     def draw(self):
         if self.boy.face_dir == 1:
-            self.boy.image.clip_draw(self.boy.frame * 128, 6 * 128, 128, 128, self.boy.x, self.boy.y)
+            self.boy.image.clip_draw(int(self.boy.frame) * 128, 6 * 128, 128, 128, self.boy.x, self.boy.y)
         else:
             #self.boy.image.clip_draw(self.boy.frame * 128, 6 * 128, 128, 128, self.boy.x, self.boy.y)
-            self.boy.image.clip_composite_draw(self.boy.frame * 128, 6 * 128, 128, 128, 0, 'h',
+            self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 6 * 128, 128, 128, 0, 'h',
                                           self.boy.x, self.boy.y, 128, 128)
 
 
@@ -100,7 +110,7 @@ class Attack:
         pass
 
     def do(self):
-        self.boy.frame = (self.boy.frame + 1)
+        self.boy.frame = (FRAMES_PER_SEC * game_framework.frame_time + self.boy.frame)
         if self.boy.frame >= 4:
             self.boy.state_machine.handle_state_event(('TIMEOUT', None))
 
@@ -113,9 +123,9 @@ class Attack:
 
     def draw(self):
         if self.boy.face_dir == 1:
-            self.boy.image.clip_draw(self.boy.frame * 128, 2 * 128, 128, 128, self.boy.x, self.boy.y)
+            self.boy.image.clip_draw(int(self.boy.frame) * 128, 2 * 128, 128, 128, self.boy.x, self.boy.y)
         else:
-            self.boy.image.clip_composite_draw(self.boy.frame * 128, 2 * 128, 128, 128, 0, 'h',
+            self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 2 * 128, 128, 128, 0, 'h',
                                           self.boy.x, self.boy.y, 128, 128)
 
 
@@ -136,8 +146,8 @@ class Run:
         pass
 
     def do(self):
-        self.boy.frame = (self.boy.frame + 1) % 7
-        self.boy.x += self.boy.dir * 5
+        self.boy.frame = (FRAMES_PER_SEC * game_framework.frame_time + self.boy.frame) % 7
+        self.boy.x += self.boy.dir * RUN_SPEED_PPS * game_framework.frame_time
         if self.boy.x < 0:
             self.boy.x = 0
         elif self.boy.x > 800:
@@ -145,9 +155,9 @@ class Run:
 
     def draw(self):
         if self.boy.face_dir == 1:
-            self.boy.image.clip_draw(self.boy.frame * 128, 5 * 128, 128, 128, self.boy.x, self.boy.y)
+            self.boy.image.clip_draw(int(self.boy.frame) * 128, 5 * 128, 128, 128, self.boy.x, self.boy.y)
         else:
-            self.boy.image.clip_composite_draw(self.boy.frame * 128, 5 * 128, 128, 128, 0, 'h',
+            self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 5 * 128, 128, 128, 0, 'h',
                                           self.boy.x, self.boy.y, 128, 128)
 
 
