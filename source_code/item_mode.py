@@ -20,6 +20,8 @@ def finish():
 
 def update():
     game_world.update()
+    game_world.handle_collision()
+
     # 아이템 모드에서 플레이모드가 유지가 되어야 하므로 게임 월드를 계속 업데이트 해줘야한다
 
 def draw():

@@ -33,8 +33,7 @@ def init():
     boy = Boy()
     game_world.add_object(boy, 1)
 
-    game_world.add_collision_pair('boy:grass', boy, None)
-    game_world.add_collision_pair('boy:grass', None, grass)
+    game_world.add_collision_pair('boy:grass', boy, grass)
 
 
 def finish():

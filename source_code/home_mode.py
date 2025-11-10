@@ -37,6 +37,7 @@ def init():
     game_world.add_object(grass, 0)
     boy = Boy()
     game_world.add_object(boy, 1)
+    game_world.add_collision_pair('boy:grass', boy, grass)
 
 
 def finish():
@@ -44,6 +45,7 @@ def finish():
 
 def update():
     game_world.update()
+    game_world.handle_collision()
 
 
 def draw():
