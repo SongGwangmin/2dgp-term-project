@@ -16,5 +16,5 @@ class Grass:
     def get_bb(self):
         return 0, 0, 800, 50
 
-    def handle_collision(self, other, group):
+    def handle_collision(self, group, other):
         pass

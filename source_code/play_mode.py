@@ -34,7 +34,7 @@ def init():
     game_world.add_object(boy, 1)
 
     game_world.add_collision_pair('boy:grass', boy, None)
-    game_world.add_collision_pair('boy:grass', None, boy)
+    game_world.add_collision_pair('boy:grass', None, grass)
 
 
 def finish():
