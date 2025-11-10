@@ -9,7 +9,7 @@ from ball import Ball
 # 전역 변수로 A키 눌림 상태 저장
 attackkeydown = 0
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
-RUN_SPEED_KMPH = 20.0            # Km / Hour
+RUN_SPEED_KMPH = 30.0            # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -18,6 +18,8 @@ time_per_action = 0.3
 frames_per_action = 8
 actions_per_time = 1.0 / time_per_action
 FRAMES_PER_SEC = frames_per_action * actions_per_time
+
+METER = 5
 
 def space_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
@@ -90,11 +92,12 @@ class Idle:
 
     def draw(self):
         if self.boy.face_dir == 1:
-            self.boy.image.clip_draw(int(self.boy.frame) * 128, 6 * 128, 128, 128, self.boy.x, self.boy.y)
+            self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 6 * 128, 128, 128, 0, '',
+                                               self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         else:
             #self.boy.image.clip_draw(self.boy.frame * 128, 6 * 128, 128, 128, self.boy.x, self.boy.y)
             self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 6 * 128, 128, 128, 0, 'h',
-                                          self.boy.x, self.boy.y, 128, 128)
+                                          self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
 
 
 class Attack:
@@ -123,10 +126,11 @@ class Attack:
 
     def draw(self):
         if self.boy.face_dir == 1:
-            self.boy.image.clip_draw(int(self.boy.frame) * 128, 2 * 128, 128, 128, self.boy.x, self.boy.y)
+            self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 2 * 128, 128, 128, 0, '',
+                                               self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         else:
             self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 2 * 128, 128, 128, 0, 'h',
-                                          self.boy.x, self.boy.y, 128, 128)
+                                          self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
 
 
 class Run:
@@ -155,10 +159,11 @@ class Run:
 
     def draw(self):
         if self.boy.face_dir == 1:
-            self.boy.image.clip_draw(int(self.boy.frame) * 128, 5 * 128, 128, 128, self.boy.x, self.boy.y)
+            self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 5 * 128, 128, 128, 0, '',
+                                               self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         else:
             self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 5 * 128, 128, 128, 0, 'h',
-                                          self.boy.x, self.boy.y, 128, 128)
+                                          self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
 
 
 class Boy:
