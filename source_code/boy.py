@@ -1,4 +1,4 @@
-from pico2d import load_image, get_time, load_font
+from pico2d import load_image, get_time, load_font, draw_rectangle
 from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_a
 
 import game_world
@@ -168,7 +168,7 @@ class Run:
 
 class Boy:
     def __init__(self):
-        self.x, self.y = 400, 90
+        self.x, self.y = 400, 130
         self.frame = 0
         self.face_dir = 1
         self.dir = 0
@@ -229,8 +229,12 @@ class Boy:
 
     def draw(self):
         self.state_machine.draw()
+        draw_rectangle(*self.get_bb())
 
     def fire_ball(self):
         print("Fire Ball!")
         ball = Ball(self.x, self.y, self.face_dir * 10)
         game_world.add_object(ball, 1)
+
+    def get_bb(self):
+        return self.x - 15, self.y - 80, self.x + 15, self.y + 5

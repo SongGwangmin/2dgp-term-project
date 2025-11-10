@@ -1,4 +1,4 @@
-from pico2d import load_image
+from pico2d import *
 
 
 class Grass:
@@ -8,6 +8,11 @@ class Grass:
 
     def draw(self):
         self.image.draw(400, 30 + self.y)
+        draw_rectangle(*self.get_bb())
 
     def update(self):
         pass
+
+    def get_bb(self):
+        return 0, 0, 800, 50
+
