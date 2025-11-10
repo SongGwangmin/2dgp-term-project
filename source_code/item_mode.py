@@ -3,6 +3,7 @@ import game_framework
 from pannel import Pannel
 import game_world
 import play_mode
+import home_mode
 
 def init():
     global pannel
@@ -44,6 +45,19 @@ def handle_events():
             elif event.key == SDLK_2:
                 play_mode.boy.item = 'BigBall'
                 game_framework.pop_mode()
+            elif event.key == SDLK_LEFT: #
+                home_mode.boy.handle_event(event)  # 방향키 이벤트도 플레이모드의 보이 핸들 이벤트로 전달
+                print(1);
+            elif event.key == SDLK_RIGHT:
+                home_mode.boy.handle_event(event)
+                print(1);
+        elif event.type == SDL_KEYUP:
+            if event.key == SDLK_LEFT:
+                home_mode.boy.handle_event(event)
+                print(1);
+            elif event.key == SDLK_RIGHT:
+                home_mode.boy.handle_event(event)
+                print(1);
 
 
 
