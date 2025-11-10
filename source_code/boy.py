@@ -21,6 +21,8 @@ FRAMES_PER_SEC = frames_per_action * actions_per_time
 
 METER = 5
 
+GRAVITY = 9.8  # 중력 가속도 (m/s²)
+
 def space_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
 
@@ -172,6 +174,7 @@ class Boy:
         self.frame = 0
         self.face_dir = 1
         self.dir = 0
+        self.yv = 0
         self.image = load_image('player_sprite_full.png')
 
         self.IDLE = Idle(self)
@@ -198,6 +201,9 @@ class Boy:
             self.state_machine.handle_state_event(('RUN_DIR', self))
         else:
             self.state_machine.handle_state_event(('IDLE_DIR', self))
+
+        self.y += self.yv * game_framework.frame_time * PIXEL_PER_METER
+        self.yv -= GRAVITY * game_framework.frame_time  # m/s
 
         # dir 기반 상태 전이 이벤트는 handle_event에서 방향키 입력이 있을 때만 보냄
         pass
