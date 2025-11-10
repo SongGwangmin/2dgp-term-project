@@ -248,3 +248,7 @@ class Boy:
 
     def jump(self):
         self.yv = 10
+
+    def handle_collision(self, other, group):
+        if group == 'boy:grass':
+            self.yv = 0

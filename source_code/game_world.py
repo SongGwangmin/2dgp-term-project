@@ -68,7 +68,7 @@ def add_collision_pair(group, a, b):
         collision_pairs[group][1].append(b)
 
 
-def hendle_collision():
+def handle_collision():
     for group, pairs in collision_pairs.items():
         for a in pairs[0]:
             for b in pairs[1]:

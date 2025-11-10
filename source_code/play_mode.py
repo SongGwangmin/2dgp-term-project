@@ -20,10 +20,6 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_q:
             game_framework.change_mode(worldmap_mode)
-            #game_framework.change_mode(title_mode)
-        #elif event.type == SDL_KEYDOWN and event.key == SDLK_i:
-            #game_framework.push_mode(item_mode)
-            # push mode: 플레이 모드를 유지해야하므로
         else:
             boy.handle_event(event)
 
@@ -37,6 +33,8 @@ def init():
     boy = Boy()
     game_world.add_object(boy, 1)
 
+    game_world.add_collision_pair('boy:grass', boy, None)
+    game_world.add_collision_pair('boy:grass', None, boy)
 
 
 def finish():
@@ -44,6 +42,7 @@ def finish():
 
 def update():
     game_world.update()
+    game_world.handle_collision()
 
 
 def draw():
