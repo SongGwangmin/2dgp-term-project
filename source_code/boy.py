@@ -84,7 +84,7 @@ class Idle:
 
     def exit(self, e):
         if space_down(e):
-            self.boy.fire_ball()
+            self.boy.jump()
         pass
 
     def do(self):
@@ -218,6 +218,7 @@ class Boy:
                 elif event.key == SDLK_LEFT:
                     self.dir -= 1
                     self.face_dir = -1
+
             elif event.type == SDL_KEYUP:
                 if event.key == SDLK_RIGHT:
                     self.dir -= 1
@@ -244,3 +245,6 @@ class Boy:
 
     def get_bb(self):
         return self.x - 15, self.y - 80, self.x + 15, self.y + 5
+
+    def jump(self):
+        self.yv = 10
