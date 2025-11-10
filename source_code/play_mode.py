@@ -38,6 +38,7 @@ def init():
     game_world.add_object(boy, 1)
 
 
+
 def finish():
     game_world.clear()
 
