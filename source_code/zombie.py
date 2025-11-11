@@ -29,7 +29,7 @@ class Zombie:
                 Zombie.images[name] = [load_image("./zombie/"+ name + " (%d)" % i + ".png") for i in range(1, 11)]
 
     def __init__(self):
-        self.x, self.y = random.randint(1600-800, 1600), 150
+        self.x, self.y = random.randint(100, 800), 150
         self.load_images()
         self.frame = random.randint(0, 9)
         self.dir = random.choice([-1,1])
@@ -43,11 +43,11 @@ class Zombie:
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
         self.x += RUN_SPEED_PPS * self.dir * game_framework.frame_time
-        if self.x > 1600:
+        if self.x > 800:
             self.dir = -1
-        elif self.x < 800:
+        elif self.x < 100:
             self.dir = 1
-        self.x = clamp(800, self.x, 1600)
+        self.x = clamp(100, self.x, 800)
         pass
 
 

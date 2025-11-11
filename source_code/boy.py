@@ -178,7 +178,7 @@ class Run:
 class Boy:
     money = 0
     dir = 0
-    set_balls = 0
+    set_balls = 1
     strength = 1
     def __init__(self):
         self.x, self.y = 140, 130
@@ -255,6 +255,7 @@ class Boy:
         print("Fire Ball!")
         ball = Ball(self.x, self.y, self.face_dir)
         game_world.add_object(ball, 1)
+        game_world.add_collision_pair('ball:zombie', ball, None)
 
     def get_bb(self):
         return self.x - 15, self.y - 80, self.x + 15, self.y + 5

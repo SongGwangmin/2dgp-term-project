@@ -4,6 +4,7 @@ from grass import Grass
 import game_world
 import game_framework
 import worldmap_mode
+from zombie import Zombie
 import home_mode
 from game_world import world
 # Game object class here
@@ -34,6 +35,12 @@ def init():
     game_world.add_object(boy, 1)
 
     game_world.add_collision_pair('boy:grass', boy, grass)
+    zombies = [Zombie() for i in range(4)]
+    game_world.add_objects(zombies, 1)
+
+    for zombie in zombies:
+        game_world.add_collision_pair('boy:zombie', None, zombie)
+        game_world.add_collision_pair('ball:zombie', None, zombie)
 
 
 def finish():
