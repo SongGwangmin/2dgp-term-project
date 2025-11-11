@@ -1,4 +1,4 @@
-from pico2d import load_image
+from pico2d import load_image, draw_rectangle
 import game_world
 import game_framework
 
@@ -24,6 +24,8 @@ class Ball:
         #                                           self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
     def draw(self):
         self.image.clip_composite_draw(0, 0, 21, 21, 0, '', self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+        draw_rectangle(*self.get_bb())
+
         print('draw ball')
 
     def update(self):
@@ -32,3 +34,6 @@ class Ball:
 
         if self.x < 0 or self.x > 800:
             game_world.remove_object(self)
+
+    def get_bb(self):
+        return self.x - 50, self.y - 50, self.x + 50, self.y + 50
