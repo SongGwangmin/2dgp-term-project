@@ -1,5 +1,5 @@
 from pico2d import load_image, get_time, load_font, draw_rectangle
-from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_a
+from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_a, SDLK_d
 
 import game_world
 from state_machine import StateMachine
@@ -13,6 +13,7 @@ RUN_SPEED_KMPH = 30.0            # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
 
 time_per_action = 0.3
 frames_per_action = 8
@@ -59,6 +60,8 @@ def a_up(e):
         return True
     return False
 
+def d_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_d
 
 def attack_hold(e):
     return e[0] == 'ATTACK_HOLD'
@@ -109,6 +112,8 @@ class Attack:
 
     def enter(self, e):
         self.boy.frame = 0
+        if e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_d:
+            self.boy.fire_ball()
         pass
 
     def exit(self, e):
@@ -189,8 +194,8 @@ class Boy:
                 self.ATTACK: {time_out: self.IDLE, a_up: self.ATTACK},
                 # 좌우 키의 직접적인 up/down 이벤트 매핑 제거. dir 상태로 전이 처리
                 self.IDLE: {space_down: self.IDLE, a_down: self.ATTACK, a_up: self.IDLE, attack_hold: self.ATTACK,
-                            run_dir: self.RUN},
-                self.RUN: {space_down: self.RUN, idle_dir: self.IDLE, a_down: self.ATTACK}
+                            run_dir: self.RUN, d_down: self.ATTACK},
+                self.RUN: {space_down: self.RUN, idle_dir: self.IDLE, a_down: self.ATTACK, d_down: self.ATTACK,}
             }
         )
 
