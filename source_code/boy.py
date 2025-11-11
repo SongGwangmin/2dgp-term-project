@@ -261,8 +261,8 @@ class Boy:
         return self.x - 15, self.y - 80, self.x + 15, self.y + 5
 
     def jump(self):
-        self.yv = 10
-        Boy.money += 1
+        self.yv = 7
+        Boy.money += 10
 
     def handle_collision(self, group, other):
         if group == 'boy:grass':
