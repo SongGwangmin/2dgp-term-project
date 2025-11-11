@@ -178,12 +178,11 @@ class Run:
 class Boy:
     money = 0
     dir = 0
-    set_balls = 1
+    set_balls = 0
     def __init__(self):
         self.x, self.y = 140, 130
         self.frame = 0
         self.face_dir = 1
-
         self.yv = 0
         self.font = load_font('ENCR10B.TTF', 16)
         self.image = load_image('player_sprite_full.png')

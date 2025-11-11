@@ -2,6 +2,7 @@ from pico2d import load_image, draw_rectangle
 import game_world
 import game_framework
 
+
 METER = 3
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
 
@@ -16,14 +17,14 @@ class Ball:
     def __init__(self, x = 400, y=400, velocity=1):
         print('create ball')
         if Ball.image is None:
-            Ball.image = load_image('ball21x21.png')
+            Ball.image = load_image('ball41x41.png')
         self.x = x
         self.y = y
         self.velocity = velocity
         # self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 2 * 128, 128, 128, 0, 'h',
         #                                           self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
     def draw(self):
-        self.image.clip_composite_draw(0, 0, 21, 21, 0, '', self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+        self.image.clip_composite_draw(0, 0, 41, 41, 0, '', self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         draw_rectangle(*self.get_bb())
 
         print('draw ball')
