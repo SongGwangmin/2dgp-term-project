@@ -51,20 +51,10 @@ def handle_events():
             elif event.key == SDLK_q:
                 game_framework.pop_mode() # 아이템 모드에서 빠져나올 때는 홈모드로 돌아가야하므로 pop_mode
                 game_framework.change_mode(worldmap_mode)
-            elif event.key == SDLK_LEFT: #
-                home_mode.boy.handle_event(event)  # 방향키 이벤트도 홈모드의 보이 핸들 이벤트로 전달
-                print(1);
-            elif event.key == SDLK_RIGHT:
+            else:
                 home_mode.boy.handle_event(event)
-                print(1);
-        elif event.type == SDL_KEYUP:
-            if event.key == SDLK_LEFT:
-                home_mode.boy.handle_event(event)
-                print(1);
-            elif event.key == SDLK_RIGHT:
-                home_mode.boy.handle_event(event)
-                print(1);
-
+        else:
+            home_mode.boy.handle_event(event)
 
 
 def pause():
