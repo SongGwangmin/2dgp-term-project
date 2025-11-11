@@ -61,6 +61,8 @@ def a_up(e):
     return False
 
 def d_down(e):
+    if Boy.set_balls == 0:
+        return False
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_d
 
 def attack_hold(e):
@@ -176,6 +178,7 @@ class Run:
 class Boy:
     money = 0
     dir = 0
+    set_balls = 1
     def __init__(self):
         self.x, self.y = 140, 130
         self.frame = 0
@@ -249,6 +252,7 @@ class Boy:
         self.font.draw(15, 580, f'{Boy.money:02d}', (0, 0, 0))
 
     def fire_ball(self):
+
         print("Fire Ball!")
         ball = Ball(self.x, self.y, self.face_dir)
         game_world.add_object(ball, 1)
