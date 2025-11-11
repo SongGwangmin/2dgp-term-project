@@ -253,7 +253,7 @@ class Boy:
 
     def fire_ball(self):
         print("Fire Ball!")
-        ball = Ball(self.x, self.y, self.face_dir)
+        ball = Ball(self.x, self.y, self.face_dir, Boy.strength)
         game_world.add_object(ball, 1)
         game_world.add_collision_pair('ball:zombie', ball, None)
 

@@ -21,12 +21,15 @@ animation_names = ['Walk']
 
 class Zombie:
     images = None
-
+    maxhp = 10
+    font = None
     def load_images(self):
         if Zombie.images == None:
             Zombie.images = {}
             for name in animation_names:
                 Zombie.images[name] = [load_image("./zombie/"+ name + " (%d)" % i + ".png") for i in range(1, 11)]
+        if Zombie.font == None:
+            Zombie.font = load_font('ENCR10B.TTF', 16)
 
     def __init__(self):
         self.x, self.y = random.randint(100, 800), 150
@@ -35,6 +38,7 @@ class Zombie:
         self.dir = random.choice([-1,1])
         self.count = 1
         self.size = 100
+        self.hp = Zombie.maxhp
 
 
     def get_bb(self):
@@ -57,15 +61,16 @@ class Zombie:
         else:
             Zombie.images['Walk'][int(self.frame)].draw(self.x, self.y + 50 * (self.count - 1), self.size * 2, self.size * 2)
         draw_rectangle(*self.get_bb())
+        Zombie.font.draw(self.x-10, self.y + 50, f'{self.hp:02d}', (255, 0, 0))
 
     def handle_event(self, event):
         pass
 
     def handle_collision(self, group, other):
         if group == 'ball:zombie':
-            if self.count > 0:
-                self.count -= 1
-                self.size -= 50
+            self.hp -= other.strength
+            if self.hp > 0:
+                pass
             else:
                 game_world.remove_object(self)
         elif group == 'boy:zombie':

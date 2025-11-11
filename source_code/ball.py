@@ -14,15 +14,15 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 class Ball:
     image = None
-    def __init__(self, x = 400, y=400, velocity=1):
+    def __init__(self, x = 400, y=400, velocity=1, strength=1):
         print('create ball')
         if Ball.image is None:
             Ball.image = load_image('ball41x41.png')
         self.x = x
         self.y = y
         self.velocity = velocity
-        # self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 2 * 128, 128, 128, 0, 'h',
-        #                                           self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+        self.strength = strength
+
     def draw(self):
         self.image.clip_composite_draw(0, 0, 41, 41, 0, '', self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         draw_rectangle(*self.get_bb())
@@ -42,3 +42,4 @@ class Ball:
     def handle_collision(self, group, other):
         if group == 'ball:zombie':
             game_world.remove_object(self)
+            print('ball collide with zombie')

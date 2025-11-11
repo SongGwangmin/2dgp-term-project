@@ -29,6 +29,7 @@ def init():
     global boy
     global running
     running = True
+    game_world.collision_pairs = {}
     grass = Grass()
     game_world.add_object(grass, 0)
     boy = Boy()
