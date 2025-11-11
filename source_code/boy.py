@@ -252,7 +252,6 @@ class Boy:
         self.font.draw(15, 580, f'{Boy.money:02d}', (0, 0, 0))
 
     def fire_ball(self):
-
         print("Fire Ball!")
         ball = Ball(self.x, self.y, self.face_dir)
         game_world.add_object(ball, 1)
