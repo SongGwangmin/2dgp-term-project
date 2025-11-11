@@ -15,7 +15,9 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 # zombie Action Speed
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 10.0
+FRAMES_PER_ACTION = 4.0
+
+METER = 5
 
 animation_names = ['Walk']
 
@@ -25,9 +27,7 @@ class Zombie:
     font = None
     def load_images(self):
         if Zombie.images == None:
-            Zombie.images = {}
-            for name in animation_names:
-                Zombie.images[name] = [load_image("./zombie/"+ name + " (%d)" % i + ".png") for i in range(1, 11)]
+            Zombie.images = load_image('LARVA.png')
         if Zombie.font == None:
             Zombie.font = load_font('ENCR10B.TTF', 16)
 
@@ -57,9 +57,11 @@ class Zombie:
 
     def draw(self):
         if self.dir < 0:
-            Zombie.images['Walk'][int(self.frame)].composite_draw(0, 'h', self.x, self.y + 50 * (self.count - 1), self.size * 2, self.size * 2)
+            Zombie.images.clip_composite_draw(int(self.frame) * 144 + 2, 0, 144, 114, 0, '',
+                                               self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         else:
-            Zombie.images['Walk'][int(self.frame)].draw(self.x, self.y + 50 * (self.count - 1), self.size * 2, self.size * 2)
+            Zombie.images.clip_composite_draw(int(self.frame) * 144 + 2, 0, 144, 114, 0, 'h',
+                                              self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         draw_rectangle(*self.get_bb())
         Zombie.font.draw(self.x-10, self.y + 50, f'{self.hp:02d}', (255, 0, 0))
 
