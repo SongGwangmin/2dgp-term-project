@@ -250,7 +250,7 @@ class Boy:
 
     def fire_ball(self):
         print("Fire Ball!")
-        ball = Ball(self.x, self.y, self.face_dir * 10)
+        ball = Ball(self.x, self.y, self.face_dir)
         game_world.add_object(ball, 1)
 
     def get_bb(self):
