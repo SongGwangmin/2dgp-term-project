@@ -170,11 +170,12 @@ class Run:
 
 class Boy:
     money = 0
+    dir = 0
     def __init__(self):
         self.x, self.y = 140, 130
         self.frame = 0
         self.face_dir = 1
-        self.dir = 0
+
         self.yv = 0
         self.font = load_font('ENCR10B.TTF', 16)
         self.image = load_image('player_sprite_full.png')
@@ -199,8 +200,9 @@ class Boy:
         if attackkeydown:
             self.state_machine.handle_state_event(('ATTACK_HOLD', None))
 
-        if self.dir != 0:
+        if Boy.dir != 0:
             self.state_machine.handle_state_event(('RUN_DIR', self))
+
         else:
             self.state_machine.handle_state_event(('IDLE_DIR', self))
 
@@ -215,17 +217,17 @@ class Boy:
         try:
             if event.type == SDL_KEYDOWN:
                 if event.key == SDLK_RIGHT:
-                    self.dir += 1
+                    Boy.dir += 1
                     self.face_dir = 1
                 elif event.key == SDLK_LEFT:
-                    self.dir -= 1
+                    Boy.dir -= 1
                     self.face_dir = -1
 
             elif event.type == SDL_KEYUP:
                 if event.key == SDLK_RIGHT:
-                    self.dir -= 1
+                    Boy.dir -= 1
                 elif event.key == SDLK_LEFT:
-                    self.dir += 1
+                    Boy.dir += 1
         except Exception:
             # event가 None이거나 구조가 다를 경우 예외 무시
             pass
