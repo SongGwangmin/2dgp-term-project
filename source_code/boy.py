@@ -169,12 +169,14 @@ class Run:
 
 
 class Boy:
+    money = 0
     def __init__(self):
         self.x, self.y = 140, 130
         self.frame = 0
         self.face_dir = 1
         self.dir = 0
         self.yv = 0
+        self.font = load_font('ENCR10B.TTF', 16)
         self.image = load_image('player_sprite_full.png')
 
         self.IDLE = Idle(self)
@@ -237,6 +239,7 @@ class Boy:
     def draw(self):
         self.state_machine.draw()
         draw_rectangle(*self.get_bb())
+        self.font.draw(self.x - 10, self.y + 50, f'{Boy.money:02d}', (255, 255, 0))
 
     def fire_ball(self):
         print("Fire Ball!")
@@ -248,6 +251,7 @@ class Boy:
 
     def jump(self):
         self.yv = 10
+        Boy.money += 1
 
     def handle_collision(self, group, other):
         if group == 'boy:grass':
