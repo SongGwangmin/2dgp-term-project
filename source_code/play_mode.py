@@ -30,6 +30,7 @@ def init():
     global running
     running = True
     game_world.collision_pairs = {}
+    Grass.image = load_image('forest.png')
     grass = Grass()
     game_world.add_object(grass, 0)
     boy = Boy()

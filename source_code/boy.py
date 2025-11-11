@@ -249,7 +249,7 @@ class Boy:
     def draw(self):
         self.state_machine.draw()
         draw_rectangle(*self.get_bb())
-        self.font.draw(15, 580, f'{Boy.money:02d}', (0, 0, 0))
+        self.font.draw(15, 580, f'{Boy.money:02d}', (255, 255, 0))
 
     def fire_ball(self):
         print("Fire Ball!")

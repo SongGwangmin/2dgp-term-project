@@ -2,8 +2,9 @@ from pico2d import *
 
 
 class Grass:
+    image = None
     def __init__(self, y=0):
-        self.image = load_image('forest.png')
+        #self.image = load_image('forest.png')
         self.y = y
 
     def draw(self):

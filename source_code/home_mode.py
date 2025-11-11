@@ -35,7 +35,7 @@ def init():
     running = True
 
     game_world.collision_pairs = {}
-
+    Grass.image = load_image('home.png')
     grass = Grass(60)
     game_world.add_object(grass, 0)
     boy = Boy()
