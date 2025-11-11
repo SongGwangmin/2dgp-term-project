@@ -41,7 +41,7 @@ def handle_events():
         elif event.type == SDL_KEYDOWN:
             if event.key == SDLK_1:
                 home_mode.Boy.money -= 3
-                
+                home_mode.Boy.strength += 1
                 game_framework.pop_mode()
             elif event.key == SDLK_2:
                 home_mode.Boy.money -= 5

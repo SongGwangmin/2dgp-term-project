@@ -179,6 +179,7 @@ class Boy:
     money = 0
     dir = 0
     set_balls = 0
+    strength = 1
     def __init__(self):
         self.x, self.y = 140, 130
         self.frame = 0
