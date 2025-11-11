@@ -148,7 +148,7 @@ class Run:
 
     def exit(self, e):
         if space_down(e):
-            self.boy.fire_ball()
+            self.boy.jump()
         pass
 
     def do(self):
