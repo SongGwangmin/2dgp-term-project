@@ -176,9 +176,9 @@ class Run:
 
 
 class Boy:
-    money = 0
+    money = 20
     dir = 0
-    set_balls = 1
+    set_balls = 0
     strength = 1
     def __init__(self):
         self.x, self.y = 140, 130
@@ -262,7 +262,7 @@ class Boy:
 
     def jump(self):
         self.yv = 7
-        Boy.money += 10
+        #Boy.money += 10
 
     def handle_collision(self, group, other):
         if group == 'boy:grass':
