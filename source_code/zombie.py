@@ -25,11 +25,14 @@ class Zombie:
     images = None
     maxhp = 10
     font = None
+    hpbar = None
     def load_images(self):
         if Zombie.images == None:
             Zombie.images = load_image('LARVA.png')
         if Zombie.font == None:
             Zombie.font = load_font('ENCR10B.TTF', 16)
+        if Zombie.hpbar == None:
+            Zombie.hpbar = load_image('hpbar.png')
 
     def __init__(self):
         self.x, self.y = random.randint(100, 800), 150
@@ -63,7 +66,8 @@ class Zombie:
             Zombie.images.clip_composite_draw(int(self.frame) * 144 + 2, 0, 144, 114, 0, 'h',
                                               self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         draw_rectangle(*self.get_bb())
-        Zombie.font.draw(self.x-10, self.y + 50, f'{self.hp:02d}', (255, 0, 0))
+        #Zombie.font.draw(self.x-10, self.y + 50, f'{self.hp:02d}', (255, 0, 0))
+        Zombie.hpbar.clip_draw(0, 0, 5, 5, self.x, self.y + 50, 50 * (self.hp / Zombie.maxhp), 5)
 
     def handle_event(self, event):
         pass
