@@ -16,6 +16,9 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 #km/h -> m/s : 1000/3600 = 1/3.6
 # 그럼 대시 스피드는 dash_speed * 1/3.6 * PIXEL_PER_METER
+DELTA_DASH_SPEED_KMPH = 360
+
+
 
 time_per_action = 0.3
 frames_per_action = 8
@@ -166,7 +169,7 @@ class Run:
 
         if shift_down(e):
             self.boy.dash = True
-            self.boy.dash_speed = 1.5
+            self.boy.dash_speed = RUN_SPEED_KMPH * 3
         else:
             self.boy.dash = False
 
@@ -177,11 +180,19 @@ class Run:
 
     def do(self):
         self.boy.frame = (FRAMES_PER_SEC * game_framework.frame_time + self.boy.frame) % 7
-        self.boy.x += self.boy.dir * RUN_SPEED_PPS * game_framework.frame_time
+        if self.boy.dash:
+            self.boy.x += self.boy.dir * self.boy.dash_speed * 1/3.6 * PIXEL_PER_METER * game_framework.frame_time
+            self.boy.dash_speed -= DELTA_DASH_SPEED_KMPH * game_framework.frame_time
+            if self.boy.dash_speed < RUN_SPEED_KMPH / 1.5:
+                self.boy.dash = False
+        else:
+            self.boy.x += self.boy.dir * RUN_SPEED_PPS * game_framework.frame_time
         if self.boy.x < 0:
             self.boy.x = 0
         elif self.boy.x > 800:
             self.boy.x = 800
+
+
 
     def draw(self):
         if self.boy.face_dir == 1:
