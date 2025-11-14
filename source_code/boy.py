@@ -20,6 +20,11 @@ frames_per_action = 8
 actions_per_time = 1.0 / time_per_action
 FRAMES_PER_SEC = frames_per_action * actions_per_time
 
+attacktime_per_action = 0.3
+attackframes_per_action = 4
+attackactions_per_time = 1.0 / attacktime_per_action
+ATTACK_FRAMES_PER_SEC = attackframes_per_action * attackactions_per_time
+
 METER = 5
 
 GRAVITY = 9.8  # 중력 가속도 (m/s²)
@@ -122,7 +127,7 @@ class Attack:
         pass
 
     def do(self):
-        self.boy.frame = (FRAMES_PER_SEC * game_framework.frame_time + self.boy.frame)
+        self.boy.frame = (ATTACK_FRAMES_PER_SEC * game_framework.frame_time + self.boy.frame)
         if self.boy.frame >= 4:
             self.boy.state_machine.handle_state_event(('TIMEOUT', None))
 
