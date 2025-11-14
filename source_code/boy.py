@@ -1,5 +1,5 @@
 from pico2d import load_image, get_time, load_font, draw_rectangle
-from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_a, SDLK_d
+from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_a, SDLK_d, SDLK_LSHIFT
 
 import game_world
 from state_machine import StateMachine
@@ -14,6 +14,8 @@ RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
+#km/h -> m/s : 1000/3600 = 1/3.6
+# 그럼 대시 스피드는 dash_speed * 1/3.6 * PIXEL_PER_METER
 
 time_per_action = 0.3
 frames_per_action = 8
@@ -82,6 +84,9 @@ def run_dir(e):
 def idle_dir(e):
     return e[0] == 'IDLE_DIR'
 
+def shift_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_LSHIFT
+
 
 class Idle:
 
@@ -90,6 +95,7 @@ class Idle:
 
     def enter(self, e):
         self.boy.wait_time = get_time()
+        self.boy.dash = False
         # dir는 키 이벤트로 관리하므로 여기서 초기화하지 않습니다.
 
     def exit(self, e):
@@ -158,6 +164,12 @@ class Run:
         elif self.boy.dir < 0:
             self.boy.face_dir = -1
 
+        if shift_down(e):
+            self.boy.dash = True
+            self.boy.dash_speed = 1.5
+        else:
+            self.boy.dash = False
+
     def exit(self, e):
         if space_down(e):
             self.boy.jump()
@@ -173,10 +185,20 @@ class Run:
 
     def draw(self):
         if self.boy.face_dir == 1:
-            self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 5 * 128, 128, 128, 0, '',
+            if self.boy.dash:
+                self.boy.image.clip_composite_draw(5 * 128, 5 * 128, 128, 128, 0, '',
+                                                   self.boy.x, self.boy.y, METER * PIXEL_PER_METER,
+                                                   METER * PIXEL_PER_METER)
+            else:
+                self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 5 * 128, 128, 128, 0, '',
                                                self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         else:
-            self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 5 * 128, 128, 128, 0, 'h',
+            if self.boy.dash:
+                self.boy.image.clip_composite_draw(5 * 128, 5 * 128, 128, 128, 0, 'h',
+                                                   self.boy.x, self.boy.y, METER * PIXEL_PER_METER,
+                                                   METER * PIXEL_PER_METER)
+            else:
+                self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 5 * 128, 128, 128, 0, 'h',
                                           self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
 
 
@@ -192,6 +214,8 @@ class Boy:
         self.yv = 0
         self.font = load_font('ENCR10B.TTF', 16)
         self.image = load_image('player_sprite_full.png')
+        self.dash = False
+        self.dash_speed = 0.0
 
         self.IDLE = Idle(self)
         self.ATTACK = Attack(self)
@@ -203,7 +227,8 @@ class Boy:
                 # 좌우 키의 직접적인 up/down 이벤트 매핑 제거. dir 상태로 전이 처리
                 self.IDLE: {space_down: self.IDLE, a_down: self.ATTACK, a_up: self.IDLE, attack_hold: self.ATTACK,
                             run_dir: self.RUN, d_down: self.ATTACK},
-                self.RUN: {space_down: self.RUN, idle_dir: self.IDLE, a_down: self.ATTACK, d_down: self.ATTACK,}
+                self.RUN: {space_down: self.RUN, idle_dir: self.IDLE, a_down: self.ATTACK, d_down: self.ATTACK,
+                           shift_down: self.RUN}
             }
         )
 
