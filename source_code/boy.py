@@ -178,7 +178,7 @@ class Run:
 class Boy:
     money = 20
     dir = 0
-    set_balls = 0
+    set_balls = 1
     strength = 1
     def __init__(self):
         self.x, self.y = 140, 130

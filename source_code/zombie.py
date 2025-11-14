@@ -12,6 +12,8 @@ RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
+DELTA_KNOCKBACK_SPEED = 1
+
 # zombie Action Speed
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
@@ -42,6 +44,8 @@ class Zombie:
         self.count = 1
         self.size = 100
         self.hp = Zombie.maxhp
+        self.knockbackspeed = 0
+        self.knockbackdir = 0
 
 
     def get_bb(self):
@@ -50,6 +54,9 @@ class Zombie:
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
         self.x += RUN_SPEED_PPS * self.dir * game_framework.frame_time
+        self.x += self.knockbackspeed * self.knockbackdir * PIXEL_PER_METER * game_framework.frame_time
+        self.knockbackspeed = max(0, self.knockbackspeed - DELTA_KNOCKBACK_SPEED * game_framework.frame_time)
+
         if self.x > 800:
             self.dir = -1
         elif self.x < 100:
@@ -76,6 +83,14 @@ class Zombie:
         if group == 'ball:zombie':
             self.hp -= other.strength
             if self.hp > 0:
+                # 맞은 곳과 반대로 튕겨야함
+                dx = self.x - other.x
+                if dx == 0:
+                    self.knockbackdir = 0.0
+                else:
+                    # dx / math.fabs(dx)는 dx의 부호(+1 또는 -1)를 반환
+                    self.knockbackdir = dx / math.fabs(dx)
+                self.knockbackspeed = 10
                 pass
             else:
                 game_world.remove_object(self)
