@@ -168,8 +168,9 @@ class Run:
             self.boy.face_dir = -1
 
         if shift_down(e):
-            self.boy.dash = True
-            self.boy.dash_speed = RUN_SPEED_KMPH * 3
+            if self.boy.dash == False:
+                self.boy.dash = True
+                self.boy.dash_speed = RUN_SPEED_KMPH * 3
         else:
             self.boy.dash = False
 
@@ -183,7 +184,7 @@ class Run:
         if self.boy.dash:
             self.boy.x += self.boy.dir * self.boy.dash_speed * 1/3.6 * PIXEL_PER_METER * game_framework.frame_time
             self.boy.dash_speed -= DELTA_DASH_SPEED_KMPH * game_framework.frame_time
-            if self.boy.dash_speed < RUN_SPEED_KMPH / 1.5:
+            if self.boy.dash_speed < RUN_SPEED_KMPH / 2:
                 self.boy.dash = False
         else:
             self.boy.x += self.boy.dir * RUN_SPEED_PPS * game_framework.frame_time
