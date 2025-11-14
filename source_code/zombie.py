@@ -90,7 +90,7 @@ class Zombie:
                 else:
                     # dx / math.fabs(dx)는 dx의 부호(+1 또는 -1)를 반환
                     self.knockbackdir = dx / math.fabs(dx)
-                self.knockbackspeed = 10
+                self.knockbackspeed = 5
                 pass
             else:
                 game_world.remove_object(self)
