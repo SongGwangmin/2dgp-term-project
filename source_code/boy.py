@@ -103,7 +103,8 @@ class Idle:
 
     def exit(self, e):
         if space_down(e):
-            self.boy.jump()
+            if self.boy.yv == 0 and self.boy.y <= 130:
+                self.boy.jump()
         pass
 
     def do(self):
@@ -176,7 +177,8 @@ class Run:
 
     def exit(self, e):
         if space_down(e):
-            self.boy.jump()
+            if self.boy.yv == 0 and self.boy.y <= 130:
+                self.boy.jump()
         pass
 
     def do(self):
