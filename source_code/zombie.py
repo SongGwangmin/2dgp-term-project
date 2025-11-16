@@ -25,7 +25,7 @@ animation_names = ['Walk']
 
 class Zombie:
     images = None
-    maxhp = 10
+    max_hp = 10
     font = None
     hpbar = None
     hpblank = None
@@ -46,7 +46,7 @@ class Zombie:
         self.dir = random.choice([-1,1])
         self.count = 1
         self.size = 100
-        self.hp = Zombie.maxhp
+        self.now_hp = Zombie.max_hp
         self.knockbackspeed = 0
         self.knockbackdir = 0
 
@@ -79,16 +79,16 @@ class Zombie:
         #Zombie.font.draw(self.x-10, self.y + 50, f'{self.hp:02d}', (255, 0, 0))
         Zombie.hpblank.clip_draw(0, 0, 5, 5, self.x, self.y + 50, 50, 5)
         #Zombie.hpbar.clip_draw(0, 0, 5, 5, self.x, self.y + 50, 50 * (self.hp / Zombie.maxhp), 5)
-
-        Zombie.hpbar.clip_draw_to_origin(0, 0, 5, 5, self.x - 10, self.y + 50, 50 * (self.hp / Zombie.maxhp), 5)
+        Zombie.hpbar.clip_draw_to_origin(0, 0, 5, 5, self.x - 25, self.y + 50, 50 * (self.now_hp / Zombie.max_hp), 5)
+        #Zombie.hpbar.clip_draw_to_origin(0, 0, 5, 5, self.x - 10, self.y + 50, 50 * (self.hp / Zombie.maxhp), 5)
 
     def handle_event(self, event):
         pass
 
     def handle_collision(self, group, other):
         if group == 'ball:zombie':
-            self.hp -= other.strength
-            if self.hp > 0:
+            self.now_hp -= other.strength
+            if self.now_hp > 0:
                 # 맞은 곳과 반대로 튕겨야함
                 dx = self.x - other.x
                 if dx == 0:
