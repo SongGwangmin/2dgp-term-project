@@ -53,9 +53,6 @@ def handle_events():
                     home_mode.Boy.money -= 5
                     home_mode.Boy.set_balls = 1
                 #game_framework.pop_mode()
-            elif event.key == SDLK_q:
-                game_framework.pop_mode() # 아이템 모드에서 빠져나올 때는 홈모드로 돌아가야하므로 pop_mode
-                game_framework.change_mode(worldmap_mode)
             else:
                 home_mode.boy.handle_event(event)
         else:

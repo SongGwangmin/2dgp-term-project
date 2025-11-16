@@ -20,8 +20,6 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_q:
-            game_framework.change_mode(worldmap_mode)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_i:
             game_framework.push_mode(item_mode)
             #push mode: 플레이 모드를 유지해야하므로
