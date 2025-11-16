@@ -75,6 +75,7 @@ class Zombie:
         draw_rectangle(*self.get_bb())
         #Zombie.font.draw(self.x-10, self.y + 50, f'{self.hp:02d}', (255, 0, 0))
         Zombie.hpbar.clip_draw(0, 0, 5, 5, self.x, self.y + 50, 50 * (self.hp / Zombie.maxhp), 5)
+        #Zombie.hpbar.clip_draw_to_origin(0, 0, 5, 5, self.x - 10, self.y + 50, 50 * (self.hp / Zombie.maxhp), 5)
 
     def handle_event(self, event):
         pass

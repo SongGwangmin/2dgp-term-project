@@ -222,6 +222,7 @@ class Boy:
     set_balls = 1
     strength = 1
     max_hp = 100
+    hpbar = None
     def __init__(self):
         self.x, self.y = 140, 130
         self.frame = 0
@@ -233,6 +234,8 @@ class Boy:
         self.dash_speed = 0.0
         self.hunt_count = 0
         self.now_hp = Boy.max_hp
+        if Boy.hpbar == None:
+            Boy.hpbar = load_image('hpbar.png')
 
         self.IDLE = Idle(self)
         self.ATTACK = Attack(self)
@@ -296,7 +299,9 @@ class Boy:
     def draw(self):
         self.state_machine.draw()
         draw_rectangle(*self.get_bb())
-        self.font.draw(15, 580, f'{Boy.money:02d}', (255, 255, 0))
+        self.font.draw(15, 570, f'money: {Boy.money:02d}$', (255, 255, 0))
+        Boy.hpbar.clip_draw_to_origin(0, 0, 5, 5, 10, 580, 200 * (self.now_hp / Boy.max_hp), 5)
+        #Boy.hpbar.clip_draw_to_origin(0, 0, 5, 5, 100, 290, 50 * (50 / Boy.max_hp), 5)
 
     def fire_ball(self):
         print("Fire Ball!")
