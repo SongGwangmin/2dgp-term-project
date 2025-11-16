@@ -21,6 +21,10 @@ def finish():
 def update():
     game_world.update()
     game_world.handle_collision()
+    # 맵 이동 - 오른쪽 끝 == 월드맵
+    if home_mode.boy.x > 790:
+        game_framework.pop_mode()
+        game_framework.change_mode(worldmap_mode)
 
     # 아이템 모드에서 플레이모드가 유지가 되어야 하므로 게임 월드를 계속 업데이트 해줘야한다
 

@@ -50,6 +50,10 @@ def update():
     game_world.update()
     game_world.handle_collision()
 
+    # 맵 이동 - 오른쪽 끝 == 월드맵
+    if boy.x > 790:
+        game_framework.change_mode(worldmap_mode)
+
 
 def draw():
     clear_canvas()
