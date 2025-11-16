@@ -221,6 +221,7 @@ class Boy:
     dir = 0
     set_balls = 1
     strength = 1
+    max_hp = 100
     def __init__(self):
         self.x, self.y = 140, 130
         self.frame = 0
@@ -231,6 +232,7 @@ class Boy:
         self.dash = False
         self.dash_speed = 0.0
         self.hunt_count = 0
+        self.now_hp = Boy.max_hp
 
         self.IDLE = Idle(self)
         self.ATTACK = Attack(self)
