@@ -14,14 +14,15 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 class Ball:
     image = None
-    def __init__(self, x = 400, y=400, velocity=1, strength=1):
+    def __init__(self, x = 400, y=400, velocity=1, boys = None):
         print('create ball')
         if Ball.image is None:
             Ball.image = load_image('ball41x41.png')
         self.x = x
         self.y = y
         self.velocity = velocity
-        self.strength = strength
+        self.boy_pointer = boys
+        self.strength = boys.strength
 
     def draw(self):
         if self.velocity > 0:

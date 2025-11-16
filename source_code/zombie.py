@@ -94,5 +94,6 @@ class Zombie:
                 pass
             else:
                 game_world.remove_object(self)
+                other.boy_pointer.hunt_count += 1
         elif group == 'boy:zombie':
             pass
