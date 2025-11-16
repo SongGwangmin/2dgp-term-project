@@ -9,6 +9,8 @@ import home_mode
 from game_world import world
 # Game object class here
 
+max_monster_count = 4
+
 
 def handle_events():
     global running
@@ -37,7 +39,7 @@ def init():
     game_world.add_object(boy, 1)
 
     game_world.add_collision_pair('boy:grass', boy, grass)
-    zombies = [Zombie() for i in range(4)]
+    zombies = [Zombie() for i in range(max_monster_count)]
     game_world.add_objects(zombies, 1)
 
     for zombie in zombies:
@@ -51,6 +53,8 @@ def finish():
 def update():
     game_world.update()
     game_world.handle_collision()
+    if boy.x > 790 or boy.x < 10:
+        game_framework.change_mode(worldmap_mode)
 
 
 def draw():

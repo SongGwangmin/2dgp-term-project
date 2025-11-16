@@ -228,6 +228,7 @@ class Boy:
         self.image = load_image('player_sprite_full.png')
         self.dash = False
         self.dash_speed = 0.0
+        self.hunt_count = 0
 
         self.IDLE = Idle(self)
         self.ATTACK = Attack(self)
