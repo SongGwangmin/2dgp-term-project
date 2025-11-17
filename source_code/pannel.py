@@ -1,4 +1,4 @@
-from pico2d import load_image
+from pico2d import load_image, draw_rectangle
 import boy
 
 class Pannel:
@@ -14,6 +14,7 @@ class Pannel:
         if self.divider == 0:
             if boy.Boy.set_slash == 1:
                 self.Sold_out.draw(700, 150)
+
 
     def update(self):
         pass

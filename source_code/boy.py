@@ -88,6 +88,8 @@ def idle_dir(e):
     return e[0] == 'IDLE_DIR'
 
 def shift_down(e):
+    if Boy.set_dash == 0:
+        return False
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_LSHIFT
 
 
@@ -220,6 +222,7 @@ class Boy:
     money = 20
     dir = 0
     set_slash = 0
+    set_dash = 0
     strength = 1
     max_hp = 100.0
     hpbar = None
