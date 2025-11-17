@@ -71,7 +71,7 @@ def a_up(e):
     return False
 
 def d_down(e):
-    if Boy.set_balls == 0:
+    if Boy.set_slash == 0:
         return False
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_d
 
@@ -219,7 +219,7 @@ class Run:
 class Boy:
     money = 20
     dir = 0
-    set_balls = 1
+    set_slash = 0
     strength = 1
     max_hp = 100.0
     hpbar = None

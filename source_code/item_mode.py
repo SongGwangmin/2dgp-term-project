@@ -49,9 +49,9 @@ def handle_events():
                     home_mode.Boy.strength += 1
                 #game_framework.pop_mode()
             elif event.key == SDLK_2:
-                if home_mode.Boy.money >= 5 and home_mode.Boy.set_balls == 0:
+                if home_mode.Boy.money >= 5 and home_mode.Boy.set_slash == 0:
                     home_mode.Boy.money -= 5
-                    home_mode.Boy.set_balls = 1
+                    home_mode.Boy.set_slash = 1
                 #game_framework.pop_mode()
             else:
                 home_mode.boy.handle_event(event)

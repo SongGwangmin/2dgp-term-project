@@ -10,7 +10,7 @@ class Pannel:
 
     def draw(self):
         self.image.draw(400, 300)
-        if boy.Boy.set_balls == 1:
+        if boy.Boy.set_slash == 1:
             self.Sold_out.draw(700, 150)
 
     def update(self):
