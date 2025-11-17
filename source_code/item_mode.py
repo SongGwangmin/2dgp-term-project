@@ -55,6 +55,12 @@ def handle_events():
                 #game_framework.pop_mode()
             else:
                 home_mode.boy.handle_event(event)
+        elif event.type  == SDL_MOUSEBUTTONDOWN:
+            x, y = event.x, 600 - event.y
+            if x >= 700 and y >= 500:
+                if home_mode.Boy.money >= 3:
+                    home_mode.Boy.money -= 3
+                    home_mode.Boy.strength += 1
         else:
             home_mode.boy.handle_event(event)
 
