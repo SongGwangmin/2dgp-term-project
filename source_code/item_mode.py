@@ -42,25 +42,20 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.pop_mode()
-        elif event.type == SDL_KEYDOWN:
-            if event.key == SDLK_1:
-                if home_mode.Boy.money >= 3:
-                    home_mode.Boy.money -= 3
-                    home_mode.Boy.strength += 1
-                #game_framework.pop_mode()
-            elif event.key == SDLK_2:
+        elif event.type  == SDL_MOUSEBUTTONDOWN:
+            x, y = event.x, 600 - event.y
+            select = pannel.click_colision(x, y)
+            if select == 1:
                 if home_mode.Boy.money >= 5 and home_mode.Boy.set_slash == 0:
                     home_mode.Boy.money -= 5
                     home_mode.Boy.set_slash = 1
-                #game_framework.pop_mode()
-            else:
-                home_mode.boy.handle_event(event)
-        elif event.type  == SDL_MOUSEBUTTONDOWN:
-            x, y = event.x, 600 - event.y
-            if x >= 700 and y >= 500:
-                if home_mode.Boy.money >= 3:
-                    home_mode.Boy.money -= 3
-                    home_mode.Boy.strength += 1
+            if select == 2:
+                if home_mode.Boy.money >= 5 and home_mode.Boy.set_dash == 0:
+                    home_mode.Boy.money -= 5
+                    home_mode.Boy.set_dash = 1
+            elif select == 3:
+                game_framework.pop_mode()
+
         elif event.type == SDL_MOUSEMOTION:
             x, y = event.x, 600 - event.y
             pannel.mousemove_colision(x, y)
