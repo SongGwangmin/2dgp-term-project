@@ -24,7 +24,9 @@ class Pannel:
                 draw_rectangle(*self.border[i])
         if self.divider == 0:
             if boy.Boy.set_slash == 1:
-                self.Sold_out.draw(700, 150)
+                self.Sold_out.draw(400, 230)
+            if boy.Boy.set_dash == 1:
+                self.Sold_out.draw(400, 290)
 
 
 
