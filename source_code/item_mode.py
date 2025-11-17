@@ -9,7 +9,7 @@ import worldmap_mode
 
 def init():
     global pannel
-    pannel = Pannel()
+    pannel = Pannel(0)
     game_world.add_object(pannel, 2)
 
 def finish():
