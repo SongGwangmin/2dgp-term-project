@@ -61,6 +61,9 @@ def handle_events():
                 if home_mode.Boy.money >= 3:
                     home_mode.Boy.money -= 3
                     home_mode.Boy.strength += 1
+        elif event.type == SDL_MOUSEMOTION:
+            x, y = event.x, 600 - event.y
+            pannel.mousemove_colision(x, y)
         else:
             home_mode.boy.handle_event(event)
 
