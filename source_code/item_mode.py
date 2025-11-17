@@ -1,6 +1,7 @@
 from pico2d import *
 import game_framework
 from pannel import Pannel
+from sold_out import Sold_out
 import game_world
 import play_mode
 import home_mode
@@ -8,7 +9,6 @@ import worldmap_mode
 
 def init():
     global pannel
-
     pannel = Pannel()
     game_world.add_object(pannel, 2)
 
