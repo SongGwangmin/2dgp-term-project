@@ -39,7 +39,7 @@ class Zombie:
         if Zombie.hpblank == None:
             Zombie.hpblank = load_image('hpblank.png')
 
-    def __init__(self, x = 400, left=100, bottom=100, right=100, top=100):
+    def __init__(self, x = 400, left=100, bottom=100, right=100, top=100, strength=5):
         self.x = x
         self.y =  80
         self.load_images()
@@ -51,6 +51,8 @@ class Zombie:
         self.right = right
         self.top = top
         self.now_hp = Zombie.max_hp
+        # 공격력: 전달받지 않으면 기본값 5
+        self.strength = strength
         self.knockbackspeed = 0
         self.knockbackdir = 0
 

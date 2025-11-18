@@ -286,7 +286,7 @@ class Boy:
         self.dash = False
         self.dash_speed = 0.0
         self.hunt_count = 0
-        self.now_hp = Boy.max_hp / 2
+        self.now_hp = Boy.max_hp
         if Boy.hpbar == None:
             Boy.hpbar = load_image('hpbar.png')
         if Boy.hpblank == None:
@@ -375,9 +375,12 @@ class Boy:
     def handle_collision(self, group, other):
         if group == 'boy:grass':
             self.yv = 0
-        # 적과 충돌하면 wait_time으로 디바운스(1초) 체크 후 ENEMY_COLIDE 이벤트 발생
+        # 적과 충돌하면 wait_time으로 디바운스 체크 후 ENEMY_COLIDE 이벤트 발생
         if group == 'boy:enemy':
-            # 마지막 충돌로부터 .5초 이상 지났을 때만 처리
-            if get_time() - self.wait_time >= 0.5:
+            # 마지막 충돌로부터 hit_time_per_action * 2 이상 지났을 때만 처리
+            if get_time() - self.wait_time >= hit_time_per_action * 2:
+                self.now_hp -= other.strength
+                if self.now_hp < 0:
+                    self.now_hp = 0
                 self.wait_time = get_time()
                 self.state_machine.handle_state_event(('ENEMY_COLIDE', other))
