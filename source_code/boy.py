@@ -109,7 +109,6 @@ class Idle:
         self.boy = boy
 
     def enter(self, e):
-        self.boy.wait_time = get_time()
         self.boy.dash = False
         # dir는 키 이벤트로 관리하므로 여기서 초기화하지 않습니다.
 
@@ -121,8 +120,7 @@ class Idle:
 
     def do(self):
         self.boy.frame = (FRAMES_PER_SEC * game_framework.frame_time + self.boy.frame) % 6
-        if get_time() - self.boy.wait_time > 3: # 슬립 흔적기관
-            pass
+
 
     def draw(self):
         if self.boy.face_dir == 1:
@@ -281,6 +279,8 @@ class Boy:
         self.frame = 0
         self.face_dir = 1
         self.yv = 0
+        # wait_time을 init에서 초기화해 Idle.enter와 충돌 처리에서 사용
+        self.wait_time = 0
         self.font = load_font('ENCR10B.TTF', 16)
         self.image = load_image('player_sprite_full.png')
         self.dash = False
@@ -375,6 +375,9 @@ class Boy:
     def handle_collision(self, group, other):
         if group == 'boy:grass':
             self.yv = 0
-        # 적과 충돌하면 ENEMY_COLIDE 이벤트 발생시켜 Hit 상태로 전이
+        # 적과 충돌하면 wait_time으로 디바운스(1초) 체크 후 ENEMY_COLIDE 이벤트 발생
         if group == 'boy:enemy':
-            self.state_machine.handle_state_event(('ENEMY_COLIDE', other))
+            # 마지막 충돌로부터 .5초 이상 지났을 때만 처리
+            if get_time() - self.wait_time >= 0.5:
+                self.wait_time = get_time()
+                self.state_machine.handle_state_event(('ENEMY_COLIDE', other))
