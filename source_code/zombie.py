@@ -41,7 +41,7 @@ class Zombie:
 
     def __init__(self, x = 400, left=100, bottom=100, right=100, top=100):
         self.x = x
-        self.y =  130
+        self.y =  80
         self.load_images()
         self.frame = random.randint(0, 9)
         self.dir = random.choice([-1,1])
@@ -56,13 +56,22 @@ class Zombie:
 
 
     def get_bb(self):
-        return self.x - self.left, self.y - self.bottom, self.x + self.right, self.y + self.top
+        if self.dir < 0:
+            return self.x - self.left, self.y - self.bottom, self.x + self.right, self.y + self.top
+        else:
+            return self.x - self.right, self.y - self.bottom, self.x + self.left, self.y + self.top
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
         self.x += RUN_SPEED_PPS * self.dir * game_framework.frame_time
         self.x += self.knockbackspeed * self.knockbackdir * PIXEL_PER_METER * game_framework.frame_time
         self.knockbackspeed = max(0, self.knockbackspeed - DELTA_KNOCKBACK_SPEED * game_framework.frame_time)
+
+        # 프레임 마다 바운더리 다르게 - 만약에 몬스터 종류마다 클래스로 하면 다시 주석 해제할것
+        #if int(self.frame) == 2 or int(self.frame) == 3:
+        #    self.left = 30
+        #else:
+        #    self.left = 10
 
         if self.x > 800:
             self.dir = -1
@@ -80,11 +89,8 @@ class Zombie:
             Zombie.images.clip_composite_draw(int(self.frame) * 144 + 2, 0, 144, 114, 0, 'h',
                                               self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         draw_rectangle(*self.get_bb())
-        #Zombie.font.draw(self.x-10, self.y + 50, f'{self.hp:02d}', (255, 0, 0))
         Zombie.hpblank.clip_draw(0, 0, 5, 5, self.x, self.y + 50, 50, 5)
-        #Zombie.hpbar.clip_draw(0, 0, 5, 5, self.x, self.y + 50, 50 * (self.hp / Zombie.maxhp), 5)
         Zombie.hpbar.clip_draw_to_origin(0, 0, 5, 5, self.x - 25, self.y + 50, 50 * (self.now_hp / Zombie.max_hp), 5)
-        #Zombie.hpbar.clip_draw_to_origin(0, 0, 5, 5, self.x - 10, self.y + 50, 50 * (self.hp / Zombie.maxhp), 5)
 
     def handle_event(self, event):
         pass
