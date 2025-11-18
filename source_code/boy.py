@@ -30,6 +30,12 @@ attackframes_per_action = 4
 attackactions_per_time = 1.0 / attacktime_per_action
 ATTACK_FRAMES_PER_SEC = attackframes_per_action * attackactions_per_time
 
+# Hit 상태를 위한 짧은 애니메이션(프레임 수 2)
+hit_time_per_action = 0.2
+hit_frames_per_action = 2
+hit_actions_per_time = 1.0 / hit_time_per_action
+HIT_FRAMES_PER_SEC = hit_frames_per_action * hit_actions_per_time
+
 METER = 5
 
 GRAVITY = 9.8  # 중력 가속도 (m/s²)
@@ -217,6 +223,35 @@ class Run:
                 self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 5 * 128, 128, 128, 0, 'h',
                                           self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
 
+class Hit:
+    def __init__(self, boy):
+        self.boy = boy
+
+    def enter(self, e):
+        # 히트 시작 시 프레임 초기화
+        self.boy.frame = 0
+
+    def exit(self, e):
+        pass
+
+    def do(self):
+        # 짧은 히트 애니메이션 진행, 프레임이 끝나면 IDLE로 전이
+        self.boy.frame = (HIT_FRAMES_PER_SEC * game_framework.frame_time + self.boy.frame)
+        if self.boy.frame >= hit_frames_per_action:
+            self.boy.state_machine.handle_state_event(('TIMEOUT', None))
+
+    def handle_event(self, event):
+        pass
+
+    def draw(self):
+        # 히트 애니메이션 그리기 (attack과 비슷한 방식으로 처리)
+        if self.boy.face_dir == 1:
+            self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 3 * 128, 128, 128, 0, '',
+                                               self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+        else:
+            self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 3 * 128, 128, 128, 0, 'h',
+                                               self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+
 
 class Boy:
     money = 20
@@ -245,6 +280,7 @@ class Boy:
         self.IDLE = Idle(self)
         self.ATTACK = Attack(self)
         self.RUN = Run(self)
+        self.HIT = Hit(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
@@ -253,7 +289,8 @@ class Boy:
                 self.IDLE: {space_down: self.IDLE, a_down: self.ATTACK, a_up: self.IDLE, attack_hold: self.ATTACK,
                             run_dir: self.RUN, d_down: self.ATTACK},
                 self.RUN: {space_down: self.RUN, idle_dir: self.IDLE, a_down: self.ATTACK, d_down: self.ATTACK,
-                           shift_down: self.RUN}
+                           shift_down: self.RUN},
+                self.HIT: {time_out: self.IDLE}
             }
         )
 
@@ -265,7 +302,6 @@ class Boy:
 
         if Boy.dir != 0:
             self.state_machine.handle_state_event(('RUN_DIR', self))
-
         else:
             self.state_machine.handle_state_event(('IDLE_DIR', self))
 
