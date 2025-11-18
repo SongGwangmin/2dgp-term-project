@@ -110,7 +110,10 @@ def enemy_collide(e):
 
 # 적 사망(보이 사망) 이벤트
 def enemy_death(e):
-    return e[0] == 'ENEMY_DEATH'
+    if e[0] == 'ENEMY_DEATH':
+        Boy.frame = 0
+        return True
+    return False
 
 
 class Idle:
@@ -129,7 +132,7 @@ class Idle:
         pass
 
     def do(self):
-        self.boy.frame = (FRAMES_PER_SEC * game_framework.frame_time + self.boy.frame) % 6
+        Boy.frame = (FRAMES_PER_SEC * game_framework.frame_time + Boy.frame) % 6
 
 
     def draw(self):
@@ -139,7 +142,7 @@ class Idle:
             charinpit = 'h'
 
         if self.boy.yv == 0 and self.boy.y <= 130:
-            self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 6 * 128, 128, 128, 0, charinpit,
+            self.boy.image.clip_composite_draw(int(Boy.frame) * 128, 6 * 128, 128, 128, 0, charinpit,
                                                self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
 
         else:
@@ -155,7 +158,7 @@ class Attack:
         self.boy = boy
 
     def enter(self, e):
-        self.boy.frame = 0
+        Boy.frame = 0
         if e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_d:
             self.boy.fire_ball()
         pass
@@ -164,8 +167,8 @@ class Attack:
         pass
 
     def do(self):
-        self.boy.frame = (ATTACK_FRAMES_PER_SEC * game_framework.frame_time + self.boy.frame)
-        if self.boy.frame >= 4:
+        Boy.frame = (ATTACK_FRAMES_PER_SEC * game_framework.frame_time + Boy.frame)
+        if Boy.frame >= 4:
             self.boy.state_machine.handle_state_event(('TIMEOUT', None))
 
         if attackkeydown:
@@ -177,10 +180,10 @@ class Attack:
 
     def draw(self):
         if self.boy.face_dir == 1:
-            self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 2 * 128, 128, 128, 0, '',
+            self.boy.image.clip_composite_draw(int(Boy.frame) * 128, 2 * 128, 128, 128, 0, '',
                                                self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         else:
-            self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 2 * 128, 128, 128, 0, 'h',
+            self.boy.image.clip_composite_draw(int(Boy.frame) * 128, 2 * 128, 128, 128, 0, 'h',
                                           self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
 
 
@@ -209,7 +212,7 @@ class Run:
         pass
 
     def do(self):
-        self.boy.frame = (FRAMES_PER_SEC * game_framework.frame_time + self.boy.frame) % 7
+        Boy.frame = (FRAMES_PER_SEC * game_framework.frame_time + Boy.frame) % 7
         if self.boy.dash:
             self.boy.x += self.boy.dir * self.boy.dash_speed * 1/3.6 * PIXEL_PER_METER * game_framework.frame_time
             self.boy.dash_speed -= DELTA_DASH_SPEED_KMPH * game_framework.frame_time
@@ -235,7 +238,7 @@ class Run:
                                                self.boy.x, self.boy.y, METER * PIXEL_PER_METER,
                                                METER * PIXEL_PER_METER)
         elif self.boy.yv == 0 and self.boy.y <= 130:
-            self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 5 * 128, 128, 128, 0, charinpit,
+            self.boy.image.clip_composite_draw(int(Boy.frame) * 128, 5 * 128, 128, 128, 0, charinpit,
                                                self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         else:
             # self.boy.image.clip_draw(self.boy.frame * 128, 6 * 128, 128, 128, self.boy.x, self.boy.y)
@@ -251,15 +254,15 @@ class Hit:
 
     def enter(self, e):
         # 히트 시작 시 프레임 초기화
-        self.boy.frame = 0
+        Boy.frame = 0
 
     def exit(self, e):
         pass
 
     def do(self):
         # 짧은 히트 애니메이션 진행, 프레임이 끝나면 IDLE로 전이
-        self.boy.frame = (HIT_FRAMES_PER_SEC * game_framework.frame_time + self.boy.frame)
-        if self.boy.frame >= hit_frames_per_action:
+        Boy.frame = (HIT_FRAMES_PER_SEC * game_framework.frame_time + Boy.frame)
+        if Boy.frame >= hit_frames_per_action:
             self.boy.state_machine.handle_state_event(('TIMEOUT', None))
 
     def handle_event(self, event):
@@ -268,10 +271,10 @@ class Hit:
     def draw(self):
         # 히트 애니메이션 그리기 (attack과 비슷한 방식으로 처리)
         if self.boy.face_dir == 1:
-            self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 3 * 128, 128, 128, 0, '',
+            self.boy.image.clip_composite_draw(int(Boy.frame) * 128, 3 * 128, 128, 128, 0, '',
                                                 self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         else:
-            self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 3 * 128, 128, 128, 0, 'h',
+            self.boy.image.clip_composite_draw(int(Boy.frame) * 128, 3 * 128, 128, 128, 0, 'h',
                                                 self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
 
 
@@ -280,16 +283,15 @@ class Death:
         self.boy = boy
 
     def enter(self, e):
-        # 죽음 시작 시 프레임 초기화
-        self.boy.frame = 0
+        pass
 
     def exit(self, e):
         pass
 
     def do(self):
         # 죽음 애니메이션 진행, 끝나면 게임오버 모드로 전환
-        self.boy.frame = (DEATH_FRAMES_PER_SEC * game_framework.frame_time + self.boy.frame)
-        if self.boy.frame >= death_frames_per_action:
+        Boy.frame = (DEATH_FRAMES_PER_SEC * game_framework.frame_time + Boy.frame)
+        if Boy.frame >= death_frames_per_action:
             try:
                 import gameover_mode
                 game_framework.push_mode(gameover_mode)
@@ -302,16 +304,17 @@ class Death:
     def draw(self):
         # 죽음 애니메이션 그리기 (임시로 Hit과 다른 행을 사용)
         if self.boy.face_dir == 1:
-            self.boy.image.clip_composite_draw(min(int(self.boy.frame), 3) * 128, 0 * 128, 128, 128, 0, '',
+            self.boy.image.clip_composite_draw(min(int(Boy.frame), 3) * 128, 0 * 128, 128, 128, 0, '',
                                                self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         else:
-            self.boy.image.clip_composite_draw(min(int(self.boy.frame), 3) * 128, 0 * 128, 128, 128, 0, 'h',
+            self.boy.image.clip_composite_draw(min(int(Boy.frame), 3) * 128, 0 * 128, 128, 128, 0, 'h',
                                                self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
 
 
 class Boy:
     money = 20
     dir = 0
+    frame = 0
     set_slash = 0
     set_dash = 0
     strength = 1
@@ -320,7 +323,6 @@ class Boy:
     hpblank = None
     def __init__(self):
         self.x, self.y = 140, 130
-        self.frame = 0
         self.face_dir = 1
         self.yv = 0
         # wait_time을 init에서 초기화해 Idle.enter와 충돌 처리에서 사용
@@ -350,7 +352,7 @@ class Boy:
                 self.RUN: {space_down: self.RUN, idle_dir: self.IDLE, a_down: self.ATTACK, d_down: self.ATTACK,
                            shift_down: self.RUN, enemy_collide: self.HIT, enemy_death: self.DEATH},
                 self.HIT: {time_out: self.IDLE},
-                self.DEATH: {}
+                self.DEATH: {run_dir: self.DEATH, idle_dir: self.DEATH}
             }
         )
 
@@ -373,26 +375,20 @@ class Boy:
 
     def handle_event(self, event):
         # 방향키 상태를 누를 때마다 dir을 ++/-- 하여 여러 키 동시 입력도 처리
-        try:
-            if event.type == SDL_KEYDOWN:
-                if event.key == SDLK_RIGHT:
-                    Boy.dir += 1
-                    self.face_dir = 1
-                elif event.key == SDLK_LEFT:
-                    Boy.dir -= 1
-                    self.face_dir = -1
-
-            elif event.type == SDL_KEYUP:
-                if event.key == SDLK_RIGHT:
-                    Boy.dir -= 1
-                elif event.key == SDLK_LEFT:
-                    Boy.dir += 1
-        except Exception:
-            # event가 None이거나 구조가 다를 경우 예외 무시
-            pass
-
-
-
+        if event.type == SDL_KEYDOWN:
+            if event.key == SDLK_RIGHT:
+                Boy.dir += 1
+                self.face_dir = 1
+            elif event.key == SDLK_LEFT:
+                Boy.dir -= 1
+                self.face_dir = -1
+            print(Boy.dir)
+        elif event.type == SDL_KEYUP:
+            if event.key == SDLK_RIGHT:
+                Boy.dir -= 1
+            elif event.key == SDLK_LEFT:
+                Boy.dir += 1
+            print(Boy.dir)
 
         self.state_machine.handle_state_event(('INPUT', event))
         pass
@@ -421,9 +417,8 @@ class Boy:
     def handle_collision(self, group, other):
         if group == 'boy:grass':
             self.yv = 0
-        # 적과 충돌하면 wait_time으로 디바운스 체크 후 ENEMY_COLIDE 이벤트 발생
+        # 적과 충돌하면 wait_time으로 디바운스 체크 후 ENEMY_COLIDE 또는 ENEMY_DEATH 이벤트 발생
         if group == 'boy:enemy':
-            # 마지막 충돌로부터 hit_time_per_action * 2 이상 지났을 때만 처리
             if get_time() - self.wait_time >= hit_time_per_action * 2:
                 self.now_hp -= other.strength
                 if self.now_hp <= 0:
