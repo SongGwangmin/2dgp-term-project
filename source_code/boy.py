@@ -218,21 +218,24 @@ class Run:
 
     def draw(self):
         if self.boy.face_dir == 1:
-            if self.boy.dash:
-                self.boy.image.clip_composite_draw(5 * 128, 5 * 128, 128, 128, 0, '',
-                                                   self.boy.x, self.boy.y, METER * PIXEL_PER_METER,
-                                                   METER * PIXEL_PER_METER)
-            else:
-                self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 5 * 128, 128, 128, 0, '',
+            charinpit = ''
+        else:
+            charinpit = 'h'
+
+        if self.boy.dash:
+            self.boy.image.clip_composite_draw(5 * 128, 5 * 128, 128, 128, 0, charinpit,
+                                               self.boy.x, self.boy.y, METER * PIXEL_PER_METER,
+                                               METER * PIXEL_PER_METER)
+        elif self.boy.yv == 0 and self.boy.y <= 130:
+            self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 5 * 128, 128, 128, 0, charinpit,
                                                self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         else:
-            if self.boy.dash:
-                self.boy.image.clip_composite_draw(5 * 128, 5 * 128, 128, 128, 0, 'h',
-                                                   self.boy.x, self.boy.y, METER * PIXEL_PER_METER,
-                                                   METER * PIXEL_PER_METER)
-            else:
-                self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 5 * 128, 128, 128, 0, 'h',
-                                          self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+            # self.boy.image.clip_draw(self.boy.frame * 128, 6 * 128, 128, 128, self.boy.x, self.boy.y)
+            self.boy.image.clip_composite_draw(2 * 128, 4 * 128, 128, 128, 0, charinpit,
+                                               self.boy.x, self.boy.y, METER * PIXEL_PER_METER,
+                                               METER * PIXEL_PER_METER)
+
+
 
 class Hit:
     def __init__(self, boy):
