@@ -49,7 +49,8 @@ def handle_events():
             game_framework.pop_mode()
             game_framework.change_mode(home_mode)
         else:
-            boy.handle_event(event)
+            if boy is not None:
+                boy.handle_event(event)
 
 
 
