@@ -3,14 +3,12 @@ import game_framework
 from pannel import Pannel
 from sold_out import Sold_out
 import game_world
-import play_mode
 import home_mode
-import worldmap_mode
 
 def init():
     global pannel
     pannel = Pannel(0)
-    game_world.add_object(pannel, 2)
+    game_world.add_object(pannel, 3)
 
 def finish():
 
@@ -21,10 +19,6 @@ def finish():
 def update():
     game_world.update()
     game_world.handle_collision()
-    # 맵 이동 - 오른쪽 끝 == 월드맵
-    if home_mode.boy.x > 790:
-        game_framework.pop_mode()
-        game_framework.change_mode(worldmap_mode)
 
     # 아이템 모드에서 플레이모드가 유지가 되어야 하므로 게임 월드를 계속 업데이트 해줘야한다
 
