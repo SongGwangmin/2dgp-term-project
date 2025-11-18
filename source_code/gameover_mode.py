@@ -9,7 +9,7 @@ def init():
     game_world.add_object(plate, 3)
 
 def finish():
-    pass
+    game_world.clear()
 
 def update():
     game_world.update()
