@@ -382,5 +382,8 @@ class Boy:
                 self.now_hp -= other.strength
                 if self.now_hp < 0:
                     self.now_hp = 0
+                    # gameover_mode를 로컬 임포트하여 순환참조 방지
+                    import gameover_mode
+                    game_framework.push_mode(gameover_mode)
                 self.wait_time = get_time()
                 self.state_machine.handle_state_event(('ENEMY_COLIDE', other))

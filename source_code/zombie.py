@@ -39,7 +39,7 @@ class Zombie:
         if Zombie.hpblank == None:
             Zombie.hpblank = load_image('hpblank.png')
 
-    def __init__(self, x = 400, left=100, bottom=100, right=100, top=100, strength=5):
+    def __init__(self, x = 400, left=100, bottom=100, right=100, top=100, strength=50):
         self.x = x
         self.y =  80
         self.load_images()

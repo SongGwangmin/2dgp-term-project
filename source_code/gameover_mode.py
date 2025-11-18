@@ -1,20 +1,15 @@
 from pico2d import *
 import game_framework
 from plate import Plate
-from sold_out import Sold_out
 import game_world
 import home_mode
 
 def init():
-    global plate
-    plate = Plate(0)
+    plate = Plate()
     game_world.add_object(plate, 3)
 
 def finish():
-
-    global plate
-    game_world.remove_object(plate)
-    del plate
+    pass
 
 def update():
     game_world.update()
