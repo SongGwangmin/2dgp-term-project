@@ -37,7 +37,7 @@ def init():
     game_world.add_object(boy, 1)
 
     game_world.add_collision_pair('boy:grass', boy, grass)
-    zombies = [Zombie(400 + i * 100, 30,30,30,30) for i in range(max_monster_count)]
+    zombies = [Zombie(400 + i * 100, 1,1,1,1) for i in range(max_monster_count)]
     game_world.add_objects(zombies, 1)
 
     game_world.add_collision_pair('boy:enemy', boy, None)

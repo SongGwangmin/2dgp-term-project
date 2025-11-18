@@ -57,9 +57,9 @@ class Zombie:
 
     def get_bb(self):
         if self.dir < 0:
-            return self.x - self.left, self.y - self.bottom, self.x + self.right, self.y + self.top
+            return self.x - self.left * PIXEL_PER_METER, self.y - self.bottom * PIXEL_PER_METER, self.x + self.right * PIXEL_PER_METER, self.y + self.top * PIXEL_PER_METER
         else:
-            return self.x - self.right, self.y - self.bottom, self.x + self.left, self.y + self.top
+            return self.x - self.right * PIXEL_PER_METER, self.y - self.bottom * PIXEL_PER_METER, self.x + self.left * PIXEL_PER_METER, self.y + self.top * PIXEL_PER_METER
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
