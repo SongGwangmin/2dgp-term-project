@@ -126,12 +126,19 @@ class Idle:
 
     def draw(self):
         if self.boy.face_dir == 1:
-            self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 6 * 128, 128, 128, 0, '',
-                                               self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+            charinpit = ''
         else:
-            #self.boy.image.clip_draw(self.boy.frame * 128, 6 * 128, 128, 128, self.boy.x, self.boy.y)
-            self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 6 * 128, 128, 128, 0, 'h',
-                                          self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+            charinpit = 'h'
+
+        if self.boy.yv == 0 and self.boy.y <= 130:
+            self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 6 * 128, 128, 128, 0, charinpit,
+                                               self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+
+        else:
+            # self.boy.image.clip_draw(self.boy.frame * 128, 6 * 128, 128, 128, self.boy.x, self.boy.y)
+            self.boy.image.clip_composite_draw(2 * 128, 4 * 128, 128, 128, 0, charinpit,
+                                               self.boy.x, self.boy.y, METER * PIXEL_PER_METER,
+                                               METER * PIXEL_PER_METER)
 
 
 class Attack:
@@ -359,7 +366,7 @@ class Boy:
         return self.x - 15, self.y - 80, self.x + 15, self.y + 5
 
     def jump(self):
-        self.yv = 7
+        self.yv = 10
         #Boy.money += 10
 
     def handle_collision(self, group, other):
