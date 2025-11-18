@@ -98,6 +98,10 @@ def shift_down(e):
         return False
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_LSHIFT
 
+# 적 충돌 이벤트 판정
+def enemy_collide(e):
+    return e[0] == 'ENEMY_COLIDE'
+
 
 class Idle:
 
@@ -284,12 +288,12 @@ class Boy:
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.ATTACK: {time_out: self.IDLE, a_up: self.ATTACK},
+                self.ATTACK: {time_out: self.IDLE, a_up: self.ATTACK, enemy_collide: self.HIT},
                 # 좌우 키의 직접적인 up/down 이벤트 매핑 제거. dir 상태로 전이 처리
                 self.IDLE: {space_down: self.IDLE, a_down: self.ATTACK, a_up: self.IDLE, attack_hold: self.ATTACK,
-                            run_dir: self.RUN, d_down: self.ATTACK},
+                            run_dir: self.RUN, d_down: self.ATTACK, enemy_collide: self.HIT},
                 self.RUN: {space_down: self.RUN, idle_dir: self.IDLE, a_down: self.ATTACK, d_down: self.ATTACK,
-                           shift_down: self.RUN},
+                           shift_down: self.RUN, enemy_collide: self.HIT},
                 self.HIT: {time_out: self.IDLE}
             }
         )
@@ -361,3 +365,6 @@ class Boy:
     def handle_collision(self, group, other):
         if group == 'boy:grass':
             self.yv = 0
+        # 적과 충돌하면 ENEMY_COLIDE 이벤트 발생시켜 Hit 상태로 전이
+        if group == 'boy:enemy':
+            self.state_machine.handle_state_event(('ENEMY_COLIDE', other))
