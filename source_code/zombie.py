@@ -19,7 +19,7 @@ TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 4.0
 
-METER = 5
+METER = 2
 
 animation_names = ['Walk']
 
@@ -39,20 +39,24 @@ class Zombie:
         if Zombie.hpblank == None:
             Zombie.hpblank = load_image('hpblank.png')
 
-    def __init__(self):
-        self.x, self.y = random.randint(100, 800), 150
+    def __init__(self, x = 400, left=100, bottom=100, right=100, top=100):
+        self.x = x
+        self.y =  130
         self.load_images()
         self.frame = random.randint(0, 9)
         self.dir = random.choice([-1,1])
         self.count = 1
-        self.size = 100
+        self.left = left
+        self.bottom = bottom
+        self.right = right
+        self.top = top
         self.now_hp = Zombie.max_hp
         self.knockbackspeed = 0
         self.knockbackdir = 0
 
 
     def get_bb(self):
-        return self.x - self.size, self.y - self.size + 50 * (self.count - 1), self.x + self.size, self.y + self.size + 50 * (self.count - 1)
+        return self.x - self.left, self.y - self.bottom, self.x + self.right, self.y + self.top
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
