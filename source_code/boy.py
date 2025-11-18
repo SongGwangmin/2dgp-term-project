@@ -36,6 +36,12 @@ hit_frames_per_action = 2
 hit_actions_per_time = 1.0 / hit_time_per_action
 HIT_FRAMES_PER_SEC = hit_frames_per_action * hit_actions_per_time
 
+# Death 상태를 위한 애니메이션 설정
+death_time_per_action = 0.3
+death_frames_per_action = 4
+death_actions_per_time = 1.0 / death_time_per_action
+DEATH_FRAMES_PER_SEC = death_frames_per_action * death_actions_per_time
+
 METER = 5
 
 GRAVITY = 9.8  # 중력 가속도 (m/s²)
@@ -101,6 +107,10 @@ def shift_down(e):
 # 적 충돌 이벤트 판정
 def enemy_collide(e):
     return e[0] == 'ENEMY_COLIDE'
+
+# 적 사망(보이 사망) 이벤트
+def enemy_death(e):
+    return e[0] == 'ENEMY_DEATH'
 
 
 class Idle:
@@ -259,9 +269,43 @@ class Hit:
         # 히트 애니메이션 그리기 (attack과 비슷한 방식으로 처리)
         if self.boy.face_dir == 1:
             self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 3 * 128, 128, 128, 0, '',
-                                               self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+                                                self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         else:
             self.boy.image.clip_composite_draw(int(self.boy.frame) * 128, 3 * 128, 128, 128, 0, 'h',
+                                                self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+
+
+class Death:
+    def __init__(self, boy):
+        self.boy = boy
+
+    def enter(self, e):
+        # 죽음 시작 시 프레임 초기화
+        self.boy.frame = 0
+
+    def exit(self, e):
+        pass
+
+    def do(self):
+        # 죽음 애니메이션 진행, 끝나면 게임오버 모드로 전환
+        self.boy.frame = (DEATH_FRAMES_PER_SEC * game_framework.frame_time + self.boy.frame)
+        if self.boy.frame >= death_frames_per_action:
+            try:
+                import gameover_mode
+                game_framework.push_mode(gameover_mode)
+            except Exception:
+                pass
+
+    def handle_event(self, event):
+        pass
+
+    def draw(self):
+        # 죽음 애니메이션 그리기 (임시로 Hit과 다른 행을 사용)
+        if self.boy.face_dir == 1:
+            self.boy.image.clip_composite_draw(min(int(self.boy.frame), 3) * 128, 0 * 128, 128, 128, 0, '',
+                                               self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+        else:
+            self.boy.image.clip_composite_draw(min(int(self.boy.frame), 3) * 128, 0 * 128, 128, 128, 0, 'h',
                                                self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
 
 
@@ -295,16 +339,18 @@ class Boy:
         self.ATTACK = Attack(self)
         self.RUN = Run(self)
         self.HIT = Hit(self)
+        self.DEATH = Death(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.ATTACK: {time_out: self.IDLE, a_up: self.ATTACK, enemy_collide: self.HIT},
+                self.ATTACK: {time_out: self.IDLE, a_up: self.ATTACK, enemy_collide: self.HIT, enemy_death: self.DEATH},
                 # 좌우 키의 직접적인 up/down 이벤트 매핑 제거. dir 상태로 전이 처리
                 self.IDLE: {space_down: self.IDLE, a_down: self.ATTACK, a_up: self.IDLE, attack_hold: self.ATTACK,
-                            run_dir: self.RUN, d_down: self.ATTACK, enemy_collide: self.HIT},
+                            run_dir: self.RUN, d_down: self.ATTACK, enemy_collide: self.HIT, enemy_death: self.DEATH},
                 self.RUN: {space_down: self.RUN, idle_dir: self.IDLE, a_down: self.ATTACK, d_down: self.ATTACK,
-                           shift_down: self.RUN, enemy_collide: self.HIT},
-                self.HIT: {time_out: self.IDLE}
+                           shift_down: self.RUN, enemy_collide: self.HIT, enemy_death: self.DEATH},
+                self.HIT: {time_out: self.IDLE},
+                self.DEATH: {}
             }
         )
 
@@ -380,10 +426,10 @@ class Boy:
             # 마지막 충돌로부터 hit_time_per_action * 2 이상 지났을 때만 처리
             if get_time() - self.wait_time >= hit_time_per_action * 2:
                 self.now_hp -= other.strength
-                if self.now_hp < 0:
+                if self.now_hp <= 0:
                     self.now_hp = 0
-                    # gameover_mode를 로컬 임포트하여 순환참조 방지
-                    import gameover_mode
-                    game_framework.push_mode(gameover_mode)
-                self.wait_time = get_time()
-                self.state_machine.handle_state_event(('ENEMY_COLIDE', other))
+                    self.wait_time = get_time()
+                    self.state_machine.handle_state_event(('ENEMY_DEATH', other))
+                else:
+                    self.wait_time = get_time()
+                    self.state_machine.handle_state_event(('ENEMY_COLIDE', other))
