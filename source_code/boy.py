@@ -298,8 +298,6 @@ class Death:
             except Exception:
                 pass
 
-    def handle_event(self, event):
-        pass
 
     def draw(self):
         # 죽음 애니메이션 그리기 (임시로 Hit과 다른 행을 사용)
