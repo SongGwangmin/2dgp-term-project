@@ -171,7 +171,7 @@ class Attack:
 
     def exit(self, e):
         # 상태 종료 시 히트박스 비활성화 보장
-        if hasattr(self.boy, 'attack_hitbox'):
+        if (self.boy, 'attack_hitbox'):
             self.boy.attack_hitbox.disable()
         pass
 

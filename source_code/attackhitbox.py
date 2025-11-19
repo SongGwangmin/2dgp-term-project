@@ -6,7 +6,7 @@ import game_framework
 class AttackHitBox:
     # 공격 히트박스: Boy가 생성하지 않음(나중에 연결할 용도)
     def __init__(self, boy=None, width=50, height=50, offset_x=50, offset_y=0):
-        self.boy = boy
+        self.boy_pointer = boy
         self.width = width
         self.height = height
         self.offset_x = offset_x
@@ -14,6 +14,7 @@ class AttackHitBox:
         self.enabled = False
         self.x = 0
         self.y = 0
+        self.strength = boy.strength  # 공격력
 
     def enable(self):
         self.enabled = True
@@ -23,12 +24,12 @@ class AttackHitBox:
 
     def update(self):
         # 활성화되어 있으면 항상 보이의 위치에 맞춰 따른다
-        if self.boy is None:
+        if self.boy_pointer is None:
             return
         if self.enabled:
             # face_dir가 1이면 오른쪽, -1이면 왼쪽으로 offset 적용
-            self.x = self.boy.x + self.offset_x * (self.boy.face_dir if hasattr(self.boy, 'face_dir') else 1)
-            self.y = self.boy.y + self.offset_y
+            self.x = self.boy_pointer.x + self.offset_x * (self.boy_pointer.face_dir if hasattr(self.boy_pointer, 'face_dir') else 1)
+            self.y = self.boy_pointer.y + self.offset_y
 
     def draw(self):
         if not self.enabled:
