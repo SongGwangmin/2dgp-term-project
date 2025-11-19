@@ -372,7 +372,7 @@ class Boy:
                 self.RUN: {space_down: self.RUN, idle_dir: self.IDLE, a_down: self.ATTACK, d_down: self.ATTACK,
                            shift_down: self.RUN, enemy_collide: self.HIT, enemy_death: self.DEATH},
                 self.HIT: {time_out: self.IDLE},
-                self.DEATH: {run_dir: self.DEATH, idle_dir: self.DEATH}
+                self.DEATH: {a_up: self.DEATH, a_down: self.DEATH}
             }
         )
 
