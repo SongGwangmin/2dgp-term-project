@@ -20,7 +20,7 @@ ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 4.0
 
 # 공격 데미지 디바운스 시간 (boy의 attacktime_per_action(0.3) * 1.5과 동일)
-ATTACK_WAIT_TIME = 0.3 * 1.5
+ATTACK_WAIT_TIME = 0.3 * 0.8
 
 METER = 2
 
