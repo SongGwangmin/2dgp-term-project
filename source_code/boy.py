@@ -337,7 +337,7 @@ class Boy:
     frame = 0
     set_slash = 0
     set_dash = 0
-    strength = 1
+    strength = 5
     max_hp = 100.0
     hpbar = None
     hpblank = None
@@ -455,3 +455,5 @@ class Boy:
                     self.state_machine.handle_state_event(('ENEMY_COLIDE', other))
         if group == 'boy:portal':
             pass
+        if group == 'boy:money':
+            Boy.money += other.value

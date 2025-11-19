@@ -4,6 +4,7 @@ import game_framework
 import game_world
 
 from pico2d import *
+from money import Money
 
 # zombie Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
@@ -116,10 +117,16 @@ class Zombie:
                     else:
                         # dx / math.fabs(dx)는 dx의 부호(+1 또는 -1)를 반환
                         self.knockbackdir = dx / math.fabs(dx)
-                    self.knockbackspeed = 7
+                    self.knockbackspeed = 5
                     pass
                 else:
+                    # 죽을 때 돈을 드롭
+                    money = Money(self.x, self.y, value=5)
+                    game_world.add_object(money, 1)
+                        # boy:money 충돌 페어에 몬스터 드랍 등록
+                    game_world.add_collision_pair('boy:money', None, money)
                     game_world.remove_object(self)
                     other.boy_pointer.hunt_count += 1
+
         elif group == 'boy:enemy':
             pass

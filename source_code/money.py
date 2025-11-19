@@ -1,4 +1,9 @@
 from pico2d import load_image, draw_rectangle
+import game_world
+
+
+METER = 2
+PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 1 meter
 
 class Money:
     image = None
@@ -15,10 +20,10 @@ class Money:
     def draw(self):
         # 바운딩 박스는 디버그용으로 항상 그림
         draw_rectangle(*self.get_bb())
-        if not self.enabled:
-            return
+
         if Money.image:
-            Money.image.draw(self.x, self.y)
+            Money.image.clip_composite_draw(0, 0, 265, 257, 0, '',
+                                               self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
 
     def update(self):
         # 각 프레임 기본적으로 비활성화하고, 충돌 처리에서 enable()로 켬
@@ -36,6 +41,14 @@ class Money:
         return left, bottom, right, top
 
     def handle_collision(self, group, other):
-        # 'boy:money' 충돌 시 활성화(필요시 다른 동작 추가)
+        # 'boy:money' 충돌 시 보상 지급 및 자신 제거
         if group == 'boy:money':
-            self.enable()
+
+            # 자신을 월드에서 제거
+            game_world.remove_object(self)
+
+    def enable(self):
+        self.enabled = True
+
+    def disable(self):
+        self.enabled = False
