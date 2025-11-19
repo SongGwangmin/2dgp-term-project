@@ -98,7 +98,7 @@ class Zombie:
         pass
 
     def handle_collision(self, group, other):
-        if group == 'ball:zombie':
+        if group == 'attack:zombie':
             self.now_hp -= other.strength
             if self.now_hp > 0:
                 # 맞은 곳과 반대로 튕겨야함
