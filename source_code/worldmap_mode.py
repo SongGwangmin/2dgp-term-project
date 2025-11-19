@@ -1,6 +1,7 @@
 from pico2d import *
 from boy import Boy
 from grass import Grass
+from keycap import Keycap
 import game_world
 import game_framework
 import home_mode
@@ -45,6 +46,12 @@ def init():
     game_world.add_object(boy, 1)
     game_world.add_collision_pair('boy:grass', boy, grass)
 
+
+    # 월드맵에 Keycap 추가 (space 아이콘)
+    key1 = Keycap(30, 200)
+    key2 = Keycap(250, 200)
+    game_world.add_object(key1, 3)
+    game_world.add_object(key2, 3)
 
 def finish():
     game_world.clear()

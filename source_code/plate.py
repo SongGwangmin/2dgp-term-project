@@ -9,10 +9,5 @@ class Plate:
     def draw(self):
         self.image.draw(400, 300)
 
-
-
-
     def update(self):
         pass
-
-
