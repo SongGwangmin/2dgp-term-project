@@ -1,4 +1,5 @@
 from pico2d import load_image, draw_rectangle
+import game_world
 
 class Keycap:
     image = None
@@ -8,15 +9,33 @@ class Keycap:
             Keycap.image = load_image('space.png')
         self.x = x
         self.y = y
+        # 기본적으로 비활성화: 충돌 시에만 보이게 함
+        self.enabled = False
 
     def draw(self):
+        # 활성화되어 있을 때만 이미지와 바운딩 박스를 그림
+        if not self.enabled:
+            return
         if Keycap.image:
             Keycap.image.draw(self.x, self.y)
-        # 충돌 디버그용 바운딩 박스 그리기
         draw_rectangle(*self.get_bb())
 
     def update(self):
-        pass
+        # game_world를 검사하여 Boy와 충돌 중인지 확인
+        colliding = False
+        for layer in game_world.world:
+            for o in layer:
+                if o.__class__.__name__ == 'Boy':
+                    try:
+                        if game_world.collide(self, o):
+                            colliding = True
+                            break
+                    except Exception:
+                        # 안전하게 무시
+                        pass
+            if colliding:
+                break
+        self.enabled = colliding
 
     def get_bb(self):
         # 중심을 (self.x, self.y - 100)으로 하고, 너비 50, 높이 40으로 바운딩 박스 반환
@@ -31,6 +50,12 @@ class Keycap:
         return left, bottom, right, top
 
     def handle_collision(self, group, other):
-        # 'boy:portal'과의 충돌을 처리하는 자리, 현재 동작은 없음
+        # 'boy:portal'과 충돌하면 활성화하여 space 아이콘을 보이게 함
         if group == 'boy:portal':
-            pass
+            self.enable()
+
+    def enable(self):
+        self.enabled = True
+
+    def disable(self):
+        self.enabled = False
