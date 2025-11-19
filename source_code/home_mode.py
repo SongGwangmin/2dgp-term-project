@@ -7,10 +7,12 @@ import trainig_mode
 import play_mode
 import item_mode
 import worldmap_mode
+from keycap import Keycap
 
 from game_world import world
 # Game object class here
 
+dest_list = []
 
 def handle_events():
     global running
@@ -21,6 +23,14 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
+        if event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
+            for k in dest_list:
+                if getattr(k, 'enabled', False) and getattr(k, 'dest', None) is not None:
+                    try:
+                        game_framework.push_mode(k.dest)
+                    except Exception:
+                        pass
+                    break
         elif event.type == SDL_KEYDOWN and event.key == SDLK_i:
             game_framework.push_mode(trainig_mode)
             #push mode: 플레이 모드를 유지해야하므로
@@ -31,6 +41,7 @@ def handle_events():
 def init():
     global boy
     global running
+    global dest_list
     running = True
 
     game_world.collision_pairs = {}
@@ -41,6 +52,17 @@ def init():
     game_world.add_object(boy, 1)
     game_world.add_collision_pair('boy:grass', boy, grass)
 
+    dest_list.clear()
+    key1 = Keycap(230, 200, dest=item_mode)
+    key2 = Keycap(450, 200, dest=trainig_mode)
+    game_world.add_object(key1, 3)
+    game_world.add_object(key2, 3)
+    dest_list.append(key1)
+    dest_list.append(key2)
+
+    game_world.add_collision_pair('boy:portal', boy, None)
+    game_world.add_collision_pair('boy:portal', None, key1)
+    game_world.add_collision_pair('boy:portal', None, key2)
 
 def finish():
     game_world.clear()

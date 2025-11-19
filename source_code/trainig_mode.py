@@ -9,7 +9,7 @@ import worldmap_mode
 
 def init():
     global pannel
-    pannel = Pannel(0)
+    pannel = Pannel(1)
     Pannel.image = load_image('training_select.png')
     game_world.add_object(pannel, 2)
 
