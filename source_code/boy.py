@@ -157,8 +157,10 @@ class Attack:
     def __init__(self, boy):
         self.boy = boy
 
+
     def enter(self, e):
         Boy.frame = 0
+        self.attack_dir = self.boy.face_dir
         if e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_d:
             self.boy.fire_ball()
         pass
@@ -179,7 +181,7 @@ class Attack:
         pass
 
     def draw(self):
-        if self.boy.face_dir == 1:
+        if self.attack_dir == 1:
             self.boy.image.clip_composite_draw(int(Boy.frame) * 128, 2 * 128, 128, 128, 0, '',
                                                self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         else:
