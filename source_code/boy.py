@@ -5,6 +5,7 @@ import game_world
 from state_machine import StateMachine
 import game_framework
 from ball import Ball
+from attackhitbox import AttackHitBox
 
 # 전역 변수로 A키 눌림 상태 저장
 attackkeydown = 0
@@ -163,13 +164,32 @@ class Attack:
         self.attack_dir = self.boy.face_dir
         if e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_d:
             self.boy.fire_ball()
+        # 시작 시 히트박스 비활성화
+        if hasattr(self.boy, 'attack_hitbox'):
+            self.boy.attack_hitbox.disable()
         pass
 
     def exit(self, e):
+        # 상태 종료 시 히트박스 비활성화 보장
+        if hasattr(self.boy, 'attack_hitbox'):
+            self.boy.attack_hitbox.disable()
         pass
 
     def do(self):
         Boy.frame = (ATTACK_FRAMES_PER_SEC * game_framework.frame_time + Boy.frame)
+        # 프레임 인덱스 기반 히트박스 제어: 정확히 2일 때 활성화, 4 이상이면 비활성화
+        try:
+            frame_idx = int(Boy.frame)
+        except Exception:
+            frame_idx = 0
+        if hasattr(self.boy, 'attack_hitbox'):
+            if frame_idx == 2:
+                self.boy.attack_hitbox.enable()
+            elif frame_idx >= 4:
+                self.boy.attack_hitbox.disable()
+            else:
+                self.boy.attack_hitbox.disable()
+
         if Boy.frame >= 4:
             self.boy.state_machine.handle_state_event(('TIMEOUT', None))
 
@@ -355,6 +375,11 @@ class Boy:
                 self.DEATH: {run_dir: self.DEATH, idle_dir: self.DEATH}
             }
         )
+
+        # 생성 시 공격 히트박스 하나를 만들어 self에 저장하고 game_world에 등록
+        self.attack_hitbox = AttackHitBox(self, width=60, height=40, offset_x=50, offset_y=10)
+        game_world.add_object(self.attack_hitbox)
+        game_world.add_collision_pair('attack:zombie', self.attack_hitbox, None)
 
     def update(self):
         self.state_machine.update()
