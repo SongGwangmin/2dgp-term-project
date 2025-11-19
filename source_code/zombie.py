@@ -19,6 +19,9 @@ TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 4.0
 
+# 공격 데미지 디바운스 시간 (boy의 attacktime_per_action(0.3) * 1.5과 동일)
+ATTACK_WAIT_TIME = 0.3 * 1.5
+
 METER = 2
 
 animation_names = ['Walk']
@@ -55,6 +58,8 @@ class Zombie:
         self.strength = strength
         self.knockbackspeed = 0
         self.knockbackdir = 0
+        # 데미지 디바운스용 대기시간 초기화
+        self.wait_time = 0
 
 
     def get_bb(self):
@@ -99,19 +104,22 @@ class Zombie:
 
     def handle_collision(self, group, other):
         if group == 'attack:zombie':
-            self.now_hp -= other.strength
-            if self.now_hp > 0:
-                # 맞은 곳과 반대로 튕겨야함
-                dx = self.x - other.x
-                if dx == 0:
-                    self.knockbackdir = 0.0
+            # 일정 시간(ATTACK_WAIT_TIME) 동안은 추가 데미지를 받지 않도록 디바운스
+            if get_time() - self.wait_time >= ATTACK_WAIT_TIME:
+                self.wait_time = get_time()
+                self.now_hp -= other.strength
+                if self.now_hp > 0:
+                    # 맞은 곳과 반대로 튕겨야함
+                    dx = self.x - other.x
+                    if dx == 0:
+                        self.knockbackdir = 0.0
+                    else:
+                        # dx / math.fabs(dx)는 dx의 부호(+1 또는 -1)를 반환
+                        self.knockbackdir = dx / math.fabs(dx)
+                    self.knockbackspeed = 7
+                    pass
                 else:
-                    # dx / math.fabs(dx)는 dx의 부호(+1 또는 -1)를 반환
-                    self.knockbackdir = dx / math.fabs(dx)
-                self.knockbackspeed = 5
-                pass
-            else:
-                game_world.remove_object(self)
-                other.boy_pointer.hunt_count += 1
+                    game_world.remove_object(self)
+                    other.boy_pointer.hunt_count += 1
         elif group == 'boy:enemy':
             pass
