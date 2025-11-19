@@ -7,6 +7,7 @@ import worldmap_mode
 from zombie import Zombie
 import home_mode
 from game_world import world
+from money import Money
 # Game object class here
 
 max_monster_count = 4
@@ -44,6 +45,9 @@ def init():
     for zombie in zombies:
         game_world.add_collision_pair('boy:enemy', None, zombie)
         game_world.add_collision_pair('attack:zombie', None, zombie)
+
+    # Money 오브젝트 추가 및 충돌 페어 등록
+    game_world.add_collision_pair('boy:money', boy, None)
 
 
 def finish():
