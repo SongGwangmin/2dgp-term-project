@@ -42,7 +42,7 @@ class AttackHitBox:
             return 0, 0, 0, 0
         half_w = self.width / 2
         half_h = self.height / 2
-        return self.x - half_w, self.y - half_h, self.x + half_w, self.y + half_h
+        return self.x - half_w, self.y - half_h * 4, self.x + half_w, self.y + half_h
 
     def handle_collision(self, group, other):
         # 충돌 처리 후 동작은 사용처에서 구현
