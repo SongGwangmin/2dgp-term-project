@@ -10,6 +10,7 @@ import worldmap_mode
 def init():
     global pannel
     pannel = Pannel(0)
+    Pannel.image = load_image('item_select.png')
     game_world.add_object(pannel, 2)
 
 def finish():

@@ -3,6 +3,7 @@ from boy import Boy
 from grass import Grass
 import game_world
 import game_framework
+import trainig_mode
 import play_mode
 import item_mode
 import worldmap_mode
@@ -21,7 +22,7 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_i:
-            game_framework.push_mode(item_mode)
+            game_framework.push_mode(trainig_mode)
             #push mode: 플레이 모드를 유지해야하므로
         else:
             boy.handle_event(event)
