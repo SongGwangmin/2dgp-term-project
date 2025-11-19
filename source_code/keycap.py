@@ -4,38 +4,30 @@ import game_world
 class Keycap:
     image = None
 
-    def __init__(self, x=400, y=300):
+    def __init__(self, x=400, y=300, dest=None):
         if Keycap.image is None:
             Keycap.image = load_image('space.png')
         self.x = x
         self.y = y
+        # 목적지 모듈(예: home_mode, play_mode)을 저장
+        self.dest = dest
         # 기본적으로 비활성화: 충돌 시에만 보이게 함
         self.enabled = False
 
     def draw(self):
-        # 활성화되어 있을 때만 이미지와 바운딩 박스를 그림
+        draw_rectangle(*self.get_bb())
+        # 활성화되어 있을 때만 이미지를 그림
         if not self.enabled:
             return
         if Keycap.image:
             Keycap.image.draw(self.x, self.y)
-        draw_rectangle(*self.get_bb())
+
 
     def update(self):
-        # game_world를 검사하여 Boy와 충돌 중인지 확인
-        colliding = False
-        for layer in game_world.world:
-            for o in layer:
-                if o.__class__.__name__ == 'Boy':
-                    try:
-                        if game_world.collide(self, o):
-                            colliding = True
-                            break
-                    except Exception:
-                        # 안전하게 무시
-                        pass
-            if colliding:
-                break
-        self.enabled = colliding
+        # 매 프레임 기본적으로 비활성화하고, game_world.handle_collision()에서
+        # 충돌이 감지되면 handle_collision이 호출되어 enable()로 상태를 바꿉니다.
+        # (game loop 순서: update() -> handle_collision() -> draw())
+        self.enabled = False
 
     def get_bb(self):
         # 중심을 (self.x, self.y - 100)으로 하고, 너비 50, 높이 40으로 바운딩 박스 반환

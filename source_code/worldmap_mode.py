@@ -7,6 +7,9 @@ import home_mode
 import play_mode
 from game_world import world
 from keycap import Keycap
+
+# 현재 프레임에서 활성화된 Keycap 목적지들을 보관
+dest_list = []
 # Game object class here
 
 
@@ -15,6 +18,16 @@ def handle_events():
 
     event_list = get_events()
     for event in event_list:
+        # 스페이스 키로 활성화된 Keycap의 목적지로 이동
+        if event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
+            for k in dest_list:
+                if getattr(k, 'enabled', False) and getattr(k, 'dest', None) is not None:
+                    try:
+                        game_framework.change_mode(k.dest)
+                    except Exception:
+                        pass
+                    break
+
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
@@ -34,6 +47,7 @@ def handle_events():
 def init():
     global boy
     global running
+    global dest_list
     running = True
 
     game_world.collision_pairs = {}
@@ -47,10 +61,14 @@ def init():
     game_world.add_collision_pair('boy:grass', boy, grass)
 
     # 월드맵에 Keycap 추가 (space 아이콘)
-    key1 = Keycap(30, 200)
-    key2 = Keycap(250, 200)
+    # init마다 dest_list 비우고 새로 채움
+    dest_list.clear()
+    key1 = Keycap(30, 200, dest=home_mode)
+    key2 = Keycap(250, 200, dest=play_mode)
     game_world.add_object(key1, 3)
     game_world.add_object(key2, 3)
+    dest_list.append(key1)
+    dest_list.append(key2)
 
     # boy와 Keycap 간 충돌 페어 등록: 'boy:portal'
     # 패턴: 먼저 boy를 왼쪽에 등록하고, 우측 객체들을 별도로 등록
