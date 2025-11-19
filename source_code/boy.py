@@ -453,3 +453,5 @@ class Boy:
                 else:
                     self.wait_time = get_time()
                     self.state_machine.handle_state_event(('ENEMY_COLIDE', other))
+        if group == 'boy:portal':
+            pass

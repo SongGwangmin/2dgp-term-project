@@ -1,4 +1,4 @@
-from pico2d import load_image
+from pico2d import load_image, draw_rectangle
 
 class Keycap:
     image = None
@@ -12,6 +12,8 @@ class Keycap:
     def draw(self):
         if Keycap.image:
             Keycap.image.draw(self.x, self.y)
+        # 충돌 디버그용 바운딩 박스 그리기
+        draw_rectangle(*self.get_bb())
 
     def update(self):
         pass
@@ -27,3 +29,8 @@ class Keycap:
         right = cx + half_w
         top = cy + half_h
         return left, bottom, right, top
+
+    def handle_collision(self, group, other):
+        # 'boy:portal'과의 충돌을 처리하는 자리, 현재 동작은 없음
+        if group == 'boy:portal':
+            pass

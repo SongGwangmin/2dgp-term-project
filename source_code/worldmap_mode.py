@@ -1,12 +1,12 @@
 from pico2d import *
 from boy import Boy
 from grass import Grass
-from keycap import Keycap
 import game_world
 import game_framework
 import home_mode
 import play_mode
 from game_world import world
+from keycap import Keycap
 # Game object class here
 
 
@@ -46,12 +46,18 @@ def init():
     game_world.add_object(boy, 1)
     game_world.add_collision_pair('boy:grass', boy, grass)
 
-
     # 월드맵에 Keycap 추가 (space 아이콘)
     key1 = Keycap(30, 200)
     key2 = Keycap(250, 200)
     game_world.add_object(key1, 3)
     game_world.add_object(key2, 3)
+
+    # boy와 Keycap 간 충돌 페어 등록: 'boy:portal'
+    # 패턴: 먼저 boy를 왼쪽에 등록하고, 우측 객체들을 별도로 등록
+    game_world.add_collision_pair('boy:portal', boy, None)
+    game_world.add_collision_pair('boy:portal', None, key1)
+    game_world.add_collision_pair('boy:portal', None, key2)
+
 
 def finish():
     game_world.clear()
