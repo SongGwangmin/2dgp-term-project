@@ -2,7 +2,7 @@ from pico2d import load_image, draw_rectangle
 import game_world
 
 
-METER = 2
+METER = 1.8
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 1 meter
 
 class Money:
@@ -18,12 +18,9 @@ class Money:
         self.enabled = False
 
     def draw(self):
-        # 바운딩 박스는 디버그용으로 항상 그림
-        draw_rectangle(*self.get_bb())
-
-        if Money.image:
-            Money.image.clip_composite_draw(0, 0, 265, 257, 0, '',
+        Money.image.clip_composite_draw(0, 0, 265, 257, 0, '',
                                                self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+        draw_rectangle(*self.get_bb())
 
     def update(self):
         # 각 프레임 기본적으로 비활성화하고, 충돌 처리에서 enable()로 켬
