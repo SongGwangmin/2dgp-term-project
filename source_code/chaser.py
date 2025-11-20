@@ -35,7 +35,7 @@ class Chaser:
     hpblank = None
     def load_images(self):
         if Chaser.images == None:
-            Chaser.images = load_image('LARVA.png')
+            Chaser.images = load_image('16336.png')
         if Chaser.font == None:
             Chaser.font = load_font('ENCR10B.TTF', 16)
         if Chaser.hpbar == None:
@@ -97,10 +97,10 @@ class Chaser:
 
     def draw(self):
         if self.dir < 0:
-            Chaser.images.clip_composite_draw(int(self.frame) * 144 + 2, 0, 144, 114, 0, '',
+            Chaser.images.clip_composite_draw(int(self.frame) * 25, 0, 25, 27, 0, '',
                                                self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         else:
-            Chaser.images.clip_composite_draw(int(self.frame) * 144 + 2, 0, 144, 114, 0, 'h',
+            Chaser.images.clip_composite_draw(int(self.frame) * 25, 0, 25, 27, 0, 'h',
                                               self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         draw_rectangle(*self.get_bb())
         Chaser.hpblank.clip_draw(0, 0, 5, 5, self.x, self.y + 50, 50, 5)
