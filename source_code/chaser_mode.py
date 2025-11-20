@@ -39,7 +39,7 @@ def init():
     game_world.add_object(boy, 1)
 
     game_world.add_collision_pair('boy:grass', boy, grass)
-    chasers = [Chaser(400 + i * 100, 1,1,1,1) for i in range(max_monster_count)]
+    chasers = [Chaser(400 + i * 100, 1,1,1,1, 0, boy) for i in range(max_monster_count)]
     game_world.add_objects(chasers, 1)
 
     game_world.add_collision_pair('boy:enemy', boy, None)

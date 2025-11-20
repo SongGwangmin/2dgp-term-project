@@ -43,7 +43,7 @@ class Chaser:
         if Chaser.hpblank == None:
             Chaser.hpblank = load_image('hpblank.png')
 
-    def __init__(self, x = 400, left=100, bottom=100, right=100, top=100, strength=50):
+    def __init__(self, x = 400, left=100, bottom=100, right=100, top=100, strength=50, boy=None):
         self.x = x
         self.y =  80
         self.load_images()
@@ -61,6 +61,7 @@ class Chaser:
         self.knockbackdir = 0
         # 데미지 디바운스용 대기시간 초기화
         self.wait_time = 0
+        self.target = boy
 
 
     def get_bb(self):
@@ -71,6 +72,11 @@ class Chaser:
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
+        if self.dir == 1 and self.x >= self.target.x + 15:
+            self.dir = -1
+
+        elif self.dir == -1 and self.x <= self.target.x - 15:
+            self.dir = 1
         self.x += RUN_SPEED_PPS * self.dir * game_framework.frame_time
         self.x += self.knockbackspeed * self.knockbackdir * PIXEL_PER_METER * game_framework.frame_time
         self.knockbackspeed = max(0, self.knockbackspeed - DELTA_KNOCKBACK_SPEED * game_framework.frame_time)
