@@ -275,8 +275,8 @@ class Hit:
         self.boy = boy
 
     def enter(self, e):
-        # 히트 시작 시 프레임 초기화
-        Boy.frame = 0
+        pass# 히트 시작 시 프레임 초기화
+
 
     def exit(self, e):
         pass
@@ -371,7 +371,7 @@ class Boy:
                             run_dir: self.RUN, d_down: self.ATTACK, enemy_collide: self.HIT, enemy_death: self.DEATH},
                 self.RUN: {space_down: self.RUN, idle_dir: self.IDLE, a_down: self.ATTACK, d_down: self.ATTACK,
                            shift_down: self.RUN, enemy_collide: self.HIT, enemy_death: self.DEATH},
-                self.HIT: {time_out: self.IDLE},
+                self.HIT: {time_out: self.IDLE, a_up: self.HIT, a_down: self.ATTACK},
                 self.DEATH: {a_up: self.DEATH, a_down: self.DEATH}
             }
         )
@@ -451,6 +451,7 @@ class Boy:
                     self.wait_time = get_time()
                     self.state_machine.handle_state_event(('ENEMY_DEATH', other))
                 else:
+                    Boy.frame = 0
                     self.wait_time = get_time()
                     self.state_machine.handle_state_event(('ENEMY_COLIDE', other))
         if group == 'boy:portal':
