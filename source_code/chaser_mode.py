@@ -5,6 +5,7 @@ import game_world
 import game_framework
 import worldmap_mode
 from zombie import Zombie
+from chaser import Chaser
 import home_mode
 from game_world import world
 from money import Money
