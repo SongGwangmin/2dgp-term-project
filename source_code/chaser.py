@@ -123,7 +123,7 @@ class Chaser:
                     else:
                         # dx / math.fabs(dx)는 dx의 부호(+1 또는 -1)를 반환
                         self.knockbackdir = dx / math.fabs(dx)
-                    self.knockbackspeed = 5
+                    self.knockbackspeed = 10
                     pass
                 else:
                     # 죽을 때 돈을 드롭
