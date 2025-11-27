@@ -18,9 +18,9 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 # zombie Action Speed
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 10.0
+FRAMES_PER_ACTION = 6
 
-animation_names = ['Walk', 'Idle']
+animation_names = ['eagle_1_0']
 
 
 class Bird:
@@ -30,7 +30,7 @@ class Bird:
         if Bird.images == None:
             Bird.images = {}
             for name in animation_names:
-                Bird.images[name] = [load_image("./zombie/" + name + " (%d)" % i + ".png") for i in range(1, 11)]
+                Bird.images[name] = [load_image("./bird/" + name + " (%d)" % i + ".png") for i in range(1, 6+1)]
             Bird.font = load_font('ENCR10B.TTF', 40)
 
 
