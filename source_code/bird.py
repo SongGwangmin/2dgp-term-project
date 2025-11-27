@@ -23,16 +23,15 @@ FRAMES_PER_ACTION = 10.0
 animation_names = ['Walk', 'Idle']
 
 
-class Zombie:
+class Bird:
     images = None
 
     def load_images(self):
-        if Zombie.images == None:
-            Zombie.images = {}
+        if Bird.images == None:
+            Bird.images = {}
             for name in animation_names:
-                Zombie.images[name] = [load_image("./zombie/" + name + " (%d)" % i + ".png") for i in range(1, 11)]
-            Zombie.font = load_font('ENCR10B.TTF', 40)
-            Zombie.marker_image = load_image('hand_arrow.png')
+                Bird.images[name] = [load_image("./zombie/" + name + " (%d)" % i + ".png") for i in range(1, 11)]
+            Bird.font = load_font('ENCR10B.TTF', 40)
 
 
     def __init__(self, x=None, y=None):
@@ -67,11 +66,11 @@ class Zombie:
 
     def draw(self):
         if math.cos(self.dir) < 0:
-            Zombie.images[self.state][int(self.frame)].composite_draw(0, 'h', self.x, self.y, 100, 100)
+            Bird.images[self.state][int(self.frame)].composite_draw(0, 'h', self.x, self.y, 100, 100)
         else:
-            Zombie.images[self.state][int(self.frame)].draw(self.x, self.y, 100, 100)
+            Bird.images[self.state][int(self.frame)].draw(self.x, self.y, 100, 100)
         self.font.draw(self.x - 10, self.y + 60, f'{self.ball_count}', (0, 0, 255))
-        Zombie.marker_image.draw(self.tx+25, self.ty-25)
+        Bird.marker_image.draw(self.tx+25, self.ty-25)
 
 
 
