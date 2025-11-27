@@ -18,7 +18,7 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 # zombie Action Speed
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 6
+FRAMES_PER_ACTION = 10
 
 animation_names = ['eagle_1_0']
 
@@ -31,6 +31,10 @@ class Bird:
             Bird.images = {}
             for name in animation_names:
                 Bird.images[name] = [load_image("./bird/" + name + "%d" % i + ".png") for i in range(1, 6+1)]
+            # eagle_1_0 프레임 뒤에 5,4,3,2 순서의 프레임을 추가
+            if 'eagle_1_0' in Bird.images:
+                for idx in [4, 3, 2, 1]:
+                    Bird.images['eagle_1_0'].append(Bird.images['eagle_1_0'][idx])
             Bird.font = load_font('ENCR10B.TTF', 40)
 
 
@@ -69,7 +73,7 @@ class Bird:
         else:
             Bird.images[self.state][int(self.frame)].draw(self.x, self.y, 100, 100)
         self.font.draw(self.x - 10, self.y + 60, f'{self.ball_count}', (0, 0, 255))
-    
+
 
 
 
@@ -217,5 +221,3 @@ class Bird:
 
         self.behavior_tree = BehaviorTree(root)
         pass
-
-
