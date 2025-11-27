@@ -150,6 +150,7 @@ class Bird:
 
     def if_boy_nearby(self, distance):
         # 여기를 채우시오.
+        return BehaviorTree.FAIL
         if self.distance_less_than(common.boy.x, common.boy.y, self.x, self.y, distance):
             return BehaviorTree.SUCCESS
         else:
@@ -216,7 +217,7 @@ class Bird:
         a5 = Action('다음 순찰 위치를 가져오기', self.get_patrol_location)
         patrol = Sequence('순찰', a5, a2)
 
-        Selector('추적 또는 순찰', chase_if_boy_nearby, patrol)
+        root = chase_or_patrol = Selector('추적 또는 순찰', chase_if_boy_nearby, patrol)
 
 
         self.behavior_tree = BehaviorTree(root)
