@@ -25,6 +25,9 @@ animation_names = ['eagle_1_0']
 
 class Bird:
     images = None
+    hpbar = None
+    hpblank = None
+    max_hp = 10
 
     def load_images(self):
         if Bird.images == None:
@@ -48,7 +51,11 @@ class Bird:
         self.state = 'eagle_1_0'
         self.ball_count = 0
         self.strength = 5
-
+        self.now_hp = Bird.max_hp
+        if Bird.hpbar == None:
+            Bird.hpbar = load_image('hpbar.png')
+        if Bird.hpblank == None:
+            Bird.hpblank = load_image('hpblank.png')
 
         self.tx, self.ty = 1000, 1000
         # 여기를 채우시오.
@@ -73,10 +80,9 @@ class Bird:
             Bird.images[self.state][int(self.frame)].composite_draw(0, 'h', self.x, self.y, 100, 100)
         else:
             Bird.images[self.state][int(self.frame)].draw(self.x, self.y, 100, 100)
-        #self.font.draw(self.x - 10, self.y + 60, f'{self.ball_count}', (0, 0, 255))
 
-
-
+        Bird.hpblank.clip_draw(0, 0, 5, 5, self.x, self.y + 50, 50, 5)
+        Bird.hpbar.clip_draw_to_origin(0, 0, 5, 5, self.x - 25, self.y + 50, 50 * (self.now_hp / Bird.max_hp), 5)
 
         draw_rectangle(*self.get_bb())
 
