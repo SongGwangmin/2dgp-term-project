@@ -1,5 +1,5 @@
 from pico2d import *
-import chaser_mode as start_mode
+import bird_mode as start_mode
 import game_framework
 
 
