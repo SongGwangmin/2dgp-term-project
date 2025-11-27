@@ -61,7 +61,7 @@ class Bird:
         # 여기를 채우시오.
         self.patrol_locations = [(43, 274), (708, 274)]
         self.loc_no = 0
-
+        self.wait_time = 0
         self.build_behavior_tree()
 
 
