@@ -73,14 +73,14 @@ class Bird:
             Bird.images[self.state][int(self.frame)].composite_draw(0, 'h', self.x, self.y, 100, 100)
         else:
             Bird.images[self.state][int(self.frame)].draw(self.x, self.y, 100, 100)
-        self.font.draw(self.x - 10, self.y + 60, f'{self.ball_count}', (0, 0, 255))
+        #self.font.draw(self.x - 10, self.y + 60, f'{self.ball_count}', (0, 0, 255))
 
 
 
 
         draw_rectangle(*self.get_bb())
 
-        draw_circle(self.x, self.y, int(7 * PIXEL_PER_METER), 255,255,0)  # 추적 범위 표시
+        #draw_circle(self.x, self.y, int(7 * PIXEL_PER_METER), 255,255,0)  # 추적 범위 표시
 
     def handle_event(self, event):
         pass

@@ -50,8 +50,6 @@ def init():
         game_world.add_collision_pair('boy:enemy', None, zombie)
         game_world.add_collision_pair('attack:zombie', None, zombie)
 
-    birds = [Bird(200 + i * 150, 300 + (i % 2) * 50) for i in range(3)]
-    game_world.add_objects(birds, 1)
 
     # Money 오브젝트 추가 및 충돌 페어 등록
     game_world.add_collision_pair('boy:money', boy, None)
