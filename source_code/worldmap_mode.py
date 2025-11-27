@@ -6,6 +6,7 @@ import game_framework
 import home_mode
 import play_mode
 import chaser_mode
+import bird_mode
 from game_world import world
 from keycap import Keycap
 
@@ -67,12 +68,15 @@ def init():
     key1 = Keycap(30, 200, dest=home_mode)
     key2 = Keycap(250, 200, dest=play_mode)
     key3 = Keycap(470, 200, dest=chaser_mode)
+    key4 = Keycap(690, 200, dest=bird_mode)
     game_world.add_object(key1, 3)
     game_world.add_object(key2, 3)
     game_world.add_object(key3, 3)
+    game_world.add_object(key4, 3)
     dest_list.append(key1)
     dest_list.append(key2)
     dest_list.append(key3)
+    dest_list.append(key4)
 
     # boy와 Keycap 간 충돌 페어 등록: 'boy:portal'
     # 패턴: 먼저 boy를 왼쪽에 등록하고, 우측 객체들을 별도로 등록
@@ -80,6 +84,7 @@ def init():
     game_world.add_collision_pair('boy:portal', None, key1)
     game_world.add_collision_pair('boy:portal', None, key2)
     game_world.add_collision_pair('boy:portal', None, key3)
+    game_world.add_collision_pair('boy:portal', None, key4)
 
 
 def finish():
