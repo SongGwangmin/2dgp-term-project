@@ -30,7 +30,7 @@ class Bird:
         if Bird.images == None:
             Bird.images = {}
             for name in animation_names:
-                Bird.images[name] = [load_image("./bird/" + name + " (%d)" % i + ".png") for i in range(1, 6+1)]
+                Bird.images[name] = [load_image("./bird/" + name + "%d" % i + ".png") for i in range(1, 6+1)]
             Bird.font = load_font('ENCR10B.TTF', 40)
 
 
@@ -41,7 +41,7 @@ class Bird:
         self.dir = 0.0      # radian 값으로 방향을 표시
         self.speed = 0.0
         self.frame = random.randint(0, 9)
-        self.state = 'Idle'
+        self.state = 'eagle_1_0'
         self.ball_count = 0
 
 
@@ -69,7 +69,7 @@ class Bird:
         else:
             Bird.images[self.state][int(self.frame)].draw(self.x, self.y, 100, 100)
         self.font.draw(self.x - 10, self.y + 60, f'{self.ball_count}', (0, 0, 255))
-        Bird.marker_image.draw(self.tx+25, self.ty-25)
+    
 
 
 
@@ -123,7 +123,7 @@ class Bird:
 
     def move_to(self, r=0.5):
         # 여기를 채우시오.
-        self.state = 'Walk'
+        self.state = 'eagle_1_0'
         self.move_little_to(self.tx, self.ty)
 
         # 목표 지점에 거의 도착했으면 성공 리턴
@@ -155,7 +155,7 @@ class Bird:
 
     def move_to_boy(self, r=0.5):
         # 여기를 채우시오.
-        self.state = 'Walk'
+        self.state = 'eagle_1_0'
         self.move_little_to(common.boy.x, common.boy.y)
         # 소년에 근접했으면 성공 리턴
         if self.distance_less_than(common.boy.x, common.boy.y, self.x, self.y, r):
@@ -165,7 +165,7 @@ class Bird:
 
     def run_to_boy(self, r=0.5):
             # 여기를 채우시오.
-        self.state = 'Walk'
+        self.state = 'eagle_1_0'
         self.run_little_to(common.boy.x, common.boy.y)
             # 소년에 근접했으면 성공 리턴
         if self.distance_less_than(common.boy.x, common.boy.y, self.x, self.y, r):
@@ -183,7 +183,8 @@ class Bird:
         pass
 
     def ball_count_check(self):
-        if common.boy.ball_count > self.ball_count:
+        return BehaviorTree.SUCCESS
+        if common.boy.hp > self.ball_count:
             return BehaviorTree.SUCCESS
         else:
             return BehaviorTree.FAIL

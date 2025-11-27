@@ -4,9 +4,10 @@ from grass import Grass
 import game_world
 import game_framework
 import worldmap_mode
-from zombie import Zombie
+from bird import Bird
 from chaser import Chaser
 import home_mode
+import common
 from game_world import world
 from money import Money
 # Game object class here
@@ -38,6 +39,8 @@ def init():
     boy = Boy()
     game_world.add_object(boy, 1)
 
+    common.boy = boy
+
     game_world.add_collision_pair('boy:grass', boy, grass)
     chasers = [Chaser(400 + i * 100, 1,1,1,1, 5, boy) for i in range(max_monster_count)]
     game_world.add_objects(chasers, 1)
@@ -46,6 +49,9 @@ def init():
     for zombie in chasers:
         game_world.add_collision_pair('boy:enemy', None, zombie)
         game_world.add_collision_pair('attack:zombie', None, zombie)
+
+    birds = [Bird(200 + i * 150, 300 + (i % 2) * 50) for i in range(3)]
+    game_world.add_objects(birds, 1)
 
     # Money 오브젝트 추가 및 충돌 페어 등록
     game_world.add_collision_pair('boy:money', boy, None)
