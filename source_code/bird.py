@@ -47,6 +47,7 @@ class Bird:
         self.frame = random.randint(0, 9)
         self.state = 'eagle_1_0'
         self.ball_count = 0
+        self.strength = 5
 
 
         self.tx, self.ty = 1000, 1000
