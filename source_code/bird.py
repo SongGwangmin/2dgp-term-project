@@ -5,6 +5,7 @@ import math
 import game_framework
 import game_world
 from behavior_tree import BehaviorTree, Action, Sequence, Condition, Selector
+from money import Money
 
 import common
 
@@ -22,6 +23,7 @@ FRAMES_PER_ACTION = 10
 
 animation_names = ['eagle_1_0']
 
+ATTACK_WAIT_TIME = 0.3 * 0.8
 
 class Bird:
     images = None
@@ -92,8 +94,29 @@ class Bird:
         pass
 
     def handle_collision(self, group, other):
-        if group == 'zombie:ball':
-            self.ball_count += 1
+        if group == 'attack:zombie':
+            # 일정 시간(ATTACK_WAIT_TIME) 동안은 추가 데미지를 받지 않도록 디바운스
+            if get_time() - self.wait_time >= ATTACK_WAIT_TIME:
+                self.wait_time = get_time()
+                self.now_hp -= other.strength
+                if self.now_hp > 0:
+                    # 맞은 곳과 반대로 튕겨야함
+                    dx = self.x - other.x
+                    if dx == 0:
+                        self.knockbackdir = 0.0
+                    else:
+                        # dx / math.fabs(dx)는 dx의 부호(+1 또는 -1)를 반환
+                        self.knockbackdir = dx / math.fabs(dx)
+                    self.knockbackspeed = 2
+                    pass
+                else:
+                    # 죽을 때 돈을 드롭
+                    money = Money(self.x, self.y, value=5)
+                    game_world.add_object(money, 1)
+                    # boy:money 충돌 페어에 몬스터 드랍 등록
+                    game_world.add_collision_pair('boy:money', None, money)
+                    game_world.remove_object(self)
+                    other.boy_pointer.hunt_count += 1
 
 
     def set_target_location(self, x=None, y=None):
