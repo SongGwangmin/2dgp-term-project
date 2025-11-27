@@ -47,8 +47,7 @@ class Bird:
 
         self.tx, self.ty = 1000, 1000
         # 여기를 채우시오.
-        self.patrol_locations = [(43, 274), (1118, 274), (1050, 494), (575, 804), (235, 991), (575, 804), (1050, 494),
-                                 (1118, 274)]
+        self.patrol_locations = [(43, 274), (708, 274)]
         self.loc_no = 0
 
         self.build_behavior_tree()
