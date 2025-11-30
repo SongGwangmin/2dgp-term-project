@@ -242,7 +242,8 @@ class Bird:
     def get_patrol_location(self):
         # 여기를 채우시오.
         self.tx, self.ty = self.patrol_locations[self.loc_no]
-        self.loc_no = (self.loc_no + 1) % len(self.patrol_locations)
+        if self.distance_less_than(self.x, self.y, self.tx, self.ty, 0.5):
+            self.loc_no = (self.loc_no + 1) % len(self.patrol_locations)
         return BehaviorTree.SUCCESS
         pass
 
