@@ -172,7 +172,7 @@ class Bird:
         self.shoottimer = get_time()
         fether = Fether(self.x, self.y, common.boy)
         game_world.add_object(fether, 1)
-
+        game_world.add_collision_pair('boy:enemy', None, fether)
         return BehaviorTree.FAIL
 
         pass
