@@ -167,7 +167,8 @@ class Bird:
         else:
             return BehaviorTree.RUNNING
 
-
+    def shoot_fether(self):
+        pass
 
 
 
