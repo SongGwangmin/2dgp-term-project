@@ -5,10 +5,10 @@ import game_framework
 import math
 
 
-METER = 3
+METER = 1
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
 
-RUN_SPEED_KMPH = 80.0            # Km / Hour
+RUN_SPEED_KMPH = 40.0            # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -31,7 +31,7 @@ class Fether:
             # boy를 향한 방향 계산 (각도)
             dx = self.target_x - self.x
             dy = self.target_y - self.y
-            self.angle = math.atan2(dy, dx)
+            self.angle = math.atan2(dy, dx)  # 반대 방향으로 날아가도록 각도 조정
             distance = math.sqrt(dx**2 + dy**2)
 
         else:
@@ -39,7 +39,7 @@ class Fether:
             self.dir_y = 0
 
     def draw(self):
-        self.image.clip_composite_draw(0, 0, 21, 21, self.angle, '', self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+        self.image.clip_composite_draw(0, 0, 64, 64, self.angle + math.pi / 2, 'h', self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         draw_rectangle(*self.get_bb())
 
     def update(self):
@@ -52,7 +52,7 @@ class Fether:
             game_world.remove_object(self)
 
     def get_bb(self):
-        return self.x - 30, self.y - 30, self.x + 30, self.y + 30
+        return self.x - 15, self.y - 15, self.x + 15, self.y + 15
 
     def handle_collision(self, group, other):
         if group == 'fether:boy':
