@@ -441,6 +441,15 @@ class Boy:
 
     def handle_collision(self, group, other):
         if group == 'boy:grass':
+            # grass와 약 0.1m(미터 단위)만큼 겹치도록 y 보정
+            try:
+                _, _, _, top = other.get_bb()
+            except Exception:
+                # other가 get_bb를 제공하지 않으면 기본 바닥 높이 사용
+                top = 50
+            overlap_pixels = 0.01 * PIXEL_PER_METER  # 0.1m -> 픽셀
+            # boy의 바운딩 박스는 y - 80이 하단이므로, 하단이 top + overlap가 되도록 y 계산
+            self.y = top - overlap_pixels + 80
             self.yv = 0
         # 적과 충돌하면 wait_time으로 디바운스 체크 후 ENEMY_COLIDE 또는 ENEMY_DEATH 이벤트 발생
         if group == 'boy:enemy':
