@@ -6,6 +6,7 @@ import game_framework
 import game_world
 from behavior_tree import BehaviorTree, Action, Sequence, Condition, Selector
 from money import Money
+from fether import Fether
 
 import common
 
@@ -168,9 +169,35 @@ class Bird:
             return BehaviorTree.RUNNING
 
     def shoot_fether(self):
+        self.shoottimer = get_time()
+        fether = Fether(self.x, self.y, common.boy)
+        game_world.add_object(fether, 1)
+
+        return BehaviorTree.FAIL
+
         pass
 
 
+
+    def canshoottime(self):
+        # 마지막 발사 시각과 현재 시간 차가 3초 이상이면 발사 가능
+        if get_time() - self.shoottimer >= 3.0:
+            return BehaviorTree.SUCCESS
+        return BehaviorTree.FAIL
+
+
+    def canshootframe(self):
+        # 현재 프레임이 4 또는 5일 때만 발사 가능
+        if int(self.frame) in (4, 5):
+            return BehaviorTree.SUCCESS
+        return BehaviorTree.FAIL
+
+
+    def canshootdir(self):
+        # 자기 방향(self.dir)의 코사인과 (self.x - boy.x)의 곱이 양수이면 바라보는 방향이 소년 쪽
+        if math.cos(self.dir) * (self.x - common.boy.x) > 0:
+            return BehaviorTree.SUCCESS
+        return BehaviorTree.FAIL
 
     def set_random_location(self):
         # 여기를 채우시오.
@@ -236,6 +263,13 @@ class Bird:
         c1 = Condition('소년이 근처에 있는가?', self.if_boy_nearby, 7)
         a4 = Action('소년 추적', self.move_to_boy)
 
+        # 발사 관련 Condition 및 Action 추가
+        c_shoottime = Condition('발사 시간 조건', self.canshoottime)
+        c_shootframe = Condition('발사 프레임 조건', self.canshootframe)
+        c_shootdir = Condition('발사 방향 조건', self.canshootdir)
+        a_shoot = Action('깃털 발사', self.shoot_fether)
+        shoot_seq = Sequence('발사 시퀀스(시간->방향->프레임->발사)', c_shoottime, c_shootdir, c_shootframe, a_shoot)
+
         c_ball_count = Condition('좀비의 공이 소년보다 많거나 같은가?', self.ball_count_check)
         a_run = Action('소년에게서 도망가기', self.run_to_boy)
 
@@ -244,13 +278,17 @@ class Bird:
 
         chase_if_boy_nearby = Sequence('소년이 근처에 있으면 추적', c1, chase_or_run)
 
-        root = chase_or_wander = Selector('소년이 가까이 있으면 추적하고, 아니면 배회', chase_if_boy_nearby, wander)
+        chase_or_wander = Selector('소년이 가까이 있으면 추적하고, 아니면 배회', chase_if_boy_nearby, wander)
 
         a5 = Action('다음 순찰 위치를 가져오기', self.get_patrol_location)
         patrol = Sequence('순찰', a5, a2)
 
         root = chase_or_patrol = Selector('추적 또는 순찰', chase_if_boy_nearby, patrol)
 
+        shoot_or_patrol = Selector('발사 또는 순찰', shoot_seq, patrol)
 
         self.behavior_tree = BehaviorTree(root)
         pass
+
+
+
