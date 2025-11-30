@@ -64,6 +64,7 @@ class Bird:
         self.patrol_locations = [(43, 274), (708, 274)]
         self.loc_no = 0
         self.wait_time = 0
+        self.shoottimer = get_time()
         self.build_behavior_tree()
 
 
@@ -78,7 +79,7 @@ class Bird:
 
 
     def draw(self):
-        if math.cos(self.dir) < 0:
+        if math.cos(self.dir) > 0:
             Bird.images[self.state][int(self.frame)].composite_draw(0, 'h', self.x, self.y, 100, 100)
         else:
             Bird.images[self.state][int(self.frame)].draw(self.x, self.y, 100, 100)
