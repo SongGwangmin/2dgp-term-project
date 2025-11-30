@@ -195,7 +195,7 @@ class Bird:
 
     def canshootdir(self):
         # 자기 방향(self.dir)의 코사인과 (self.x - boy.x)의 곱이 양수이면 바라보는 방향이 소년 쪽
-        if math.cos(self.dir) * (self.x - common.boy.x) > 0:
+        if math.cos(self.dir) * (self.x - common.boy.x) < 0:
             return BehaviorTree.SUCCESS
         return BehaviorTree.FAIL
 
@@ -285,7 +285,7 @@ class Bird:
 
         root = chase_or_patrol = Selector('추적 또는 순찰', chase_if_boy_nearby, patrol)
 
-        shoot_or_patrol = Selector('발사 또는 순찰', shoot_seq, patrol)
+        root = shoot_or_patrol = Selector('발사 또는 순찰', shoot_seq, chase_if_boy_nearby, patrol)
 
         self.behavior_tree = BehaviorTree(root)
         pass
