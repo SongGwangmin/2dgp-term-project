@@ -283,7 +283,7 @@ class Angry_Bird:
         a5 = Action('다음 순찰 위치를 가져오기', self.get_patrol_location)
         patrol = Sequence('순찰', a5, a2)
 
-        root = chase_or_patrol = Selector('추적 또는 순찰', chase_if_boy_nearby, patrol)
+        root = chase_or_patrol = Selector('추적 또는 순찰', shoot_seq, chase_if_boy_nearby, patrol)
 
         shoot_or_patrol = Selector('발사 또는 순찰', shoot_seq,  patrol)
 
