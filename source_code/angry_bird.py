@@ -86,7 +86,7 @@ class Angry_Bird:
             Angry_Bird.images[self.state][int(self.frame)].draw(self.x, self.y, 100, 100)
 
         Angry_Bird.hpblank.clip_draw(0, 0, 5, 5, self.x, self.y + 50, 50, 5)
-        Angry_Bird.hpbar.clip_draw_to_origin(0, 0, 5, 5, self.x - 25, self.y + 50, 50 * (self.now_hp / Bird.max_hp), 5)
+        Angry_Bird.hpbar.clip_draw_to_origin(0, 0, 5, 5, self.x - 25, self.y + 50, 50 * (self.now_hp / Angry_Bird.max_hp), 5)
 
         draw_rectangle(*self.get_bb())
 

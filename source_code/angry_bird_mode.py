@@ -1,0 +1,80 @@
+from pico2d import *
+from boy import Boy
+from grass import Grass
+import game_world
+import game_framework
+import worldmap_mode
+from angry_bird import Angry_Bird
+import home_mode
+import common
+from money import Money
+
+# Game object class here
+
+max_monster_count = 5
+
+def handle_events():
+    event_list = get_events()
+    for event in event_list:
+        if event.type == SDL_QUIT:
+            game_framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            game_framework.quit()
+        else:
+            boy.handle_event(event)
+
+
+def init():
+    global boy
+    global running
+    running = True
+    game_world.collision_pairs = {}
+    Grass.image = load_image('forest.png')
+    grass = Grass()
+    game_world.add_object(grass, 0)
+    boy = Boy()
+    game_world.add_object(boy, 1)
+
+    common.boy = boy
+
+    game_world.add_collision_pair('boy:grass', boy, grass)
+
+    # 새 5마리 생성
+    birds = [Angry_Bird(200 + i * 120, 300 + (i % 2) * 50) for i in range(max_monster_count)]
+    game_world.add_objects(birds, 1)
+
+    # 충돌 페어 등록 (소년-적, 공격-적)
+    game_world.add_collision_pair('boy:enemy', boy, None)
+    for b in birds:
+        game_world.add_collision_pair('boy:enemy', None, b)
+        game_world.add_collision_pair('attack:zombie', None, b)
+
+    # Money 오브젝트 추가 및 충돌 페어 등록
+    game_world.add_collision_pair('boy:money', boy, None)
+
+
+def finish():
+    game_world.clear()
+
+
+def update():
+    game_world.update()
+    game_world.handle_collision()
+    if boy.x < 10:
+        game_framework.change_mode(worldmap_mode)
+    elif 790 < boy.x and max_monster_count <= boy.hunt_count: # 오른쪽 끝 && 몬스터 다 잡음
+        game_framework.change_mode(worldmap_mode)
+
+def draw():
+    clear_canvas()
+    game_world.render()
+    update_canvas()
+
+
+def pause():
+    pass
+
+
+def resume():
+    pass
+
