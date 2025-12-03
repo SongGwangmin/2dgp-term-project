@@ -41,7 +41,7 @@ class AttackHitBox:
     def get_bb(self):
         # 비활성화 시 충돌을 일으키지 않도록 널 박스 반환
         if not self.enabled:
-            return 0, 0, 0, 0
+            return 0, 1000, 0, 1000
         half_w = self.width / 2
         half_h = self.height / 2
         return self.x - half_w, self.y - half_h * 4, self.x + half_w, self.y + half_h
