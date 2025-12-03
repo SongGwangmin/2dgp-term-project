@@ -1,14 +1,18 @@
 from pico2d import *
 import game_framework
-from plate import Plate
+from grass import Grass
 import game_world
-
+import help_mode
+import home_mode
+import common
+from boy import Boy
 
 def init():
-    plate = Plate()
-    Plate.image = load_image('gameover.png')
-    game_world.add_object(plate, 3)
-
+    grass = Grass()
+    Grass.image = load_image('start.png')
+    game_world.add_object(grass, 3)
+    common.grass = grass
+    common.boy = Boy()
 def finish():
     game_world.clear()
 
@@ -25,7 +29,7 @@ def draw():
     pass
 
 def handle_events():
-    global boy
+
     event_list = get_events()
 
     for event in event_list:
@@ -33,8 +37,10 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_MOUSEBUTTONDOWN:
             x, y = event.x, 600 - event.y
-            if 100 <= x <= 200 and 400 <= y <= 500:
-                game_framework.pop_mode()
+            if 300 <= x <= 500 and 100 <= y <= 200:
+                game_framework.change_mode(home_mode)
+            elif 300 <= x <= 500 and 0 <= y <= 100:
+                game_framework.push_mode(help_mode)
 
 
 
