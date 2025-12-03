@@ -71,17 +71,16 @@ class Boss:
         self.inter_cooldown = 0.0
         self.movetime = 0.0
 
+        self.build_behavior_tree()
+
 
     def get_bb(self):
-        if self.dir < 0:
-            return self.x - self.left * PIXEL_PER_METER, self.y - self.bottom * PIXEL_PER_METER, self.x + self.right * PIXEL_PER_METER, self.y + self.top * PIXEL_PER_METER
-        else:
-            return self.x - self.right * PIXEL_PER_METER, self.y - self.bottom * PIXEL_PER_METER, self.x + self.left * PIXEL_PER_METER, self.y + self.top * PIXEL_PER_METER
-
+        return self.x - self.left * PIXEL_PER_METER, self.y - self.bottom * PIXEL_PER_METER, self.x + self.right * PIXEL_PER_METER, self.y + self.top * PIXEL_PER_METER
+        
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
-        self.x = common.boy.x - 6 * PIXEL_PER_METER
-        self.build_behavior_tree()
+        #self.x = common.boy.x - 6 * PIXEL_PER_METER
+        self.behavior_tree.run() # 매 프레임마다 행동 트리 실행
 
 
 
@@ -119,45 +118,58 @@ class Boss:
         elif group == 'boy:enemy':
             pass
 
-        def prepare_chase_target(self):
+    def prepare_chase_target(self):
             # TARGET_SET이 False일 때만 실행 (시퀀스 시작 시 1회 실행됨)
-            if not self.TARGET_SET:
-                self.tx = common.boy.x  # 목표는 현재 플레이어의 X좌표
-                self.bx = self.x  # 시작점은 현재 보스의 X좌표
-                self.movetime = get_time()  # 이동 시작 시간 기록
-                self.TARGET_SET = True  # "설정 완료" 플래그 켜기
+        if not self.TARGET_SET:
+            if common.boy.x < common.grass.w / 2:
+                self.tx = common.boy.x + 6 * PIXEL_PER_METER  # 목표는 현재 플레이어의 X좌표
+            else:
+                self.tx = common.boy.x - 6 * PIXEL_PER_METER  # 목표는 현재 플레이어의 X좌표
+            self.bx = self.x  # 시작점은 현재 보스의 X좌표
+            self.movetime = get_time()  # 이동 시작 시간 기록
+            self.TARGET_SET = True  # "설정 완료" 플래그 켜기
 
             # 이미 설정되어 있다면 아무것도 하지 않고 성공 반환하여 다음 노드(이동)로 넘어감
+        return BehaviorTree.SUCCESS
+
+    def move_linearly(self):
+        # 경과 시간 계산
+        elapsed_time = get_time() - self.movetime
+        duration = 1.0  # 1초 동안 이동
+
+        # 진행률 (0.0 ~ 1.0)
+        t = elapsed_time / duration
+
+        # 1초가 아직 안 지났으면 선형 보간 이동
+        if t < 1.0:
+            # 선형 보간 공식: 시작점 + (목표점 - 시작점) * 진행률
+            self.x = self.bx + (self.tx - self.bx) * t
+            return BehaviorTree.RUNNING  # 아직 이동 중이므로 RUNNING 반환
+
+        else:
+            # 1초가 지났으면 위치를 정확히 목표점으로 맞춤
+            self.x = self.tx
+            return BehaviorTree.SUCCESS  # 이동 완료
+
+    def check_attack_frame(self):
+        # 현재 프레임이 4 이상이면 공격 완료로 판단
+        if int(self.frame) >= 4:
+            # [중요] 패턴이 완전히 끝났으므로 다음 실행을 위해 플래그를 초기화해줍니다.
+            self.TARGET_SET = False
             return BehaviorTree.SUCCESS
 
-        def move_linearly(self):
-            # 경과 시간 계산
-            elapsed_time = get_time() - self.movetime
-            duration = 1.0  # 1초 동안 이동
+        # 아직 공격 모션 중(프레임 4 미만)이라면 대기
+        return BehaviorTree.RUNNING
 
-            # 진행률 (0.0 ~ 1.0)
-            t = elapsed_time / duration
+    def build_behavior_tree(self):
+        a_set_target = Action('타겟 위치 고정', self.prepare_chase_target)
 
-            # 1초가 아직 안 지났으면 선형 보간 이동
-            if t < 1.0:
-                # 선형 보간 공식: 시작점 + (목표점 - 시작점) * 진행률
-                self.x = self.bx + (self.tx - self.bx) * t
-                return BehaviorTree.RUNNING  # 아직 이동 중이므로 RUNNING 반환
+        a_move_lerp = Action('선형 보간 이동', self.move_linearly)
 
-            else:
-                # 1초가 지났으면 위치를 정확히 목표점으로 맞춤
-                self.x = self.tx
-                return BehaviorTree.SUCCESS  # 이동 완료
+        a_check_frame = Action('공격 프레임 확인', self.check_attack_frame)
 
-        def check_attack_frame(self):
-            # 현재 프레임이 4 이상이면 공격 완료로 판단
-            if int(self.frame) >= 4:
-                # [중요] 패턴이 완전히 끝났으므로 다음 실행을 위해 플래그를 초기화해줍니다.
-                self.TARGET_SET = False
-                return BehaviorTree.SUCCESS
+        # [조립] 추적 후 공격 시퀀스
+        root = seq_chase_attack = Sequence('좌표 저장 후 이동 공격', a_set_target, a_move_lerp, a_check_frame)
 
-            # 아직 공격 모션 중(프레임 4 미만)이라면 대기
-            return BehaviorTree.RUNNING
 
-        def build_behavior_tree(self):
-            pass
+        self.behavior_tree = BehaviorTree(root)
