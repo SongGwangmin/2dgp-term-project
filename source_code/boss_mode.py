@@ -49,7 +49,7 @@ def init():
     # 충돌 페어 등록 (소년-적, 공격-적)
     game_world.add_collision_pair('boy:enemy', boy, None)
     game_world.add_collision_pair('boy:enemy', None, boss)
-
+    game_world.add_collision_pair('attack:zombie', None, boss)
     # Money 오브젝트 추가 및 충돌 페어 등록
     game_world.add_collision_pair('boy:money', boy, None)
 

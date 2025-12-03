@@ -1,6 +1,7 @@
 from pico2d import draw_rectangle
 import game_world
 import game_framework
+import common
 
 
 class AttackHitBox:
@@ -35,7 +36,7 @@ class AttackHitBox:
         if not self.enabled:
             return
         # 히트박스를 시각화하고 싶으면 draw_rectangle 사용
-        draw_rectangle(*self.get_bb())
+        draw_rectangle(*self.get_windowbb())
 
     def get_bb(self):
         # 비활성화 시 충돌을 일으키지 않도록 널 박스 반환
@@ -44,6 +45,16 @@ class AttackHitBox:
         half_w = self.width / 2
         half_h = self.height / 2
         return self.x - half_w, self.y - half_h * 4, self.x + half_w, self.y + half_h
+
+    def get_windowbb(self):
+        # 윈도우 좌표계용 바운딩 박스 반환
+        if not self.enabled:
+            return 0, 0, 0, 0
+
+        sx = self.x - common.grass.left
+        half_w = self.width / 2
+        half_h = self.height / 2
+        return sx - half_w, self.y - half_h * 4, sx + half_w, self.y + half_h
 
     def handle_collision(self, group, other):
         # 충돌 처리 후 동작은 사용처에서 구현
