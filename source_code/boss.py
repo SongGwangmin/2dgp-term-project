@@ -23,7 +23,7 @@ FRAMES_PER_ACTION = 4.0
 # 공격 데미지 디바운스 시간 (boy의 attacktime_per_action(0.3) * 1.5과 동일)
 ATTACK_WAIT_TIME = 0.3 * 0.8
 
-METER = 20
+METER = 30
 
 animation_names = ['Walk']
 
@@ -47,7 +47,7 @@ class Boss:
 
     def __init__(self, x = 400, left=1, bottom=1, right=1, top=1, strength=50):
         self.x = x
-        self.y =  80
+        self.y =  180
         self.load_images()
         self.frame = random.randint(0, 9)
         self.dir = random.choice([-1,1])
@@ -63,7 +63,7 @@ class Boss:
         self.knockbackdir = 0
         # 데미지 디바운스용 대기시간 초기화
         self.wait_time = 0
-        self.state = IDLE
+        self.state = CRUSH
 
 
     def get_bb(self):
@@ -74,7 +74,7 @@ class Boss:
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
-
+        self.x = common.boy.x - 6 * PIXEL_PER_METER
 
 
 
