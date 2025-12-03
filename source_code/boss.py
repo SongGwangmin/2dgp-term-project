@@ -1,6 +1,7 @@
 import random
 import game_framework
 import game_world
+from behavior_tree import BehaviorTree, Action, Sequence, Condition, Selector
 
 from pico2d import *
 from money import Money
@@ -80,6 +81,8 @@ class Boss:
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
         self.x = common.boy.x - 6 * PIXEL_PER_METER
+        self.build_behavior_tree()
+
 
 
 
@@ -114,4 +117,47 @@ class Boss:
                     other.boy_pointer.hunt_count += 1
 
         elif group == 'boy:enemy':
+            pass
+
+        def prepare_chase_target(self):
+            # TARGET_SET이 False일 때만 실행 (시퀀스 시작 시 1회 실행됨)
+            if not self.TARGET_SET:
+                self.tx = common.boy.x  # 목표는 현재 플레이어의 X좌표
+                self.bx = self.x  # 시작점은 현재 보스의 X좌표
+                self.movetime = get_time()  # 이동 시작 시간 기록
+                self.TARGET_SET = True  # "설정 완료" 플래그 켜기
+
+            # 이미 설정되어 있다면 아무것도 하지 않고 성공 반환하여 다음 노드(이동)로 넘어감
+            return BehaviorTree.SUCCESS
+
+        def move_linearly(self):
+            # 경과 시간 계산
+            elapsed_time = get_time() - self.movetime
+            duration = 1.0  # 1초 동안 이동
+
+            # 진행률 (0.0 ~ 1.0)
+            t = elapsed_time / duration
+
+            # 1초가 아직 안 지났으면 선형 보간 이동
+            if t < 1.0:
+                # 선형 보간 공식: 시작점 + (목표점 - 시작점) * 진행률
+                self.x = self.bx + (self.tx - self.bx) * t
+                return BehaviorTree.RUNNING  # 아직 이동 중이므로 RUNNING 반환
+
+            else:
+                # 1초가 지났으면 위치를 정확히 목표점으로 맞춤
+                self.x = self.tx
+                return BehaviorTree.SUCCESS  # 이동 완료
+
+        def check_attack_frame(self):
+            # 현재 프레임이 4 이상이면 공격 완료로 판단
+            if int(self.frame) >= 4:
+                # [중요] 패턴이 완전히 끝났으므로 다음 실행을 위해 플래그를 초기화해줍니다.
+                self.TARGET_SET = False
+                return BehaviorTree.SUCCESS
+
+            # 아직 공격 모션 중(프레임 4 미만)이라면 대기
+            return BehaviorTree.RUNNING
+
+        def build_behavior_tree(self):
             pass
