@@ -1,5 +1,6 @@
 from pico2d import load_image, draw_rectangle
 import game_world
+import common
 
 class Keycap:
     image = None
@@ -15,12 +16,14 @@ class Keycap:
         self.enabled = False
 
     def draw(self):
-        draw_rectangle(*self.get_bb())
+        draw_rectangle(*self.get_windowbb())
         # 활성화되어 있을 때만 이미지를 그림
         if not self.enabled:
             return
         if Keycap.image:
-            Keycap.image.draw(self.x, self.y)
+            sx = self.x - common.grass.left
+
+            Keycap.image.draw(sx, self.y)
 
 
     def update(self):
@@ -32,6 +35,19 @@ class Keycap:
     def get_bb(self):
         # 중심을 (self.x, self.y - 100)으로 하고, 너비 50, 높이 40으로 바운딩 박스 반환
         cx = self.x
+        cy = self.y - 100
+        half_w = 50 / 2
+        half_h = 40 / 2
+        left = cx - half_w
+        bottom = cy - half_h
+        right = cx + half_w
+        top = cy + half_h
+        return left, bottom, right, top
+
+    def get_windowbb(self):
+        sx = self.x - common.grass.left
+
+        cx = sx
         cy = self.y - 100
         half_w = 50 / 2
         half_h = 40 / 2
