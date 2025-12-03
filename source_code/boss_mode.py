@@ -7,7 +7,7 @@ import worldmap_mode
 from angry_bird import Angry_Bird
 import home_mode
 import common
-from money import Money
+from boss import Boss
 
 # Game object class here
 
@@ -40,10 +40,15 @@ def init():
 
     common.grass = grass
 
+    boss = Boss()
+    game_world.add_object(boss, 0)
+
+
     game_world.add_collision_pair('boy:grass', boy, grass)
 
     # 충돌 페어 등록 (소년-적, 공격-적)
     game_world.add_collision_pair('boy:enemy', boy, None)
+    game_world.add_collision_pair('boy:enemy', None, boss)
 
     # Money 오브젝트 추가 및 충돌 페어 등록
     game_world.add_collision_pair('boy:money', boy, None)

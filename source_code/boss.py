@@ -1,10 +1,10 @@
 import random
-import math
 import game_framework
 import game_world
 
 from pico2d import *
 from money import Money
+import common
 
 # zombie Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
@@ -27,23 +27,23 @@ METER = 2
 
 animation_names = ['Walk']
 
-class Zombie:
+class Boss:
     images = None
     max_hp = 10
     font = None
     hpbar = None
     hpblank = None
     def load_images(self):
-        if Zombie.images == None:
-            Zombie.images = load_image('LARVA.png')
-        if Zombie.font == None:
-            Zombie.font = load_font('ENCR10B.TTF', 16)
-        if Zombie.hpbar == None:
-            Zombie.hpbar = load_image('hpbar.png')
-        if Zombie.hpblank == None:
-            Zombie.hpblank = load_image('hpblank.png')
+        if Boss.images == None:
+            Boss.images = load_image('boss.png')
+        if Boss.font == None:
+            Boss.font = load_font('ENCR10B.TTF', 16)
+        if Boss.hpbar == None:
+            Boss.hpbar = load_image('hpbar.png')
+        if Boss.hpblank == None:
+            Boss.hpblank = load_image('hpblank.png')
 
-    def __init__(self, x = 400, left=100, bottom=100, right=100, top=100, strength=50):
+    def __init__(self, x = 400, left=1, bottom=1, right=1, top=1, strength=50):
         self.x = x
         self.y =  80
         self.load_images()
@@ -54,7 +54,7 @@ class Zombie:
         self.bottom = bottom
         self.right = right
         self.top = top
-        self.now_hp = Zombie.max_hp
+        self.now_hp = Boss.max_hp
         # 공격력: 전달받지 않으면 기본값 5
         self.strength = strength
         self.knockbackspeed = 0
@@ -73,7 +73,7 @@ class Zombie:
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
         self.x += RUN_SPEED_PPS * self.dir * game_framework.frame_time
         self.x += self.knockbackspeed * self.knockbackdir * PIXEL_PER_METER * game_framework.frame_time
-        self.knockbackspeed = max(0, self.knockbackspeed - DELTA_KNOCKBACK_SPEED * game_framework.frame_time)
+        self.knockbackspeed = max(0.0, self.knockbackspeed - DELTA_KNOCKBACK_SPEED * game_framework.frame_time)
 
         # 프레임 마다 바운더리 다르게 - 만약에 몬스터 종류마다 클래스로 하면 다시 주석 해제할것
         #if int(self.frame) == 2 or int(self.frame) == 3:
@@ -91,15 +91,15 @@ class Zombie:
 
     def draw(self):
         if self.dir < 0:
-            Zombie.images.clip_composite_draw(int(self.frame) * 144 + 2, 0, 144, 114, 0, '',
+            Boss.images.clip_composite_draw(int(self.frame) * 100, 0, 100, 100, 0, '',
                                                self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         else:
-            Zombie.images.clip_composite_draw(int(self.frame) * 144 + 2, 0, 144, 114, 0, 'h',
+            Boss.images.clip_composite_draw(int(self.frame) * 100, 0, 100, 100, 0, 'h',
                                               self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         draw_rectangle(*self.get_bb())
-        Zombie.hpblank.clip_draw(0, 0, 5, 5, self.x, self.y + 50, 50, 5)
-        Zombie.hpbar.clip_draw_to_origin(0, 0, 5, 5, self.x - 25, self.y + 50, 50 * (self.now_hp / Zombie.max_hp), 5)
-
+        Boss.hpblank.clip_draw_to_origin(0, 0, 5, 5, 25, 15, common.grass.w - 25 - 25, 25)
+        Boss.hpbar.clip_draw_to_origin(0, 0, 5, 5, 25, 15, (common.grass.w - 25 - 25) * (self.now_hp / Boss.max_hp), 25)
+        #(self.now_hp / Boss.max_hp)
     def handle_event(self, event):
         pass
 
