@@ -6,15 +6,14 @@ class Grass:
     def __init__(self, y=0, x=800):
         #self.image = load_image('forest.png')
         self.y = y
-
+        if Grass.image is None:
+            Grass.image = load_image('grass.png')
         self.cw = get_canvas_width()
-
 
         self.w = self.image.w
         self.left = 0
 
-        if Grass.image is None:
-            Grass.image = load_image('grass.png')
+
 
     def draw(self):
         self.image.clip_draw_to_origin( self.left, 0, self.cw, 600, 0, 0 )

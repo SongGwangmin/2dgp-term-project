@@ -9,6 +9,7 @@ import chaser_mode
 import bird_mode
 from game_world import world
 from keycap import Keycap
+import common
 
 # 현재 프레임에서 활성화된 Keycap 목적지들을 보관
 dest_list = []
@@ -54,14 +55,15 @@ def init():
 
     game_world.collision_pairs = {}
 
-    Grass.image = load_image('map.PNG')
+    Grass.image = load_image('longmap.PNG')
 
     grass = Grass(30)
     game_world.add_object(grass, 0)
     boy = Boy()
     game_world.add_object(boy, 1)
     game_world.add_collision_pair('boy:grass', boy, grass)
-
+    common.boy = boy
+    common.grass = grass
     # 월드맵에 Keycap 추가 (space 아이콘)
     # init마다 dest_list 비우고 새로 채움
     dest_list.clear()

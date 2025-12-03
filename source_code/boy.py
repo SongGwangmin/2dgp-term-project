@@ -429,7 +429,7 @@ class Boy:
         self.font.draw(15, 570, f'money: {Boy.money:02d}$', (255, 255, 0))
         Boy.hpblank.clip_draw_to_origin(0, 0, 5, 5, 10, 580, 200, 5)
         Boy.hpbar.clip_draw_to_origin(0, 0, 5, 5, 10, 580, 200 * (self.now_hp / Boy.max_hp), 5)
-
+        #self.font.draw(10, 585, f'{common.grass.w}', (255, 255, 0))
 
     def fire_ball(self):
         print("Fire Ball!")
