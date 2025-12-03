@@ -10,18 +10,21 @@ class Keycap:
             Keycap.image = load_image('space.png')
         self.x = x
         self.y = y
+        self.point = load_image('point.png')
         # 목적지 모듈(예: home_mode, play_mode)을 저장
         self.dest = dest
         # 기본적으로 비활성화: 충돌 시에만 보이게 함
         self.enabled = False
 
     def draw(self):
+        sx = self.x - common.grass.left
+        self.point.draw(sx, self.y - 100)
         draw_rectangle(*self.get_windowbb())
         # 활성화되어 있을 때만 이미지를 그림
         if not self.enabled:
             return
         if Keycap.image:
-            sx = self.x - common.grass.left
+
 
             Keycap.image.draw(sx, self.y)
 
