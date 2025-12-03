@@ -42,15 +42,8 @@ def init():
 
     game_world.add_collision_pair('boy:grass', boy, grass)
 
-    # 새 5마리 생성
-    birds = [Angry_Bird(200 + i * 120, 300 + (i % 2) * 50) for i in range(max_monster_count)]
-    game_world.add_objects(birds, 1)
-
     # 충돌 페어 등록 (소년-적, 공격-적)
     game_world.add_collision_pair('boy:enemy', boy, None)
-    for b in birds:
-        game_world.add_collision_pair('boy:enemy', None, b)
-        game_world.add_collision_pair('attack:zombie', None, b)
 
     # Money 오브젝트 추가 및 충돌 페어 등록
     game_world.add_collision_pair('boy:money', boy, None)
