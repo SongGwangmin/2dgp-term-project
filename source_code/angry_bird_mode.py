@@ -30,12 +30,14 @@ def init():
     running = True
     game_world.collision_pairs = {}
     Grass.image = load_image('forest.png')
-    grass = Grass()
-    game_world.add_object(grass, 0)
     boy = Boy()
     game_world.add_object(boy, 1)
 
     common.boy = boy
+
+    grass = Grass()
+    game_world.add_object(grass, 0)
+
     common.grass = grass
 
     game_world.add_collision_pair('boy:grass', boy, grass)
