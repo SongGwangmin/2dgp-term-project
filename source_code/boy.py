@@ -346,6 +346,7 @@ class Boy:
     max_hp = 100.0
     hpbar = None
     hpblank = None
+    level = 1
     def __init__(self):
         self.x, self.y = 140, 130
         self.face_dir = 1
