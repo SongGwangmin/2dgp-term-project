@@ -27,9 +27,11 @@ METER = 20
 
 animation_names = ['Walk']
 
+IDLE, ATTACK, CRUSH = 200, 100, 0
+
 class Boss:
     images = None
-    max_hp = 10
+    max_hp = 100
     font = None
     hpbar = None
     hpblank = None
@@ -50,9 +52,9 @@ class Boss:
         self.frame = random.randint(0, 9)
         self.dir = random.choice([-1,1])
         self.count = 1
-        self.left = METER / 2
+        self.left = METER / 3
         self.bottom = METER / 2
-        self.right = METER / 2
+        self.right = METER / 3
         self.top = METER / 2
         self.now_hp = Boss.max_hp
         # 공격력: 전달받지 않으면 기본값 5
@@ -61,6 +63,7 @@ class Boss:
         self.knockbackdir = 0
         # 데미지 디바운스용 대기시간 초기화
         self.wait_time = 0
+        self.state = IDLE
 
 
     def get_bb(self):
@@ -71,26 +74,13 @@ class Boss:
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
-        self.x += RUN_SPEED_PPS * self.dir * game_framework.frame_time
-        self.x += self.knockbackspeed * self.knockbackdir * PIXEL_PER_METER * game_framework.frame_time
-        self.knockbackspeed = max(0.0, self.knockbackspeed - DELTA_KNOCKBACK_SPEED * game_framework.frame_time)
 
-        # 프레임 마다 바운더리 다르게 - 만약에 몬스터 종류마다 클래스로 하면 다시 주석 해제할것
-        #if int(self.frame) == 2 or int(self.frame) == 3:
-        #    self.left = 30
-        #else:
-        #    self.left = 10
 
-        if self.x > 800:
-            self.dir = -1
-        elif self.x < 100:
-            self.dir = 1
-        self.x = clamp(100, self.x, 800)
-        pass
 
 
     def draw(self):
-        Boss.images.clip_composite_draw(int(self.frame) * 100, 0, 100, 100, 0, '',
+
+        Boss.images.clip_composite_draw(int(self.frame) * 100, self.state, 100, 100, 0, '',
                                                self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
 
         draw_rectangle(*self.get_bb())
