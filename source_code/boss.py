@@ -23,7 +23,7 @@ FRAMES_PER_ACTION = 4.0
 # 공격 데미지 디바운스 시간 (boy의 attacktime_per_action(0.3) * 1.5과 동일)
 ATTACK_WAIT_TIME = 0.3 * 0.8
 
-METER = 2
+METER = 20
 
 animation_names = ['Walk']
 
@@ -90,12 +90,9 @@ class Boss:
 
 
     def draw(self):
-        if self.dir < 0:
-            Boss.images.clip_composite_draw(int(self.frame) * 100, 0, 100, 100, 0, '',
+        Boss.images.clip_composite_draw(int(self.frame) * 100, 0, 100, 100, 0, '',
                                                self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
-        else:
-            Boss.images.clip_composite_draw(int(self.frame) * 100, 0, 100, 100, 0, 'h',
-                                              self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+
         draw_rectangle(*self.get_bb())
         Boss.hpblank.clip_draw_to_origin(0, 0, 5, 5, 25, 15, common.grass.w - 25 - 25, 25)
         Boss.hpbar.clip_draw_to_origin(0, 0, 5, 5, 25, 15, (common.grass.w - 25 - 25) * (self.now_hp / Boss.max_hp), 25)
