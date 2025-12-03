@@ -3,29 +3,35 @@ import game_framework
 from plate import Plate
 import game_world
 
+plate = None
+
 
 def init():
+    global plate
     plate = Plate()
     Plate.image = load_image('help.png')
     game_world.add_object(plate, 3)
 
+
 def finish():
-    game_world.clear()
+    global plate
+    if plate is not None:
+        game_world.remove_object(plate)
+        plate = None
+
 
 def update():
     game_world.update()
     game_world.handle_collision()
 
-    # 아이템 모드에서 플레이모드가 유지가 되어야 하므로 게임 월드를 계속 업데이트 해줘야한다
 
 def draw():
     clear_canvas()
     game_world.render()
     update_canvas()
-    pass
+
 
 def handle_events():
-    global boy
     event_list = get_events()
 
     for event in event_list:
@@ -37,11 +43,9 @@ def handle_events():
                 game_framework.pop_mode()
 
 
-
-
-
 def pause():
     pass
+
 
 def resume():
     pass
