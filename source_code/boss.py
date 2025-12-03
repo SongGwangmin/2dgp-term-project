@@ -62,13 +62,13 @@ class Boss:
         self.strength = strength
         # 데미지 디바운스용 대기시간 초기화
         self.wait_time = 0
-        self.state = CRUSH
+        self.state = IDLE
 
         # 행동 트리 위한 타이머와 상태 변수
         self.TARGET_SET = False
         self.bx = 0
         self.tx = 1000
-        self.inter_cooldown = 0.0
+        self.inter_cooldown = get_time()
         self.movetime = 0.0
 
         self.build_behavior_tree()
@@ -76,9 +76,12 @@ class Boss:
 
     def get_bb(self):
         return self.x - self.left * PIXEL_PER_METER, self.y - self.bottom * PIXEL_PER_METER, self.x + self.right * PIXEL_PER_METER, self.y + self.top * PIXEL_PER_METER
-        
+
     def update(self):
-        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
+        if self.state != IDLE:
+            self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5
+        else:
+            self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
         #self.x = common.boy.x - 6 * PIXEL_PER_METER
         self.behavior_tree.run() # 매 프레임마다 행동 트리 실행
 
@@ -128,6 +131,7 @@ class Boss:
             self.bx = self.x  # 시작점은 현재 보스의 X좌표
             self.movetime = get_time()  # 이동 시작 시간 기록
             self.TARGET_SET = True  # "설정 완료" 플래그 켜기
+            self.state = IDLE
 
             # 이미 설정되어 있다면 아무것도 하지 않고 성공 반환하여 다음 노드(이동)로 넘어감
         return BehaviorTree.SUCCESS
@@ -149,6 +153,8 @@ class Boss:
         else:
             # 1초가 지났으면 위치를 정확히 목표점으로 맞춤
             self.x = self.tx
+            self.state = CRUSH
+            self.frame = 0.0  # 공격 모션 시작을 위해 프레임 초기화
             return BehaviorTree.SUCCESS  # 이동 완료
 
     def check_attack_frame(self):
@@ -156,10 +162,19 @@ class Boss:
         if int(self.frame) >= 4:
             # [중요] 패턴이 완전히 끝났으므로 다음 실행을 위해 플래그를 초기화해줍니다.
             self.TARGET_SET = False
+            self.state = IDLE
+            self.inter_cooldown = get_time()  # 인터벌 타이머 초기화
             return BehaviorTree.SUCCESS
 
         # 아직 공격 모션 중(프레임 4 미만)이라면 대기
         return BehaviorTree.RUNNING
+
+    def wait_interval(self):
+        if get_time() - self.inter_cooldown >= 3.0:
+            return BehaviorTree.FAIL
+        else:
+            return BehaviorTree.SUCCESS
+
 
     def build_behavior_tree(self):
         a_set_target = Action('타겟 위치 고정', self.prepare_chase_target)
@@ -171,5 +186,8 @@ class Boss:
         # [조립] 추적 후 공격 시퀀스
         root = seq_chase_attack = Sequence('좌표 저장 후 이동 공격', a_set_target, a_move_lerp, a_check_frame)
 
+        a_wait_interval = Action('대기 인터벌', self.wait_interval)
+
+        root = wait_and_attack = Selector('대기 후 공격', a_wait_interval, seq_chase_attack)
 
         self.behavior_tree = BehaviorTree(root)
