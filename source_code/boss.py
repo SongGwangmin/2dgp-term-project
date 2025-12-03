@@ -50,10 +50,10 @@ class Boss:
         self.frame = random.randint(0, 9)
         self.dir = random.choice([-1,1])
         self.count = 1
-        self.left = left
-        self.bottom = bottom
-        self.right = right
-        self.top = top
+        self.left = METER / 2
+        self.bottom = METER / 2
+        self.right = METER / 2
+        self.top = METER / 2
         self.now_hp = Boss.max_hp
         # 공격력: 전달받지 않으면 기본값 5
         self.strength = strength
