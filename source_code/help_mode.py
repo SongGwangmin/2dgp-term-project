@@ -6,7 +6,7 @@ import game_world
 
 def init():
     plate = Plate()
-    Plate.image = load_image('gameover.png')
+    Plate.image = load_image('help.png')
     game_world.add_object(plate, 3)
 
 def finish():
