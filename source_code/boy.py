@@ -247,8 +247,8 @@ class Run:
             self.boy.x += self.boy.dir * RUN_SPEED_PPS * game_framework.frame_time
         if self.boy.x < 0:
             self.boy.x = 0
-        elif self.boy.x > 800:
-            self.boy.x = 800
+        elif self.boy.x > common.grass.w:
+            self.boy.x = common.grass.w
 
 
 
