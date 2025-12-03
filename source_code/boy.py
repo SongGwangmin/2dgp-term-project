@@ -6,6 +6,7 @@ from state_machine import StateMachine
 import game_framework
 from ball import Ball
 from attackhitbox import AttackHitBox
+import common
 
 # 전역 변수로 A키 눌림 상태 저장
 attackkeydown = 0
