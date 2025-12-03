@@ -9,6 +9,8 @@ import item_mode
 import worldmap_mode
 from keycap import Keycap
 
+import common
+
 from game_world import world
 # Game object class here
 
@@ -57,6 +59,9 @@ def init():
     boy = Boy()
     game_world.add_object(boy, 1)
     game_world.add_collision_pair('boy:grass', boy, grass)
+
+    common.boy = boy
+    common.grass = grass
 
     dest_list.clear()
     key1 = Keycap(230, 200, dest=item_mode)

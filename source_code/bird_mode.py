@@ -36,6 +36,7 @@ def init():
     game_world.add_object(boy, 1)
 
     common.boy = boy
+    common.grass = grass
 
     game_world.add_collision_pair('boy:grass', boy, grass)
 

@@ -8,6 +8,7 @@ from zombie import Zombie
 import home_mode
 from game_world import world
 from money import Money
+import common
 # Game object class here
 
 max_monster_count = 4
@@ -36,6 +37,9 @@ def init():
     game_world.add_object(grass, 0)
     boy = Boy()
     game_world.add_object(boy, 1)
+
+    common.boy = boy
+    common.grass = grass
 
     game_world.add_collision_pair('boy:grass', boy, grass)
     zombies = [Zombie(400 + i * 100, 1,1,1,1) for i in range(max_monster_count)]

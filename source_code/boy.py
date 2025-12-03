@@ -142,15 +142,16 @@ class Idle:
             charinpit = ''
         else:
             charinpit = 'h'
+        sx = self.boy.x - common.grass.left
 
         if self.boy.yv == 0 and self.boy.y <= 130:
             self.boy.image.clip_composite_draw(int(Boy.frame) * 128, 6 * 128, 128, 128, 0, charinpit,
-                                               self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+                                               sx, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
 
         else:
             # self.boy.image.clip_draw(self.boy.frame * 128, 6 * 128, 128, 128, self.boy.x, self.boy.y)
             self.boy.image.clip_composite_draw(2 * 128, 4 * 128, 128, 128, 0, charinpit,
-                                               self.boy.x, self.boy.y, METER * PIXEL_PER_METER,
+                                               sx, self.boy.y, METER * PIXEL_PER_METER,
                                                METER * PIXEL_PER_METER)
 
 
@@ -202,12 +203,13 @@ class Attack:
         pass
 
     def draw(self):
+        sx = self.boy.x - common.grass.left
         if self.attack_dir == 1:
             self.boy.image.clip_composite_draw(int(Boy.frame) * 128, 2 * 128, 128, 128, 0, '',
-                                               self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+                                               sx, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         else:
             self.boy.image.clip_composite_draw(int(Boy.frame) * 128, 2 * 128, 128, 128, 0, 'h',
-                                          self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+                                          sx, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
 
 
 class Run:
@@ -255,18 +257,18 @@ class Run:
             charinpit = ''
         else:
             charinpit = 'h'
-
+        sx = self.boy.x - common.grass.left
         if self.boy.dash:
             self.boy.image.clip_composite_draw(5 * 128, 5 * 128, 128, 128, 0, charinpit,
-                                               self.boy.x, self.boy.y, METER * PIXEL_PER_METER,
+                                               sx, self.boy.y, METER * PIXEL_PER_METER,
                                                METER * PIXEL_PER_METER)
         elif self.boy.yv == 0 and self.boy.y <= 130:
             self.boy.image.clip_composite_draw(int(Boy.frame) * 128, 5 * 128, 128, 128, 0, charinpit,
-                                               self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+                                               sx, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         else:
             # self.boy.image.clip_draw(self.boy.frame * 128, 6 * 128, 128, 128, self.boy.x, self.boy.y)
             self.boy.image.clip_composite_draw(2 * 128, 4 * 128, 128, 128, 0, charinpit,
-                                               self.boy.x, self.boy.y, METER * PIXEL_PER_METER,
+                                               sx, self.boy.y, METER * PIXEL_PER_METER,
                                                METER * PIXEL_PER_METER)
 
 
@@ -292,13 +294,14 @@ class Hit:
         pass
 
     def draw(self):
+        sx = self.boy.x - common.grass.left
         # 히트 애니메이션 그리기 (attack과 비슷한 방식으로 처리)
         if self.boy.face_dir == 1:
             self.boy.image.clip_composite_draw(int(Boy.frame) * 128, 3 * 128, 128, 128, 0, '',
-                                                self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+                                                sx, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         else:
             self.boy.image.clip_composite_draw(int(Boy.frame) * 128, 3 * 128, 128, 128, 0, 'h',
-                                                self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+                                                sx, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
 
 
 class Death:
@@ -324,12 +327,13 @@ class Death:
 
     def draw(self):
         # 죽음 애니메이션 그리기 (임시로 Hit과 다른 행을 사용)
+        sx = self.boy.x - common.grass.left
         if self.boy.face_dir == 1:
             self.boy.image.clip_composite_draw(min(int(Boy.frame), 3) * 128, 0 * 128, 128, 128, 0, '',
-                                               self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+                                               sx, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         else:
             self.boy.image.clip_composite_draw(min(int(Boy.frame), 3) * 128, 0 * 128, 128, 128, 0, 'h',
-                                               self.boy.x, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+                                               sx, self.boy.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
 
 
 class Boy:
@@ -468,3 +472,4 @@ class Boy:
             pass
         if group == 'boy:money':
             Boy.money += other.value
+

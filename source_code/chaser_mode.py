@@ -36,6 +36,9 @@ def init():
     Grass.image = load_image('forest.png')
     grass = Grass()
     game_world.add_object(grass, 0)
+
+    common.grass = grass
+
     boy = Boy()
     game_world.add_object(boy, 1)
 
