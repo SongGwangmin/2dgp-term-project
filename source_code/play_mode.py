@@ -66,7 +66,7 @@ def update():
         game_framework.change_mode(worldmap_mode)
     elif 790 < boy.x and max_monster_count <= boy.hunt_count: # 오른쪽 끝 && 몬스터 다 잡음
         if Boy.level < 2:
-            Boy.level += 1
+            Boy.level = 2
         game_framework.change_mode(worldmap_mode)
 
 def draw():
