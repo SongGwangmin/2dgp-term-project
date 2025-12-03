@@ -49,8 +49,8 @@ class Boss:
         self.x = x
         self.y =  180
         self.load_images()
-        self.frame = random.randint(0, 9)
-        self.dir = random.choice([-1,1])
+        self.frame = random.randint(0, 3)
+
         self.count = 1
         self.left = METER / 3
         self.bottom = METER / 2
@@ -59,11 +59,16 @@ class Boss:
         self.now_hp = Boss.max_hp
         # 공격력: 전달받지 않으면 기본값 5
         self.strength = strength
-        self.knockbackspeed = 0
-        self.knockbackdir = 0
         # 데미지 디바운스용 대기시간 초기화
         self.wait_time = 0
         self.state = CRUSH
+
+        # 행동 트리 위한 타이머와 상태 변수
+        self.TARGET_SET = False
+        self.bx = 0
+        self.tx = 1000
+        self.inter_cooldown = 0.0
+        self.movetime = 0.0
 
 
     def get_bb(self):
