@@ -134,6 +134,7 @@ class Boss:
             self.movetime = get_time()  # 이동 시작 시간 기록
             self.TARGET_SET = True  # "설정 완료" 플래그 켜기
             self.state = IDLE
+            self.RUNNING_attack = True
 
             # 이미 설정되어 있다면 아무것도 하지 않고 성공 반환하여 다음 노드(이동)로 넘어감
         return BehaviorTree.SUCCESS
@@ -171,6 +172,7 @@ class Boss:
             global TIME_PER_ACTION, ACTION_PER_TIME
             TIME_PER_ACTION = 0.5
             ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+            self.RUNNING_attack = False
             return BehaviorTree.SUCCESS
 
 
@@ -210,6 +212,11 @@ class Boss:
         else:
             return BehaviorTree.SUCCESS
 
+    def check_attack_running(self):
+        if self.RUNNING_attack:
+            return BehaviorTree.FAIL
+        else:
+            return BehaviorTree.SUCCESS
 
     def build_behavior_tree(self):
         a_set_target = Action('타겟 위치 고정', self.prepare_chase_target)
@@ -218,6 +225,7 @@ class Boss:
 
         a_check_frame = Action('공격 프레임 확인', self.check_attack_frame)
 
+        a_check_attack_running = Action('공격 실행 중인지 확인', self.check_attack_running)
         a_prepare_crush = Action('크러쉬 준비', self.prepare_crush)
         a_charge_down = Action('크러쉬 차지', self.charge_down)
 
@@ -228,7 +236,7 @@ class Boss:
 
         root = wait_and_attack = Selector('대기 후 공격', a_wait_interval, seq_chase_attack)
 
-        seq_crush = Sequence('크러쉬 시퀀스', a_prepare_crush, a_charge_down, a_check_frame)
+        seq_crush = Sequence('크러쉬 시퀀스', a_check_attack_running, a_prepare_crush, a_charge_down, a_check_frame)
 
         root = Selector('공격 선택', a_wait_interval, seq_crush)
 
