@@ -71,6 +71,7 @@ class Boss:
         self.inter_cooldown = get_time()
         self.movetime = 0.0
         self.crush_cooldown = get_time()
+        self.RUNNING_attack = False
 
         self.build_behavior_tree()
 
