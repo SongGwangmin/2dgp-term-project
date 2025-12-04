@@ -70,6 +70,7 @@ class Boss:
         self.tx = 1000
         self.inter_cooldown = get_time()
         self.movetime = 0.0
+        self.crush_cooldown = get_time()
 
         self.build_behavior_tree()
 
@@ -136,6 +137,8 @@ class Boss:
             # 이미 설정되어 있다면 아무것도 하지 않고 성공 반환하여 다음 노드(이동)로 넘어감
         return BehaviorTree.SUCCESS
 
+
+
     def move_linearly(self):
         # 경과 시간 계산
         elapsed_time = get_time() - self.movetime
@@ -153,7 +156,7 @@ class Boss:
         else:
             # 1초가 지났으면 위치를 정확히 목표점으로 맞춤
             self.x = self.tx
-            self.state = CRUSH
+            self.state = ATTACK
             self.frame = 0.0  # 공격 모션 시작을 위해 프레임 초기화
             return BehaviorTree.SUCCESS  # 이동 완료
 
@@ -169,6 +172,31 @@ class Boss:
         # 아직 공격 모션 중(프레임 4 미만)이라면 대기
         return BehaviorTree.RUNNING
 
+    # 소환물 공격 - 크러쉬 준비
+    def prepare_crush(self):
+        if not self.TARGET_SET:
+            self.movetime = get_time()  # 이동 시작 시간 기록
+            self.TARGET_SET = True  # "설정 완료" 플래그 켜기
+            self.state = CRUSH
+
+            # 이미 설정되어 있다면 아무것도 하지 않고 성공 반환하여 다음 노드(이동)로 넘어감
+        return BehaviorTree.SUCCESS
+
+    def charge_down(self):
+        # 경과 시간 계산
+        elapsed_time = get_time() - self.movetime
+        duration = 1.0  # 1초 동안 팔 들기
+        t = elapsed_time / duration
+
+        if t < 1.0:
+            self.frame = 0.0  # 공격 모션 시작을 위해 프레임 초기화
+            return BehaviorTree.RUNNING  # 아직 이동 중이므로 RUNNING 반환
+
+        else:
+
+            return BehaviorTree.SUCCESS  # 이동 완료
+
+
     def wait_interval(self):
         if get_time() - self.inter_cooldown >= 3.0:
             return BehaviorTree.FAIL
@@ -183,11 +211,18 @@ class Boss:
 
         a_check_frame = Action('공격 프레임 확인', self.check_attack_frame)
 
+        a_prepare_crush = Action('크러쉬 준비', self.prepare_crush)
+        a_charge_down = Action('크러쉬 차지', self.charge_down)
+
         # [조립] 추적 후 공격 시퀀스
         root = seq_chase_attack = Sequence('좌표 저장 후 이동 공격', a_set_target, a_move_lerp, a_check_frame)
 
         a_wait_interval = Action('대기 인터벌', self.wait_interval)
 
         root = wait_and_attack = Selector('대기 후 공격', a_wait_interval, seq_chase_attack)
+
+        seq_crush = Sequence('크러쉬 시퀀스', a_prepare_crush, a_charge_down, a_check_frame)
+
+        root = Selector('공격 선택', a_wait_interval, seq_crush)
 
         self.behavior_tree = BehaviorTree(root)
