@@ -167,7 +167,11 @@ class Boss:
             self.TARGET_SET = False
             self.state = IDLE
             self.inter_cooldown = get_time()  # 인터벌 타이머 초기화
+            global TIME_PER_ACTION, ACTION_PER_TIME
+            TIME_PER_ACTION = 0.5
+            ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
             return BehaviorTree.SUCCESS
+
 
         # 아직 공격 모션 중(프레임 4 미만)이라면 대기
         return BehaviorTree.RUNNING
@@ -189,11 +193,13 @@ class Boss:
         t = elapsed_time / duration
 
         if t < 1.0:
-            self.frame = 0.0  # 공격 모션 시작을 위해 프레임 초기화
+            self.frame = 1.0  # 공격 모션 시작을 위해 프레임 초기화
             return BehaviorTree.RUNNING  # 아직 이동 중이므로 RUNNING 반환
 
         else:
-
+            global TIME_PER_ACTION, ACTION_PER_TIME
+            TIME_PER_ACTION = 0.7
+            ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
             return BehaviorTree.SUCCESS  # 이동 완료
 
 
