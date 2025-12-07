@@ -17,7 +17,7 @@ class Grass:
 
     def draw(self):
         self.image.clip_draw_to_origin( self.left, 0, self.cw, 600, 0, 0 )
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
     def update(self):
         self.left = clamp(0, int(common.boy.x) - self.cw // 2, self.w - self.cw - 1)

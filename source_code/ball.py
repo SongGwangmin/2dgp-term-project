@@ -29,7 +29,7 @@ class Ball:
             self.image.clip_composite_draw(0, 0, 41, 41, 0, '', self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
         else:
             self.image.clip_composite_draw(0, 0, 41, 41, 0, 'h', self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
         print('draw ball')
 

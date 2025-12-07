@@ -426,7 +426,7 @@ class Boy:
 
     def draw(self):
         self.state_machine.draw()
-        draw_rectangle(*self.drawing_bb())
+        #draw_rectangle(*self.drawing_bb())
         self.font.draw(15, 570, f'money: {Boy.money:02d}$', (255, 255, 0))
         Boy.hpblank.clip_draw_to_origin(0, 0, 5, 5, 10, 580, 200, 5)
         Boy.hpbar.clip_draw_to_origin(0, 0, 5, 5, 10, 580, 200 * (self.now_hp / Boy.max_hp), 5)

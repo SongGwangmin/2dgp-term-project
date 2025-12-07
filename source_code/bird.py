@@ -88,7 +88,7 @@ class Bird:
         Bird.hpblank.clip_draw(0, 0, 5, 5, self.x, self.y + 50, 50, 5)
         Bird.hpbar.clip_draw_to_origin(0, 0, 5, 5, self.x - 25, self.y + 50, 50 * (self.now_hp / Bird.max_hp), 5)
 
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
         #draw_circle(self.x, self.y, int(7 * PIXEL_PER_METER), 255,255,0)  # 추적 범위 표시
 

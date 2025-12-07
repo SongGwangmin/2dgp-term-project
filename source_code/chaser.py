@@ -102,7 +102,7 @@ class Chaser:
         else:
             Chaser.images.clip_composite_draw(int(self.frame) * 25, 0, 25, 27, 0, 'h',
                                               self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
         Chaser.hpblank.clip_draw(0, 0, 5, 5, self.x, self.y + 50, 50, 5)
         Chaser.hpbar.clip_draw_to_origin(0, 0, 5, 5, self.x - 25, self.y + 50, 50 * (self.now_hp / Chaser.max_hp), 5)
 
