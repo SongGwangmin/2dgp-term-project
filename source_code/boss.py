@@ -168,10 +168,11 @@ class Boss:
 
         hitbox = BossAttackHitBox(self,4 * PIXEL_PER_METER, 4 * PIXEL_PER_METER, self.x + 6 * PIXEL_PER_METER, self.y)
         game_world.add_object(hitbox, 1)
-        collision_pairs = game_world.get_collision_pairs()
+        game_world.add_collision_pair('boy:enemy', None, hitbox)
 
         hitbox2 = BossAttackHitBox(self,4 * PIXEL_PER_METER, 4 * PIXEL_PER_METER, self.x - 6 * PIXEL_PER_METER, self.y)
         game_world.add_object(hitbox2, 1)
+        game_world.add_collision_pair('boy:enemy', None, hitbox2)
 
     def check_attack_frame(self):
         # 프레임이 2 이상이면 공격 판정 시점
