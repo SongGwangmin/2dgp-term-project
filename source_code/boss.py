@@ -245,6 +245,6 @@ class Boss:
 
         seq_crush = Sequence('크러쉬 시퀀스', a_wait_crush_interval ,a_check_attack_running, a_prepare_crush, a_charge_down, a_check_frame)
 
-        root = Selector('공격 선택', a_wait_interval, wait_and_attack)
+        root = Selector('공격 선택', a_wait_interval, seq_crush, seq_chase_attack)
 
         self.behavior_tree = BehaviorTree(root)
