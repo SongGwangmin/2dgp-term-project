@@ -14,31 +14,21 @@ RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
+GRAVITY = 9.8  # 중력 가속도 (m/s^2)
 
 class Rock:
     image = None
-    def __init__(self, x = 400, y=400, boy = None, strength=5):
+    def __init__(self, x = 400, y=400, xv=0, strength=5):
         print('create rock')
         if Rock.image is None:
             Rock.image = load_image('point.png')  # 적절한 이미지로 교체 가능
         self.x = x
         self.y = y
         self.strength = strength
+        self.yv = 60
+        self.xv = 0
 
-        # boy의 현재 좌표를 목표로 설정
-        if boy:
-            self.target_x = boy.x
-            self.target_y = boy.y
 
-            # boy를 향한 방향 계산 (각도)
-            dx = self.target_x - self.x
-            dy = self.target_y - self.y
-            self.angle = math.atan2(dy, dx)
-            distance = math.sqrt(dx**2 + dy**2)
-
-        else:
-            self.dir_x = 1
-            self.dir_y = 0
 
     def draw(self):
         sx = self.x - common.grass.left
@@ -47,8 +37,9 @@ class Rock:
 
     def update(self):
         # 직선으로 이동
-        self.x += math.cos(self.angle) * RUN_SPEED_PPS * game_framework.frame_time
-        self.y += math.sin(self.angle) * RUN_SPEED_PPS * game_framework.frame_time
+        self.x += game_framework.frame_time * self.xv
+        self.y += self.yv * game_framework.frame_time * PIXEL_PER_METER
+        self.yv -= GRAVITY * game_framework.frame_time  # m/s
 
         # 화면 밖으로 나가면 제거
         if self.x < -50 or self.x > common.grass.w + 50 or self.y < -50:
