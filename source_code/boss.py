@@ -96,7 +96,7 @@ class Boss:
         Boss.images.clip_composite_draw(int(self.frame) * 100, self.state, 100, 100, 0, '',
                                                self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
 
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
         Boss.hpblank.clip_draw_to_origin(0, 0, 5, 5, 25, 15, common.grass.w - 25 - 25, 25)
         Boss.hpbar.clip_draw_to_origin(0, 0, 5, 5, 25, 15, (common.grass.w - 25 - 25) * (self.now_hp / Boss.max_hp), 25)
         #(self.now_hp / Boss.max_hp)
@@ -166,14 +166,16 @@ class Boss:
     def make_attack_damage(self):
         # 공격 판정 프레임에 도달했을 때 데미지 박스 생성
 
-        hitbox = BossAttackHitBox(self.x + 6 * PIXEL_PER_METER, self.y, self.strength)
+        hitbox = BossAttackHitBox(self,50, 50, self.x + 6 * PIXEL_PER_METER, self.y)
         game_world.add_object(hitbox, 1)
 
-        hitbox2 = BossAttackHitBox(self.x - 6 * PIXEL_PER_METER, self.y, self.strength)
+        hitbox2 = BossAttackHitBox(self,50, 50, self.x - 6 * PIXEL_PER_METER, self.y)
         game_world.add_object(hitbox2, 1)
 
     def check_attack_frame(self):
         # 프레임이 2 이상이면 공격 판정 시점
+        if int(self.frame) == 2:
+            self.make_attack_damage()
 
         # 현재 프레임이 4 이상이면 공격 완료로 판단
         if int(self.frame) >= 4:

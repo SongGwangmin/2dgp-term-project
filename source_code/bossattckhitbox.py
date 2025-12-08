@@ -1,4 +1,4 @@
-from pico2d import draw_rectangle
+from pico2d import draw_rectangle, get_time
 import game_world
 import game_framework
 import common
@@ -12,11 +12,13 @@ class BossAttackHitBox:
         self.height = height
         self.strength = boss.strength  # 공격력
         self.x = x
-        self.y = y
+        self.y = 80
+        self.timer = get_time()
 
 
     def update(self):
-        game_world.remove_object(self)
+        if get_time() - self.timer > 0.2:
+            game_world.remove_object(self)
 
     def draw(self):
 
