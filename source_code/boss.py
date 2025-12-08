@@ -163,6 +163,9 @@ class Boss:
             self.frame = 0.0  # 공격 모션 시작을 위해 프레임 초기화
             return BehaviorTree.SUCCESS  # 이동 완료
 
+    def make_rocks(self):
+        pass
+
     def make_attack_damage(self):
         # 공격 판정 프레임에 도달했을 때 데미지 박스 생성
 
