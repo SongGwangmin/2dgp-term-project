@@ -205,6 +205,11 @@ class Boss:
             ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
             return BehaviorTree.SUCCESS  # 이동 완료
 
+    def crush_interval(self):
+        if get_time() - self.crush_cooldown <= 15.0:
+            return BehaviorTree.FAIL
+        else:
+            return BehaviorTree.SUCCESS
 
     def wait_interval(self):
         if get_time() - self.inter_cooldown >= 3.0:
@@ -234,10 +239,12 @@ class Boss:
 
         a_wait_interval = Action('대기 인터벌', self.wait_interval)
 
+        a_wait_crush_interval = Action('크러쉬 인터벌', self.crush_interval)
+
         root = wait_and_attack = Selector('대기 후 공격', a_wait_interval, seq_chase_attack)
 
-        seq_crush = Sequence('크러쉬 시퀀스', a_check_attack_running, a_prepare_crush, a_charge_down, a_check_frame)
+        seq_crush = Sequence('크러쉬 시퀀스', a_wait_crush_interval ,a_check_attack_running, a_prepare_crush, a_charge_down, a_check_frame)
 
-        root = Selector('공격 선택', a_wait_interval, seq_crush)
+        root = Selector('공격 선택', a_wait_interval, wait_and_attack)
 
         self.behavior_tree = BehaviorTree(root)

@@ -50,6 +50,6 @@ class Rock:
 
     def handle_collision(self, group, other):
         if group == 'boy:enemy':
-            game_world.remove_object(self)
-            print('fether collide with boy')
+            #game_world.remove_object(self)
+            print('rock collide with boy')
 
