@@ -166,10 +166,11 @@ class Boss:
     def make_attack_damage(self):
         # 공격 판정 프레임에 도달했을 때 데미지 박스 생성
 
-        hitbox = BossAttackHitBox(self,50, 50, self.x + 6 * PIXEL_PER_METER, self.y)
+        hitbox = BossAttackHitBox(self,4 * PIXEL_PER_METER, 4 * PIXEL_PER_METER, self.x + 6 * PIXEL_PER_METER, self.y)
         game_world.add_object(hitbox, 1)
+        collision_pairs = game_world.get_collision_pairs()
 
-        hitbox2 = BossAttackHitBox(self,50, 50, self.x - 6 * PIXEL_PER_METER, self.y)
+        hitbox2 = BossAttackHitBox(self,4 * PIXEL_PER_METER, 4 * PIXEL_PER_METER, self.x - 6 * PIXEL_PER_METER, self.y)
         game_world.add_object(hitbox2, 1)
 
     def check_attack_frame(self):
