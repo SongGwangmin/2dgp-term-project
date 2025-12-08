@@ -18,9 +18,9 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 class Rock:
     image = None
     def __init__(self, x = 400, y=400, boy = None, strength=5):
-        print('create fether')
+        print('create rock')
         if Rock.image is None:
-            Rock.image = load_image('fether.png')  # 적절한 이미지로 교체 가능
+            Rock.image = load_image('point.png')  # 적절한 이미지로 교체 가능
         self.x = x
         self.y = y
         self.strength = strength
@@ -41,8 +41,9 @@ class Rock:
             self.dir_y = 0
 
     def draw(self):
-        self.image.clip_composite_draw(0, 0, 64, 64, self.angle + math.pi / 2, '', self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
-        draw_rectangle(*self.get_bb())
+        sx = self.x - common.grass.left
+        Rock.image.draw(sx, self.y)
+
 
     def update(self):
         # 직선으로 이동
