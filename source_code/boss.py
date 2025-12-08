@@ -5,6 +5,7 @@ from behavior_tree import BehaviorTree, Action, Sequence, Condition, Selector
 
 from pico2d import *
 from money import Money
+from bossattckhitbox import BossAttackHitBox
 import common
 
 # zombie Run Speed
@@ -162,7 +163,18 @@ class Boss:
             self.frame = 0.0  # 공격 모션 시작을 위해 프레임 초기화
             return BehaviorTree.SUCCESS  # 이동 완료
 
+    def make_attack_damage(self):
+        # 공격 판정 프레임에 도달했을 때 데미지 박스 생성
+
+        hitbox = BossAttackHitBox(self.x + 6 * PIXEL_PER_METER, self.y, self.strength)
+        game_world.add_object(hitbox, 1)
+
+        hitbox2 = BossAttackHitBox(self.x - 6 * PIXEL_PER_METER, self.y, self.strength)
+        game_world.add_object(hitbox2, 1)
+
     def check_attack_frame(self):
+        # 프레임이 2 이상이면 공격 판정 시점
+
         # 현재 프레임이 4 이상이면 공격 완료로 판단
         if int(self.frame) >= 4:
             # [중요] 패턴이 완전히 끝났으므로 다음 실행을 위해 플래그를 초기화해줍니다.
