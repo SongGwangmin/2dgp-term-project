@@ -1,4 +1,4 @@
-from pico2d import load_image, draw_rectangle
+from pico2d import load_image, draw_rectangle, load_font
 import boy
 
 class Pannel:
@@ -16,6 +16,7 @@ class Pannel:
             (270, 330, 530, 390)
         )
         self.cursorin = 0
+        self.font = load_font('ENCR10B.TTF', 16)
 
     def draw(self):
         self.image.draw(400, 300)
@@ -27,6 +28,9 @@ class Pannel:
                 self.Sold_out.draw(400, 230)
             if boy.Boy.set_dash == 1:
                 self.Sold_out.draw(400, 290)
+        else:
+            self.font.draw(450, 300, f'{boy.Boy.strength}$', (255, 255, 0))
+            self.font.draw(450, 240, f'{int(boy.Boy.max_hp - 95)}$', (255, 255, 0))
 
 
 
