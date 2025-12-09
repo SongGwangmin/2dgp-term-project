@@ -21,7 +21,7 @@ class Money:
         sx = self.x - common.grass.left
         Money.image.clip_composite_draw(0, 0, 265, 257, 0, '',
                                                sx, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
-        draw_rectangle(*self.get_windowbb())
+        #draw_rectangle(*self.get_windowbb())
 
     def update(self):
         # 각 프레임 기본적으로 비활성화하고, 충돌 처리에서 enable()로 켬

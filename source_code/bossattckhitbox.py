@@ -21,7 +21,7 @@ class BossAttackHitBox:
             game_world.remove_object(self)
 
     def draw(self):
-
+        pass
         #draw_rectangle(*self.get_windowbb())
 
     def get_bb(self):
