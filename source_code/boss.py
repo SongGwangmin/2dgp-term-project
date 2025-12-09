@@ -168,7 +168,7 @@ class Boss:
 
     def make_rocks(self):
 
-        rock = Rock(self.x + 6 * PIXEL_PER_METER, self.y)
+        rock = Rock(self.x + 6 * PIXEL_PER_METER, self.y - PIXEL_PER_METER, xv=0)
         game_world.add_object(rock, 1)
         game_world.add_collision_pair('boy:enemy', None, rock)
         pass
@@ -196,15 +196,16 @@ class Boss:
         if int(self.frame) >= 4:
             # [중요] 패턴이 완전히 끝났으므로 다음 실행을 위해 플래그를 초기화해줍니다.
             self.TARGET_SET = False
+            if self.state == CRUSH:
+                self.crush_cooldown = get_time()
+                self.rock_set = True
             self.state = IDLE
             self.inter_cooldown = get_time()  # 인터벌 타이머 초기화
             global TIME_PER_ACTION, ACTION_PER_TIME
             TIME_PER_ACTION = 0.5
             ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
             self.RUNNING_attack = False
-            if self.state == CRUSH:
-                self.crush_cooldown = get_time()
-                self.rock_set = True
+
 
             return BehaviorTree.SUCCESS
 

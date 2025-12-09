@@ -25,7 +25,7 @@ class Rock:
         self.x = x
         self.y = y
         self.strength = strength
-        self.yv = 5
+        self.yv = 15
         self.xv = 0
 
 
