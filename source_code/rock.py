@@ -33,6 +33,7 @@ class Rock:
     def draw(self):
         sx = self.x - common.grass.left
         Rock.image.draw(sx, self.y)
+        draw_rectangle(*self.get_window_bb())
 
 
     def update(self):
@@ -46,7 +47,11 @@ class Rock:
             game_world.remove_object(self)
 
     def get_bb(self):
-        return self.x - 30, self.y - 30, self.x + 30, self.y + 30
+        return self.x - 20, self.y - 20, self.x + 20, self.y + 20
+
+    def get_window_bb(self):
+        sx = self.x - common.grass.left
+        return sx - 20, self.y - 20, sx + 20, self.y + 20
 
     def handle_collision(self, group, other):
         if group == 'boy:enemy':
