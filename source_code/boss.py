@@ -95,13 +95,13 @@ class Boss:
 
 
     def draw(self):
-
+        sx = self.x - common.grass.left
         Boss.images.clip_composite_draw(int(self.frame) * 100, self.state, 100, 100, 0, '',
-                                               self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+                                               sx, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
 
         #draw_rectangle(*self.get_bb())
-        Boss.hpblank.clip_draw_to_origin(0, 0, 5, 5, 25, 15, common.grass.w - 25 - 25, 25)
-        Boss.hpbar.clip_draw_to_origin(0, 0, 5, 5, 25, 15, (common.grass.w - 25 - 25) * (self.now_hp / Boss.max_hp), 25)
+        Boss.hpblank.clip_draw_to_origin(0, 0, 5, 5, 25, 15, common.grass.cw - 25 - 25, 25)
+        Boss.hpbar.clip_draw_to_origin(0, 0, 5, 5, 25, 15, (common.grass.cw - 25 - 25) * (self.now_hp / Boss.max_hp), 25)
         #(self.now_hp / Boss.max_hp)
     def handle_event(self, event):
         pass
