@@ -29,7 +29,7 @@ def init():
     global running
     running = True
     game_world.collision_pairs = {}
-    Grass.image = load_image('forest.png')
+    Grass.image = load_image('bossmap.png')
     boy = Boy()
     game_world.add_object(boy, 1)
 
