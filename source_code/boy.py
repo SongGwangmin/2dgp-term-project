@@ -399,7 +399,7 @@ class Boy:
             self.state_machine.handle_state_event(('IDLE_DIR', self))
 
         self.y += self.yv * game_framework.frame_time * PIXEL_PER_METER
-        self.yv -= GRAVITY * 3 * game_framework.frame_time  # m/s
+        self.yv -= GRAVITY * 10 * game_framework.frame_time  # m/s
 
         # dir 기반 상태 전이 이벤트는 handle_event에서 방향키 입력이 있을 때만 보냄
         pass
@@ -446,7 +446,7 @@ class Boy:
         return sx - 15, self.y - 80, sx + 15, self.y + 5
 
     def jump(self):
-        self.yv = 20
+        self.yv = 35
         #Boy.money += 10
 
     def handle_collision(self, group, other):
