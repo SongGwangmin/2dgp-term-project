@@ -7,7 +7,7 @@ class Place:
         #self.image = load_image('forest.png')
         self.y = y
         if Place.image is None:
-            Place.image = load_image('grass.png')
+            Place.image = load_image('bossplace.png')
         self.cw = get_canvas_width()
 
         self.w = self.image.w

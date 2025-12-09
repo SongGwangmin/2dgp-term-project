@@ -1,9 +1,11 @@
 from pico2d import *
 from boy import Boy
 from grass import Grass
+from place import Place
 import game_world
 import game_framework
 import worldmap_mode
+
 from angry_bird import Angry_Bird
 import home_mode
 import common
@@ -31,7 +33,7 @@ def init():
     game_world.collision_pairs = {}
     Grass.image = load_image('bossmap.png')
     boy = Boy()
-    game_world.add_object(boy, 1)
+    game_world.add_object(boy, 2)
 
     common.boy = boy
 
@@ -40,8 +42,12 @@ def init():
 
     common.grass = grass
 
+    place = Place()
+    game_world.add_object(place, 1)
+
     boss = Boss()
-    game_world.add_object(boss, 0)
+    game_world.add_object(boss, 1)
+
 
 
     game_world.add_collision_pair('boy:grass', boy, grass)
