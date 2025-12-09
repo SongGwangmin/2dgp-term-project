@@ -1,6 +1,6 @@
 from pico2d import load_image, draw_rectangle
 import game_world
-
+import common
 
 METER = 1.8
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 1 meter
@@ -18,9 +18,10 @@ class Money:
         self.enabled = False
 
     def draw(self):
+        sx = self.x - common.grass.left
         Money.image.clip_composite_draw(0, 0, 265, 257, 0, '',
-                                               self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
-        draw_rectangle(*self.get_bb())
+                                               sx, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
+        draw_rectangle(*self.get_windowbb())
 
     def update(self):
         # 각 프레임 기본적으로 비활성화하고, 충돌 처리에서 enable()로 켬
@@ -28,6 +29,19 @@ class Money:
 
     def get_bb(self):
         cx = self.x
+        cy = self.y
+        half_w = 50 / 2
+        half_h = 50 / 2
+        left = cx - half_w
+        bottom = cy - half_h
+        right = cx + half_w
+        top = cy + half_h
+        return left, bottom, right, top
+
+    def get_windowbb(self):
+        sx = self.x - common.grass.left
+
+        cx = sx
         cy = self.y
         half_w = 50 / 2
         half_h = 50 / 2
