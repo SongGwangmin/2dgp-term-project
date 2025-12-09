@@ -8,6 +8,7 @@ import play_mode
 import chaser_mode
 import bird_mode
 import angry_bird_mode
+import boss_mode
 from game_world import world
 from keycap import Keycap
 import common
@@ -97,6 +98,13 @@ def init():
         game_world.add_object(key5, 1)
         dest_list.append(key5)
         game_world.add_collision_pair('boy:portal', None, key5)
+
+    if Boy.level >= 5:
+        key6 = Keycap(1130, 200, dest=boss_mode)
+        key6.point = load_image('bosscap.png')
+        game_world.add_object(key6, 1)
+        dest_list.append(key6)
+        game_world.add_collision_pair('boy:portal', None, key6)
 
     # boy와 Keycap 간 충돌 페어 등록: 'boy:portal'
     # 패턴: 먼저 boy를 왼쪽에 등록하고, 우측 객체들을 별도로 등록
