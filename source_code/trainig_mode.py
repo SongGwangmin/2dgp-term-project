@@ -51,8 +51,8 @@ def handle_events():
                     home_mode.Boy.money -= home_mode.Boy.strength
                     home_mode.Boy.strength += 1
             if select == 2:
-                if home_mode.Boy.money >= 3:
-                    home_mode.Boy.money -= 3
+                if home_mode.Boy.money >= int(home_mode.Boy.max_hp * 0.1 - 5):
+                    home_mode.Boy.money -= int(home_mode.Boy.max_hp * 0.1 - 5)
                     home_mode.Boy.max_hp += 10
             elif select == 3:
                 game_framework.pop_mode()
