@@ -75,6 +75,8 @@ class Boss:
         self.crush_cooldown = get_time()
         self.RUNNING_attack = False
 
+        self.rock_set = True
+
         self.build_behavior_tree()
 
 
@@ -186,6 +188,9 @@ class Boss:
         # 프레임이 2 이상이면 공격 판정 시점
         if int(self.frame) == 2:
             self.make_attack_damage()
+            if self.rock_set and self.state == CRUSH:
+                self.make_rocks()
+                self.rock_set = False
 
         # 현재 프레임이 4 이상이면 공격 완료로 판단
         if int(self.frame) >= 4:
@@ -197,6 +202,10 @@ class Boss:
             TIME_PER_ACTION = 0.5
             ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
             self.RUNNING_attack = False
+            if self.state == CRUSH:
+                self.crush_cooldown = get_time()
+                self.rock_set = True
+
             return BehaviorTree.SUCCESS
 
 
@@ -269,7 +278,7 @@ class Boss:
 
         root = wait_and_attack = Selector('대기 후 공격', a_wait_interval, seq_chase_attack)
 
-        seq_crush = Sequence('크러쉬 시퀀스', a_wait_crush_interval ,a_check_attack_running, a_prepare_crush, a_charge_down, a_check_frame, a_make_rocks)
+        seq_crush = Sequence('크러쉬 시퀀스', a_wait_crush_interval ,a_check_attack_running, a_prepare_crush, a_charge_down, a_check_frame)
 
         root = Selector('공격 선택', a_wait_interval, seq_crush, seq_chase_attack)
 
