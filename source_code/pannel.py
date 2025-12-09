@@ -29,8 +29,8 @@ class Pannel:
             if boy.Boy.set_dash == 1:
                 self.Sold_out.draw(400, 290)
         else:
-            self.font.draw(450, 300, f'{boy.Boy.strength}$', (255, 255, 0))
-            self.font.draw(450, 240, f'{int(boy.Boy.max_hp - 95)}$', (255, 255, 0))
+            self.font.draw(450, 240, f'{boy.Boy.strength}$', (255, 255, 0))
+            self.font.draw(450, 300, f'{int(boy.Boy.max_hp * 0.1 - 5)}$', (255, 255, 0))
 
 
 

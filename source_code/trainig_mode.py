@@ -47,8 +47,8 @@ def handle_events():
             x, y = event.x, 600 - event.y
             select = pannel.click_colision(x, y)
             if select == 1:
-                if home_mode.Boy.money >= 3:
-                    home_mode.Boy.money -= 3
+                if home_mode.Boy.money >= home_mode.Boy.strength:
+                    home_mode.Boy.money -= home_mode.Boy.strength
                     home_mode.Boy.strength += 1
             if select == 2:
                 if home_mode.Boy.money >= 3:
