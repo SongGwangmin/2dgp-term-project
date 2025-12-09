@@ -122,7 +122,7 @@ class Boss:
                         # boy:money 충돌 페어에 몬스터 드랍 등록
                     game_world.add_collision_pair('boy:money', None, money)
                     game_world.remove_object(self)
-                    other.boy_pointer.hunt_count += 1
+                    common.boy.hunt_count += 1
 
         elif group == 'boy:enemy':
             pass

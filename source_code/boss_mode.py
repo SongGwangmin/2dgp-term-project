@@ -7,13 +7,13 @@ import game_framework
 import worldmap_mode
 
 from angry_bird import Angry_Bird
-import home_mode
+import ending
 import common
 from boss import Boss
 
 # Game object class here
 
-max_monster_count = 5
+max_monster_count = 1
 
 def handle_events():
     event_list = get_events()
@@ -69,10 +69,11 @@ def update():
     game_world.handle_collision()
     if boy.x < 10:
         game_framework.change_mode(worldmap_mode)
-    elif common.grass.w < boy.x and max_monster_count <= boy.hunt_count: # 오른쪽 끝 && 몬스터 다 잡음
+    elif common.grass.w - 10 <= boy.x and max_monster_count <= boy.hunt_count: # 오른쪽 끝 && 몬스터 다 잡음
+        print("Boss Defeated! Ending Mode로 이동")
         if Boy.level < 5:
             Boy.level = 5
-        game_framework.change_mode(worldmap_mode)
+        game_framework.change_mode(ending)
 
 def draw():
     clear_canvas()
