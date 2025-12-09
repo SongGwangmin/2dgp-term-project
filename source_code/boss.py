@@ -5,6 +5,7 @@ from behavior_tree import BehaviorTree, Action, Sequence, Condition, Selector
 
 from pico2d import *
 from money import Money
+from rock import Rock
 from bossattckhitbox import BossAttackHitBox
 import common
 
@@ -164,6 +165,10 @@ class Boss:
             return BehaviorTree.SUCCESS  # 이동 완료
 
     def make_rocks(self):
+
+        rock = Rock(self.x + 6 * PIXEL_PER_METER, self.y)
+        game_world.add_object(rock, 1)
+        game_world.add_collision_pair('boy:enemy', None, rock)
         pass
 
     def make_attack_damage(self):
@@ -253,6 +258,8 @@ class Boss:
         a_prepare_crush = Action('크러쉬 준비', self.prepare_crush)
         a_charge_down = Action('크러쉬 차지', self.charge_down)
 
+        a_make_rocks = Action('바위 소환', self.make_rocks)
+
         # [조립] 추적 후 공격 시퀀스
         root = seq_chase_attack = Sequence('좌표 저장 후 이동 공격', a_set_target, a_move_lerp, a_check_frame)
 
@@ -262,7 +269,7 @@ class Boss:
 
         root = wait_and_attack = Selector('대기 후 공격', a_wait_interval, seq_chase_attack)
 
-        seq_crush = Sequence('크러쉬 시퀀스', a_wait_crush_interval ,a_check_attack_running, a_prepare_crush, a_charge_down, a_check_frame)
+        seq_crush = Sequence('크러쉬 시퀀스', a_wait_crush_interval ,a_check_attack_running, a_prepare_crush, a_charge_down, a_check_frame, a_make_rocks)
 
         root = Selector('공격 선택', a_wait_interval, seq_crush, seq_chase_attack)
 
