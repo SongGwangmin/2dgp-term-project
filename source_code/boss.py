@@ -170,7 +170,7 @@ class Boss:
 
 
         rocks = [ Rock(self.x - 6 * PIXEL_PER_METER, self.y - PIXEL_PER_METER, xv= (i - 4) * PIXEL_PER_METER) for i in range(7)]
-
+        rocks += [ Rock(self.x + 6 * PIXEL_PER_METER, self.y - PIXEL_PER_METER, xv= (i - 4) * PIXEL_PER_METER) for i in range(7)]
         for rock in rocks:
             game_world.add_object(rock, 1)
             game_world.add_collision_pair('boy:enemy', None, rock)
