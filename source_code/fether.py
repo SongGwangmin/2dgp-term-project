@@ -41,7 +41,7 @@ class Fether:
 
     def draw(self):
         self.image.clip_composite_draw(0, 0, 64, 64, self.angle + math.pi / 2, '', self.x, self.y, METER * PIXEL_PER_METER, METER * PIXEL_PER_METER)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
     def update(self):
         # 직선으로 이동

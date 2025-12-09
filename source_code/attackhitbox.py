@@ -36,7 +36,7 @@ class AttackHitBox:
         if not self.enabled:
             return
         # 히트박스를 시각화하고 싶으면 draw_rectangle 사용
-        draw_rectangle(*self.get_windowbb())
+        #draw_rectangle(*self.get_windowbb())
 
     def get_bb(self):
         # 비활성화 시 충돌을 일으키지 않도록 널 박스 반환

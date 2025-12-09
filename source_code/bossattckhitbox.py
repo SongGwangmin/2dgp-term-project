@@ -22,7 +22,7 @@ class BossAttackHitBox:
 
     def draw(self):
 
-        draw_rectangle(*self.get_windowbb())
+        #draw_rectangle(*self.get_windowbb())
 
     def get_bb(self):
 

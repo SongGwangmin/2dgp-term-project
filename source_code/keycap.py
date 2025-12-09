@@ -19,7 +19,7 @@ class Keycap:
     def draw(self):
         sx = self.x - common.grass.left
         self.point.draw(sx, self.y - 100)
-        draw_rectangle(*self.get_windowbb())
+        #draw_rectangle(*self.get_windowbb())
         # 활성화되어 있을 때만 이미지를 그림
         if not self.enabled:
             return

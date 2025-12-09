@@ -33,7 +33,7 @@ class Rock:
     def draw(self):
         sx = self.x - common.grass.left
         Rock.image.draw(sx, self.y)
-        draw_rectangle(*self.get_window_bb())
+        #draw_rectangle(*self.get_window_bb())
 
 
     def update(self):
