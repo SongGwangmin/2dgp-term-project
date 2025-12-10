@@ -1,4 +1,4 @@
-from pico2d import load_image, draw_rectangle
+from pico2d import load_image, draw_rectangle, load_wav
 import game_world
 import common
 
@@ -7,10 +7,13 @@ PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 1 meter
 
 class Money:
     image = None
+    se = None
 
     def __init__(self, x=400, y=300, value=1):
         if Money.image is None:
             Money.image = load_image('money.png')
+        if Money.se is None:
+            Money.se = load_wav('se/coin.mp3')
         self.x = x
         self.y = y
         self.value = value
@@ -54,7 +57,7 @@ class Money:
     def handle_collision(self, group, other):
         # 'boy:money' 충돌 시 보상 지급 및 자신 제거
         if group == 'boy:money':
-
+            Money.se.play()
             # 자신을 월드에서 제거
             game_world.remove_object(self)
 
