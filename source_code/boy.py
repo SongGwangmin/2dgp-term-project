@@ -168,7 +168,7 @@ class Attack:
         if e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_d:
             self.boy.fire_ball()
         # 시작 시 히트박스 비활성화
-        
+
         Boy.attacksound.play()
         if hasattr(self.boy, 'attack_hitbox'):
             self.boy.attack_hitbox.disable()

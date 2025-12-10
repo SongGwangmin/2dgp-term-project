@@ -31,6 +31,8 @@ class Bird:
     hpbar = None
     hpblank = None
     max_hp = 10
+    hit_sound = None
+    death_sound = None
 
     def load_images(self):
         if Bird.images == None:
@@ -59,6 +61,10 @@ class Bird:
             Bird.hpbar = load_image('hpbar.png')
         if Bird.hpblank == None:
             Bird.hpblank = load_image('hpblank.png')
+        if Bird.hit_sound == None:
+            Bird.hit_sound = load_wav('se/hit.mp3')
+        if Bird.death_sound == None:
+            Bird.death_sound = load_wav('se/hit-flesh.mp3')
 
         self.tx, self.ty = 1000, 1000
         # 여기를 채우시오.
@@ -103,6 +109,7 @@ class Bird:
                 self.now_hp -= other.strength
                 if self.now_hp > 0:
                     # 맞은 곳과 반대로 튕겨야함
+                    Bird.hit_sound.play()
                     dx = self.x - other.x
                     if dx == 0:
                         self.knockbackdir = 0.0
@@ -112,6 +119,7 @@ class Bird:
                     self.knockbackspeed = 2
                     pass
                 else:
+                    Bird.death_sound.play()
                     # 죽을 때 돈을 드롭
                     money = Money(self.x, self.y, value=5)
                     game_world.add_object(money, 1)
