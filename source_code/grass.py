@@ -3,6 +3,7 @@ import common
 
 class Grass:
     image = None
+    bgm = None
     def __init__(self, y=0, x=800):
         #self.image = load_image('forest.png')
         self.y = y
@@ -12,6 +13,11 @@ class Grass:
 
         self.w = self.image.w
         self.left = 0
+        if Grass.bgm is None:
+            Grass.bgm = load_music('sound/start.mp3')
+        Grass.bgm.set_volume(32)
+        Grass.bgm.repeat_play()
+
 
 
 
