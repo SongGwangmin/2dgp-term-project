@@ -38,6 +38,8 @@ class Boss:
     font = None
     hpbar = None
     hpblank = None
+    hit_sound = None
+    death_sound = None
     def load_images(self):
         if Boss.images == None:
             Boss.images = load_image('boss.png')
@@ -47,6 +49,10 @@ class Boss:
             Boss.hpbar = load_image('hpbar.png')
         if Boss.hpblank == None:
             Boss.hpblank = load_image('hpblank.png')
+        if Boss.hit_sound == None:
+            Boss.hit_sound = load_wav('se/hit.mp3')
+        if Boss.death_sound == None:
+            Boss.death_sound = load_wav('se/hit-flesh.mp3')
 
     def __init__(self, x = 400, left=1, bottom=1, right=1, top=1, strength=50):
         self.x = x
@@ -114,8 +120,10 @@ class Boss:
                 self.now_hp -= other.strength
                 if self.now_hp > 0:
                     # 보스는 넉백없음
+                    Boss.hit_sound.play()
                     pass
                 else:
+                    Boss.death_sound.play()
                     # 죽을 때 돈을 드롭
                     money = Money(self.x, self.y, value=500)
                     game_world.add_object(money, 1)

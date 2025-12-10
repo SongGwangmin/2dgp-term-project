@@ -33,6 +33,8 @@ class Chaser:
     font = None
     hpbar = None
     hpblank = None
+    hit_sound = None
+    death_sound = None
     def load_images(self):
         if Chaser.images == None:
             Chaser.images = load_image('16336.png')
@@ -42,6 +44,10 @@ class Chaser:
             Chaser.hpbar = load_image('hpbar.png')
         if Chaser.hpblank == None:
             Chaser.hpblank = load_image('hpblank.png')
+        if Chaser.hit_sound == None:
+            Chaser.hit_sound = load_wav('se/hit.mp3')
+        if Chaser.death_sound == None:
+            Chaser.death_sound = load_wav('se/hit-flesh.mp3')
 
     def __init__(self, x = 400, left=100, bottom=100, right=100, top=100, strength=50, boy=None):
         self.x = x
@@ -117,6 +123,7 @@ class Chaser:
                 self.now_hp -= other.strength
                 if self.now_hp > 0:
                     # 맞은 곳과 반대로 튕겨야함
+                    Chaser.hit_sound.play()
                     dx = self.x - other.x
                     if dx == 0:
                         self.knockbackdir = 0.0
@@ -126,6 +133,7 @@ class Chaser:
                     self.knockbackspeed = 10
                     pass
                 else:
+                    Chaser.death_sound.play()
                     # 죽을 때 돈을 드롭
                     money = Money(self.x, self.y, value=5)
                     game_world.add_object(money, 1)

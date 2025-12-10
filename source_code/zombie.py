@@ -33,6 +33,8 @@ class Zombie:
     font = None
     hpbar = None
     hpblank = None
+    hit_sound = None
+    death_sound = None
     def load_images(self):
         if Zombie.images == None:
             Zombie.images = load_image('LARVA.png')
@@ -42,6 +44,10 @@ class Zombie:
             Zombie.hpbar = load_image('hpbar.png')
         if Zombie.hpblank == None:
             Zombie.hpblank = load_image('hpblank.png')
+        if Zombie.hit_sound == None:
+            Zombie.hit_sound = load_wav('se/hit.mp3')
+        if Zombie.death_sound == None:
+            Zombie.death_sound = load_wav('se/hit-flesh.mp3')
 
     def __init__(self, x = 400, left=100, bottom=100, right=100, top=100, strength=50):
         self.x = x
@@ -111,6 +117,7 @@ class Zombie:
                 self.now_hp -= other.strength
                 if self.now_hp > 0:
                     # 맞은 곳과 반대로 튕겨야함
+                    Zombie.hit_sound.play()
                     dx = self.x - other.x
                     if dx == 0:
                         self.knockbackdir = 0.0
@@ -120,6 +127,7 @@ class Zombie:
                     self.knockbackspeed = 5
                     pass
                 else:
+                    Zombie.death_sound.play()
                     # 죽을 때 돈을 드롭
                     money = Money(self.x, self.y, value=5)
                     game_world.add_object(money, 1)

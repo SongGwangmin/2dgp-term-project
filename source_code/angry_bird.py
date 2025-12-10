@@ -31,6 +31,8 @@ class Angry_Bird:
     hpbar = None
     hpblank = None
     max_hp = 10
+    hit_sound = None
+    death_sound = None
 
     def load_images(self):
         if Angry_Bird.images == None:
@@ -42,6 +44,10 @@ class Angry_Bird:
                 for idx in [4, 3, 2, 1]:
                     Angry_Bird.images['eagle_2_0'].append(Angry_Bird.images['eagle_2_0'][idx])
             Angry_Bird.font = load_font('ENCR10B.TTF', 40)
+        if Angry_Bird.hit_sound == None:
+            Angry_Bird.hit_sound = load_wav('se/hit.mp3')
+        if Angry_Bird.death_sound == None:
+            Angry_Bird.death_sound = load_wav('se/hit-flesh.mp3')
 
 
     def __init__(self, x=None, y=None):
@@ -103,6 +109,7 @@ class Angry_Bird:
                 self.now_hp -= other.strength
                 if self.now_hp > 0:
                     # 맞은 곳과 반대로 튕겨야함
+                    Angry_Bird.hit_sound.play()
                     dx = self.x - other.x
                     if dx == 0:
                         self.knockbackdir = 0.0
@@ -112,6 +119,7 @@ class Angry_Bird:
                     self.knockbackspeed = 2
                     pass
                 else:
+                    Angry_Bird.death_sound.play()
                     # 죽을 때 돈을 드롭
                     money = Money(self.x, self.y, value=5)
                     game_world.add_object(money, 1)
@@ -289,6 +297,3 @@ class Angry_Bird:
 
         self.behavior_tree = BehaviorTree(root)
         pass
-
-
-
