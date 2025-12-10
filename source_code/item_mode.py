@@ -50,10 +50,12 @@ def handle_events():
                 if home_mode.Boy.money >= 5 and home_mode.Boy.set_slash == 0:
                     home_mode.Boy.money -= 5
                     home_mode.Boy.set_slash = 1
+                    Pannel.se.play()
             if select == 2:
                 if home_mode.Boy.money >= 5 and home_mode.Boy.set_dash == 0:
                     home_mode.Boy.money -= 5
                     home_mode.Boy.set_dash = 1
+                    Pannel.se.play()
             elif select == 3:
                 game_framework.pop_mode()
 

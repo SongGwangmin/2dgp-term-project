@@ -1,11 +1,15 @@
-from pico2d import load_image, draw_rectangle, load_font
+from pico2d import load_image, draw_rectangle, load_font, load_wav
 import boy
 
 class Pannel:
     image = None
+    se = None
     def __init__(self, divider=0):
         if Pannel.image is None:
             Pannel.image = load_image('item_select.png')
+        if Pannel.se is None:
+            Pannel.se = load_wav('se/coin.mp3')
+
         self.Sold_out = load_image('sold_out.png')
         self.divider = divider
         # border[0] = (left, bottom, right, top)
