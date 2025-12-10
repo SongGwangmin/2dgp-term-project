@@ -40,6 +40,8 @@ class Boss:
     hpblank = None
     hit_sound = None
     death_sound = None
+    crush_sound = None
+    attack_sound = None
     def load_images(self):
         if Boss.images == None:
             Boss.images = load_image('boss.png')
@@ -53,7 +55,10 @@ class Boss:
             Boss.hit_sound = load_wav('se/hit.mp3')
         if Boss.death_sound == None:
             Boss.death_sound = load_wav('se/hit-flesh.mp3')
-
+        if Boss.crush_sound == None:
+            Boss.crush_sound = load_wav('se/crash.mp3')
+        if Boss.attack_sound == None:
+            Boss.attack_sound = load_wav('se/boss_attack.mp3')
     def __init__(self, x = 400, left=1, bottom=1, right=1, top=1, strength=50):
         self.x = x
         self.y =  180
@@ -80,6 +85,7 @@ class Boss:
         self.movetime = 0.0
         self.crush_cooldown = get_time()
         self.RUNNING_attack = False
+        self.one_time_attack = False
 
         self.rock_set = True
 
@@ -203,10 +209,18 @@ class Boss:
                 self.make_rocks()
                 self.rock_set = False
 
+            if self.one_time_attack == False:
+                if self.state == CRUSH:
+                    Boss.crush_sound.play()
+                else:
+                    Boss.attack_sound.play()
+                self.run_attack_sound = True
+
         # 현재 프레임이 4 이상이면 공격 완료로 판단
         if int(self.frame) >= 4:
             # [중요] 패턴이 완전히 끝났으므로 다음 실행을 위해 플래그를 초기화해줍니다.
             self.TARGET_SET = False
+            self.one_time_attack = False
             if self.state == CRUSH:
                 self.crush_cooldown = get_time()
                 self.rock_set = True
