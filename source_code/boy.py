@@ -1,4 +1,4 @@
-from pico2d import load_image, get_time, load_font, draw_rectangle
+from pico2d import load_image, get_time, load_font, draw_rectangle, load_wav
 from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_a, SDLK_d, SDLK_LSHIFT
 
 import game_world
@@ -161,12 +161,15 @@ class Attack:
         self.boy = boy
 
 
+
     def enter(self, e):
         Boy.frame = 0
         self.attack_dir = self.boy.face_dir
         if e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_d:
             self.boy.fire_ball()
         # 시작 시 히트박스 비활성화
+        
+        Boy.attacksound.play()
         if hasattr(self.boy, 'attack_hitbox'):
             self.boy.attack_hitbox.disable()
         pass
@@ -347,6 +350,10 @@ class Boy:
     hpbar = None
     hpblank = None
     level = 1
+    hitsound = None
+    attacksound = None
+    deathsound = None
+    jump_sound = None
     def __init__(self):
         self.x, self.y = 140, 130
         self.face_dir = 1
@@ -359,6 +366,7 @@ class Boy:
         self.dash_speed = 0.0
         self.hunt_count = 0
         self.now_hp = Boy.max_hp
+        self.deathcount = 0
         if Boy.hpbar == None:
             Boy.hpbar = load_image('hpbar.png')
         if Boy.hpblank == None:
@@ -386,6 +394,15 @@ class Boy:
         self.attack_hitbox = AttackHitBox(self, width=60, height=40, offset_x=50, offset_y=10)
         game_world.add_object(self.attack_hitbox)
         game_world.add_collision_pair('attack:zombie', self.attack_hitbox, None)
+
+        if Boy.hitsound == None:
+            Boy.hitsound = load_wav('se/hit.mp3')
+        if Boy.attacksound == None:
+            Boy.attacksound = load_wav('se/swing.mp3')
+        if Boy.deathsound == None:
+            Boy.deathsound = load_wav('se/death.mp3')
+        if Boy.jump_sound == None:
+            Boy.jump_sound = load_wav('se/jump.mp3')
 
     def update(self):
         self.state_machine.update()
@@ -447,6 +464,7 @@ class Boy:
 
     def jump(self):
         self.yv = 35
+        Boy.jump_sound.play()
         #Boy.money += 10
 
     def handle_collision(self, group, other):
@@ -469,10 +487,14 @@ class Boy:
                     self.now_hp = 0
                     self.wait_time = get_time()
                     self.state_machine.handle_state_event(('ENEMY_DEATH', other))
+                    if self.deathcount == 0:
+                        self.deathcount += 1
+                        Boy.deathsound.play()
                 else:
                     Boy.frame = 0
                     self.wait_time = get_time()
                     self.state_machine.handle_state_event(('ENEMY_COLIDE', other))
+                    Boy.hitsound.play()
         if group == 'boy:portal':
             pass
         if group == 'boy:money':
