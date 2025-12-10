@@ -349,7 +349,7 @@ class Boy:
     max_hp = 100.0
     hpbar = None
     hpblank = None
-    level = 11
+    level = 1
     hitsound = None
     attacksound = None
     deathsound = None
