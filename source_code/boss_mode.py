@@ -38,6 +38,9 @@ def init():
     common.boy = boy
 
     grass = Grass()
+    Grass.bgm = load_music('sound/boss.mp3')
+    Grass.bgm.set_volume(32)
+    Grass.bgm.repeat_play()
     game_world.add_object(grass, 0)
 
     common.grass = grass
@@ -68,6 +71,9 @@ def update():
     game_world.update()
     game_world.handle_collision()
     if boy.x < 10:
+        Grass.bgm = load_music('sound/worldmap.mp3')
+        Grass.bgm.set_volume(32)
+        Grass.bgm.repeat_play()
         game_framework.change_mode(worldmap_mode)
     elif common.grass.w - 10 <= boy.x and max_monster_count <= boy.hunt_count: # 오른쪽 끝 && 몬스터 다 잡음
         print("Boss Defeated! Ending Mode로 이동")

@@ -55,6 +55,9 @@ def init():
     game_world.collision_pairs = {}
     Grass.image = load_image('home.png')
     grass = Grass(60)
+    Grass.bgm = load_music('sound/town.mp3')
+    Grass.bgm.set_volume(32)
+    Grass.bgm.repeat_play()
     game_world.add_object(grass, 0)
     boy = Boy()
     game_world.add_object(boy, 1)
@@ -85,6 +88,9 @@ def update():
     # 맵 이동 - 오른쪽 끝 == 월드맵
     if boy.x > 790:
         game_framework.change_mode(worldmap_mode)
+        Grass.bgm = load_music('sound/worldmap.mp3')
+        Grass.bgm.set_volume(32)
+        Grass.bgm.repeat_play()
 
 
 def draw():

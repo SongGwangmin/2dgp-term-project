@@ -7,10 +7,14 @@ from boy import Boy
 
 def init():
     grass = Grass()
+    Grass.bgm = load_music('sound/end.mp3')
+    Grass.bgm.set_volume(32)
+    Grass.bgm.repeat_play()
     Grass.image = load_image('ending.png')
     game_world.add_object(grass, 3)
     common.grass = grass
     common.boy = Boy()
+
 def finish():
     game_world.clear()
 
