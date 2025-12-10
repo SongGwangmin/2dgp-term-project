@@ -15,8 +15,7 @@ class Grass:
         self.left = 0
         if Grass.bgm is None:
             Grass.bgm = load_music('sound/start.mp3')
-        Grass.bgm.set_volume(32)
-        Grass.bgm.repeat_play()
+
 
 
 

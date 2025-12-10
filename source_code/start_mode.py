@@ -9,6 +9,8 @@ from boy import Boy
 
 def init():
     grass = Grass()
+    Grass.bgm.set_volume(32)
+    Grass.bgm.repeat_play()
     Grass.image = load_image('start.png')
     game_world.add_object(grass, 3)
     common.grass = grass
